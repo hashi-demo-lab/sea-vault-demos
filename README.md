@@ -13,6 +13,8 @@ This is a bootstrap script to setup Vault Enteprise and TFC Agents then refresh 
 
 * echo 'export TFC_AGENT_TOKEN=<>' >> ~/.zshenv
 * echo 'export DOORMAT_AWS_USER=<>' >> ~/.zshenv
+* echo 'export DOORMAT_AZURE_USER=<>' >> ~/.zshenv
+* echo 'export DOORMAT_GCP_USER=<>' >> ~/.zshenv
 * echo 'export VAULT_LICENSE=<>' >> ~/.zshenv
 
 # run bootstrap
