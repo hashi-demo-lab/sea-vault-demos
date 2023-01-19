@@ -65,4 +65,5 @@ hashicorp/vault-enterprise:latest
 
 # Run Terraform to configure Vault back to a good state
 cd vault-configuration
+terraform init
 terraform apply -auto-approve
