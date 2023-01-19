@@ -18,11 +18,12 @@ export ROLE_NAME=testrole
 export TFC_AGENT_NAME=tfc-agent
 
 # Run Terraform Cloud Agent
+docker pull cloudbrokeraz/tfc-agent-custom:latest
+
 if [ "$(docker ps -q -f name=$TFC_AGENT_NAME)" ]; then
   echo "tfc-agent container is running"
 else
   echo "---starting tfc-agent container---"
-  docker pull cloudbrokeraz/tfc-agent-custom:latest
   docker run -d --rm --name tfc-agent --network host --cap-add=IPC_LOCK \
 -e "TFC_AGENT_TOKEN=${TFC_AGENT_TOKEN}" \
 -e "TFC_AGENT_NAME=${TFC_AGENT_NAME}" \
@@ -63,4 +64,5 @@ docker run -d --rm --name vault-enterprise --cap-add=IPC_LOCK \
 hashicorp/vault-enterprise:latest
 
 # Run Terraform to configure Vault back to a good state
-terraform apply -replace vault_aws_secret_backend_role.vault_role_assumed_role_credential_type -auto-approve
+cd vault-configuration
+terraform apply -auto-approve
