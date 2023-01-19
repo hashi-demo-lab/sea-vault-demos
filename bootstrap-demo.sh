@@ -17,8 +17,9 @@ export VAULT_ADDR=http://localhost:${VAULT_PORT}
 export ROLE_NAME=testrole
 export TFC_AGENT_NAME=tfc-agent
 
-# Run Terraform Cloud Agent
+#pull container images
 docker pull cloudbrokeraz/tfc-agent-custom:latest
+docker pull hashicorp/vault-enterprise:latest
 
 if [ "$(docker ps -q -f name=$TFC_AGENT_NAME)" ]; then
   echo "tfc-agent container is running"
@@ -62,6 +63,9 @@ docker run -d --rm --name vault-enterprise --cap-add=IPC_LOCK \
 -e "VAULT_LICENSE"=${VAULT_LICENSE} \
 -p ${VAULT_PORT}:${VAULT_PORT} \
 hashicorp/vault-enterprise:latest
+
+echo "Starting vault-enterprise"
+sleep 5
 
 # Run Terraform to configure Vault back to a good state
 cd vault-configuration
