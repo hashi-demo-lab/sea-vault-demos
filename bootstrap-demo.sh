@@ -40,8 +40,6 @@ echo VAULT_ADDR:    $VAULT_ADDR
 echo VAULT_LICENSE: $VAULT_LICENSE
 echo ROLE_NAME:     $ROLE_NAME
 echo AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-echo AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-echo AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN
 
 # Deploy Vault in a container rather than on localhost
 # passes in the AWS Env variables so that when the TFC agent
