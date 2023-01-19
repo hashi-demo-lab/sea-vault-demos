@@ -1,5 +1,6 @@
 tfc_organization    = "Aaron-HashiCorp-Demo-Org"
 tfc_project         = "future-apps-in-the-cloud"
 tfc_workspace       = "the-future-app-in-aws"
-kv_secrets_mount    = "demo_secrets"
+kv_secrets_mount    = "demo"
 kv_secrets_key      = "pipelines_secrets"
+role_arns           = "arn:aws:iam::258850230659:role/testrole"
