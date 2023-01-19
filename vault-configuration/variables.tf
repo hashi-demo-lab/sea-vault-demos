@@ -4,15 +4,14 @@ variable "tfc_organization" {
   nullable = false
 }
 
-variable "tfc_workspace" {
-  type        = string
-  description = "(Required) The name of the TFC workspace"
-  nullable = false
-}
-
 variable "tfc_project" {
   type        = string 
   description = "(Required) The name of the TFC Project that the workspace is located within"
+  nullable = false
+}
+variable "tfc_workspace" {
+  type        = string
+  description = "(Required) The name of the TFC workspace"
   nullable = false
 }
 
@@ -23,7 +22,14 @@ variable "kv_secrets_mount" {
 }
 
 variable "kv_secrets_key" {
-  type        = string
+  type        = string 
   description = "Name of the key inside a K/V secret engine"
   nullable = false
 }
+
+variable "role_arns" {
+  type        = string 
+  description = "Amazon Resource Name of the role in AWS IAM "
+  nullable = false
+}
+
