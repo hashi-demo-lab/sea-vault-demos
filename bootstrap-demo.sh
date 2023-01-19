@@ -30,7 +30,7 @@ cloudbrokeraz/tfc-agent-custom:latest
 fi
 
 # Set up the AWS CLI Env variables so that Vault can use them for setting up the AWS Secrets Engine
-doormat login -f && eval $(doormat aws export --account aws_aaron.evans_test)
+doormat login -f && eval $(doormat aws export --account ${DOORMAT_AWS_USER})
 
 echo VAULT_PORT:    $VAULT_PORT
 echo VAULT_TOKEN:   $VAULT_TOKEN
