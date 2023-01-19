@@ -1,37 +1,23 @@
-data "terraform_remote_state" "hcp_vault_deployment" {
-  backend = "remote"
-
-  config = {
-    organization = "Aaron-HashiCorp-Demo-Org"
-    workspaces = {
-      name = "hcp-vault-deployment"
-    }
-  }
-}
-
 provider "vault" {
-  address   = data.terraform_remote_state.hcp_vault_deployment.outputs.vault_public_endpoint_url
-  token = data.terraform_remote_state.hcp_vault_deployment.outputs.vault_admin_token
-  namespace = var.namespace
+  address = "http://localhost:8200"
 }
 
 # Create a KV secrets engine
 resource "vault_mount" "futureApp" {
-  path        = var.kv_secrets_path
+  path        = var.kv_secrets_mount
   type        = "kv"
   options     = { version = "2" }
   description = "KV mount for TFC OIDC demo"
 }
 
 # Create a secret in the KV engine
-
 resource "vault_kv_secret_v2" "futureApp" {
   mount = vault_mount.futureApp.path
-  name  = var.VAULT_SECRET_KEY
+  name  = var.kv_secrets_key
   data_json = jsonencode(
     {
-      pepper = "Aji Limon",
-      juice  = "Mango"
+      customerName = "aaron",
+      location  = "sydney"
     }
   )
 }
@@ -55,21 +41,27 @@ capabilities = ["read"]
 path "${vault_kv_secret_v2.futureApp.path}" {
   capabilities = ["list","read"]
 }
+
+# Get secrets from AWS engine
+path "aws/*" {
+  capabilities = ["create", "read", "update", "patch", "delete", "list"]
+}
+
 EOT
 }
 
 # Create the JWT auth method to use GitHub
 resource "vault_jwt_auth_backend" "jwt" {
   description        = "JWT Backend for TFC OIDC"
-  path               = "tfc"
+  path               = "jwt"
   oidc_discovery_url = "https://app.terraform.io"
   bound_issuer       = "https://app.terraform.io"
 }
 
-# Create the JWT role tied to the repo
-resource "vault_jwt_auth_backend_role" "example" {
+# Create the JWT role tied to workspaceOne
+resource "vault_jwt_auth_backend_role" "workspaceOneRole" {
   backend           = vault_jwt_auth_backend.jwt.path
-  role_name         = "tfc-workspace-oidc"
+  role_name         = "vault-demo-assumed-role"
   token_policies    = [vault_policy.futureApp.name]
   token_max_ttl     = "100"
   bound_audiences   = ["vault.testing"]
@@ -79,4 +71,16 @@ resource "vault_jwt_auth_backend_role" "example" {
   }
   user_claim = "terraform_full_workspace"
   role_type  = "jwt"
+}
+
+
+resource "vault_aws_secret_backend" "aws" {
+  description       = "Demo of the AWS secrets engine"
+}
+
+resource "vault_aws_secret_backend_role" "vault_role_assumed_role_credential_type" {
+  backend         = vault_aws_secret_backend.aws.path
+  credential_type = "assumed_role"
+  name            = "vault-demo-assumed-role"
+  role_arns       = ["arn:aws:iam::258850230659:role/testrole"]
 }
