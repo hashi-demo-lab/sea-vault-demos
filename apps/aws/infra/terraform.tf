@@ -12,12 +12,10 @@ terraform {
   }
   
   cloud {
-    hostname     = "app.terraform.io"
-    organization = "Aaron-HashiCorp-Demo-Org"
+    organization = "hashi-demos-apj"
+    
     workspaces {
-      tags = [
-        "aws","infra"
-      ]
+      name = "aws-infra"
     }
   }
 }
