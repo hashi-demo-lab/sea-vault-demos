@@ -12,7 +12,7 @@ The demo environment was created with the following principles in mind
 - Easily understandable and demonstrable for the intended audience, whether it be for internal stakeholders or external clients.
 - Easliy redeployable with a principle of being idempotant
 - Low impact on cost for running a demo environment
-- 
+
 
 The entry point into creating this demo enviornment is the bootstrap script (```bootstrap-demo.sh```) which is used to set up the demo. 
 
