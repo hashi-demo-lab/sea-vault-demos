@@ -14,7 +14,6 @@ unset TFC_AGENT_NAME
 export VAULT_PORT=8200
 export VAULT_TOKEN=root
 export VAULT_ADDR=http://localhost:${VAULT_PORT}
-export ROLE_NAME=testrole
 export TFC_AGENT_NAME=tfc-agent
 
 #pull container images
@@ -37,8 +36,6 @@ doormat login -f && eval $(doormat aws export --account ${DOORMAT_AWS_USER})
 echo VAULT_PORT:    $VAULT_PORT
 echo VAULT_TOKEN:   $VAULT_TOKEN
 echo VAULT_ADDR:    $VAULT_ADDR
-echo VAULT_LICENSE: $VAULT_LICENSE
-echo ROLE_NAME:     $ROLE_NAME
 echo AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
 
 # Deploy Vault in a container rather than on localhost
