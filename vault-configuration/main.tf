@@ -28,44 +28,58 @@ resource "vault_aws_secret_backend" "main" {
   path = var.VAULT_PATH
 }
 
+resource "aws_iam_role" "role" {
+  name = "test-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "arn:aws:sts::258850230659:assumed-role/aws_aaron.evans_test-developer"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "test-policy"
+  description = "A test policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ec2:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "test-attach" {
+  role       = aws_iam_role.role.name
+  policy_arn = aws_iam_policy.policy.arn
+}
+
+
 # Configure AWS Secrets Engine with Assumed Role
 resource "vault_aws_secret_backend_role" "main" {
   backend         = vault_aws_secret_backend.main.path
   credential_type = "assumed_role"
   name            = "vault-demo-assumed-role"
-  role_arns       = ["${var.role_arns}"]
-}
-
-
-# Create a policy granting the TFC workspace access to the KV engine & AWS engine
-resource "vault_policy" "main" {
-  name = "demo_policy"
-
-  policy = <<EOT
-# Generate child tokens with Terraform provider
-path "auth/token/create" {
-capabilities = ["update"]
-}
-
-path "auth/token/revoke-self" {
-   capabilities = ["update"]
-}
-
-# Used by the token to query itself
-path "auth/token/lookup-self" {
-capabilities = ["read"]
-}
-
-# Get secrets from KV engine
-path "${vault_kv_secret_v2.main.path}" {
-  capabilities = ["list","read"]
-}
-
-# Get secrets from AWS engine
-path "${var.VAULT_PATH}/*" {
-  capabilities = ["create", "read", "update", "patch", "delete", "list"]
-}
-EOT
+  role_arns       = []
 }
 
 # Create the JWT auth method to use GitHub
