@@ -36,7 +36,7 @@ doormat login -f && eval $(doormat aws export --account ${DOORMAT_AWS_USER})
 echo VAULT_PORT:    $VAULT_PORT
 echo VAULT_TOKEN:   $VAULT_TOKEN
 echo VAULT_ADDR:    $VAULT_ADDR
-echo AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+#echo AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
 
 # Deploy Vault in a container rather than on localhost
 # passes in the AWS Env variables so that when the TFC agent
