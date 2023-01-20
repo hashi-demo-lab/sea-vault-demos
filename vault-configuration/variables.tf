@@ -39,3 +39,18 @@ variable "VAULT_PATH" {
     nullable    =  false
 }
 
+variable "vault_address" {
+  type = string
+  description = "vault address"
+  default = "http://localhost:8200"
+}
+
+variable "region" {
+  type = string
+  description = "aws region"
+}
+
+variable "doormat_user_arn" {
+  type = string
+  description = "arn of doormat user"
+}

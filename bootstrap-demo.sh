@@ -66,4 +66,4 @@ sleep 5
 # Run Terraform to configure Vault back to a good state
 cd vault-configuration
 terraform init
-terraform apply -auto-approve -var role_arns=$DOORMAT_USER_ARN
+terraform apply -auto-approve -var doormat_user_arn=$DOORMAT_USER_ARN

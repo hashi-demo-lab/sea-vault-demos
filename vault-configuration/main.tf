@@ -1,5 +1,9 @@
 provider "vault" {
-  address = "http://localhost:8200"
+  address = var.vault_address
+}
+
+provider "aws" {
+  region = var.region
 }
 
 # Create a KV secrets engine
@@ -38,7 +42,7 @@ resource "aws_iam_role" "role" {
     {
       "Action": "sts:AssumeRole",
       "Principal": {
-        "Service": "arn:aws:sts::258850230659:assumed-role/aws_aaron.evans_test-developer"
+        "AWS": "${var.doormat_user_arn}"
       },
       "Effect": "Allow",
       "Sid": ""
@@ -79,7 +83,7 @@ resource "vault_aws_secret_backend_role" "main" {
   backend         = vault_aws_secret_backend.main.path
   credential_type = "assumed_role"
   name            = "vault-demo-assumed-role"
-  role_arns       = []
+  role_arns       = aws_iam_role.role.managed_policy_arns
 }
 
 # Create the JWT auth method to use GitHub
