@@ -83,7 +83,7 @@ resource "vault_aws_secret_backend_role" "main" {
   backend         = vault_aws_secret_backend.main.path
   credential_type = "assumed_role"
   name            = "vault-demo-assumed-role"
-  role_arns       = aws_iam_role.role.arn
+  role_arns       = [aws_iam_role.arn]
 }
 
 # Create the JWT auth method to use GitHub
