@@ -32,7 +32,7 @@ fi
 
 # Set up the AWS CLI Env variables so that Vault can use them for setting up the AWS Secrets Engine
 doormat login -f && eval $(doormat aws export --account ${DOORMAT_AWS_USER})
-export USER_ARN=$(aws sts get-caller-identity | jq -r '.Arn')
+DOORMAT_USER_ARN=$(aws sts get-caller-identity | jq -r '.Arn')
 
 echo VAULT_PORT:    $VAULT_PORT
 echo VAULT_TOKEN:   $VAULT_TOKEN
@@ -66,4 +66,4 @@ sleep 5
 # Run Terraform to configure Vault back to a good state
 cd vault-configuration
 terraform init
-terraform apply -auto-approve
+terraform apply -auto-approve -var role_arns=$DOORMAT_USER_ARN
