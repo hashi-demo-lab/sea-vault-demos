@@ -47,6 +47,10 @@ path "auth/token/create" {
 capabilities = ["update"]
 }
 
+path "auth/token/revoke-self" {
+   capabilities = ["update"]
+}
+
 # Used by the token to query itself
 path "auth/token/lookup-self" {
 capabilities = ["read"]
