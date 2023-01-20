@@ -18,18 +18,24 @@ variable "tfc_workspace" {
 variable "kv_secrets_mount" {
   type        = string
   description = "KV Version 2 secret engine mount path"
-  nullable = false
+  nullable    = false
 }
 
 variable "kv_secrets_key" {
   type        = string 
   description = "Name of the key inside a K/V secret engine"
-  nullable = false
+  nullable    = false
 }
 
 variable "role_arns" {
   type        = string 
   description = "Amazon Resource Name of the role in AWS IAM "
   nullable = false
+}
+
+variable "VAULT_PATH" {
+    type        = string
+    description = "Vault path used for mount path of secrets engine and Vault policy"
+    nullable    =  false
 }
 

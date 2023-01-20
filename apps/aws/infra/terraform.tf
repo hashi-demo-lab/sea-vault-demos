@@ -8,7 +8,7 @@ terraform {
   
   cloud {
     organization = "hashi-demos-apj"
-    
+    hostname     = "app.terraform.io"
     workspaces {
       name = "aws-infra"
     }

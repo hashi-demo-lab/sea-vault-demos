@@ -25,6 +25,7 @@ resource "vault_kv_secret_v2" "main" {
 # Enable AWS Secrets Engine
 resource "vault_aws_secret_backend" "main" {
   description = "Demo of the AWS secrets engine"
+  path = var.VAULT_PATH
 }
 
 # Configure AWS Secrets Engine with Assumed Role
@@ -34,6 +35,7 @@ resource "vault_aws_secret_backend_role" "main" {
   name            = "vault-demo-assumed-role"
   role_arns       = ["${var.role_arns}"]
 }
+
 
 # Create a policy granting the TFC workspace access to the KV engine & AWS engine
 resource "vault_policy" "main" {
@@ -56,7 +58,7 @@ path "${vault_kv_secret_v2.main.path}" {
 }
 
 # Get secrets from AWS engine
-path "aws/*" {
+path "${var.VAULT_PATH}/*" {
   capabilities = ["create", "read", "update", "patch", "delete", "list"]
 }
 EOT
