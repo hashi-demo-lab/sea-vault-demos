@@ -36,6 +36,9 @@ The entry point into creating this demo enviornment is the bootstrap script (```
 
 ## Software
 
+
+* aws cli
+* jq 
 * [Doormat](https://docs.prod.secops.hashicorp.services/doormat/cli/) - command line tool must be installed and configured with appropriate credentials
 * [Docker](https://www.docker.com/products/docker-desktop/)
 
