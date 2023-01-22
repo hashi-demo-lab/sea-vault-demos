@@ -29,3 +29,9 @@ variable "tfc_workspace_name" {
   default     = "my-azure-workspace"
   description = "The name of the workspace that you'd like to create and connect to Azure"
 }
+
+variable "app_prefix" {
+  type        = string
+  default     = "my-azure-workspace"
+  description = "The name of the workspace that you'd like to create and connect to Azure"
+}
