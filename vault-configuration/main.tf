@@ -28,3 +28,11 @@ resource "vault_jwt_auth_backend_role" "main" {
   role_type  = "jwt"
 }
 
+# Enable the GitHub authentication method
+resource "vault_github_auth_backend" "main" {
+  depends_on = [
+    vault_policy.main
+  ]
+  organization = "hashicorp-demo-lab"
+  token_policies = [ "demo_policy" ]
+}
