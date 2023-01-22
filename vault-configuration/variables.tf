@@ -54,3 +54,8 @@ variable "doormat_user_arn" {
   type        = string
   description = "arn of doormat user"
 }
+
+variable "github_organization" {
+  type = string
+  description = "Name of the GitHub Organisation used for GitHub Authentication method"
+}

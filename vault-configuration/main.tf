@@ -33,6 +33,6 @@ resource "vault_github_auth_backend" "main" {
   depends_on = [
     vault_policy.main
   ]
-  organization = "hashicorp-demo-lab"
+  organization = var.github_organization
   token_policies = [ "demo_policy" ]
 }
