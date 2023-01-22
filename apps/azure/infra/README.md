@@ -1,0 +1,1 @@
+# Base Azure Infrastrcuture for Demo Environment Purposes
