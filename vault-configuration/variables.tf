@@ -53,27 +53,6 @@ variable "region" {
 variable "doormat_user_arn" {
   type        = string
   description = "arn of doormat user"
-  default     = "arn:aws:sts::258850230659:assumed-role/aws_aaron.evans_test-developer/aaron.evans@hashicorp.com"
-}
-
-variable "mysql_username" {
-  type        = string
-  description = "service account used for Vault to connect to the mysql container"
-}
-
-variable "mysql_password" {
-  type        = string
-  description = "password used for Vault to connect to the mysql container"
-}
-
-variable "mysql_application_username" {
-  type        = string
-  description = "This is static account used by an application (this could be an existing account)"
-}
-
-variable "app_prefix" {
-  type = string
-  description = "prefix for resource naming uniqueness"
 }
 
 variable "mysql_database_name" {
