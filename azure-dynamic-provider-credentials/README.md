@@ -19,3 +19,7 @@ Copy `terraform.tfvars.example` to `terraform.tfvars` and customize the required
 Run `terraform plan` to verify your setup, and then run `terraform apply`.
 
 Congratulations! You now have a Terraform Cloud workspace where runs will automatically authenticate to Azure when using the AzureRM or AzureAD Terraform providers.
+
+To interact with Azure AD you will need an Azure SP with some additional Graph API permissions allocation. 
+
+* See https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
