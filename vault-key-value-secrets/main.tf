@@ -13,7 +13,7 @@ resource "vault_mount" "main" {
 # Create a secret in the KV engine
 resource "vault_kv_secret_v2" "main" {
   mount = vault_mount.main.path
-  name  = var.kv_secrets_key
+  name  = var.kv_secrets_name
   data_json = jsonencode(
     {
       team     = "solution engineers and architects",

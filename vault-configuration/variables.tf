@@ -14,19 +14,6 @@ variable "tfc_workspace" {
   description = "(Required) The name of the TFC workspace"
   nullable    = false
 }
-
-variable "kv_secrets_mount" {
-  type        = string
-  description = "KV Version 2 secret engine mount path"
-  nullable    = false
-}
-
-variable "kv_secrets_key" {
-  type        = string
-  description = "Name of the key inside a K/V secret engine"
-  nullable    = false
-}
-
 variable "role_arns" {
   type        = string
   description = "Amazon Resource Name of the role in AWS IAM "

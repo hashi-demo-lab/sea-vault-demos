@@ -16,11 +16,6 @@ resource "vault_policy" "main" {
     capabilities = ["read"]
     }
 
-    # Get secrets from KV engine
-    path "${vault_kv_secret_v2.main.path}" {
-      capabilities = ["list","read"]
-    }
-
     # Get secrets from AWS engine
     path "${var.VAULT_PATH}/*" {
       capabilities = ["create", "read", "update", "patch", "delete", "list"]
