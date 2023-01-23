@@ -6,7 +6,9 @@ provider "azurerm" {
 }
 
 provider "azuread" {
+  tenant_id = "0e3e2e88-8caf-41ca-b4da-e3b33b6c52ec"
 }
+
 
 # Data source used to get the current subscription's ID.
 #
