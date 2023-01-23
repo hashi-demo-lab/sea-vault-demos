@@ -1,6 +1,6 @@
 # Create a policy granting the TFC workspace access to the KV engine & AWS engine
 resource "vault_policy" "main" {
-  name   = "demo_policy"
+  name   = "aws_demo_policy"
   policy = <<EOT
     # Generate child tokens with Terraform provider
     path "auth/token/create" {
@@ -17,7 +17,7 @@ resource "vault_policy" "main" {
     }
 
     # Get secrets from AWS engine
-    path "${var.VAULT_PATH}/*" {
+    path "demo-aws-dynamic-credentials/*" {
       capabilities = ["create", "read", "update", "patch", "delete", "list"]
     }
   EOT
