@@ -50,9 +50,18 @@ The entry point into creating this demo enviornment is the bootstrap script (```
 
 * echo 'export TFC_AGENT_TOKEN=<>' >> ~/.zshenv
 * echo 'export DOORMAT_AWS_USER=<>' >> ~/.zshenv
-* echo 'export DOORMAT_AZURE_USER=<>' >> ~/.zshenv
-* echo 'export DOORMAT_GCP_USER=<>' >> ~/.zshenv
 * echo 'export VAULT_LICENSE=<>' >> ~/.zshenv
+
+* echo 'export ARM_CLIENT_ID=<>' >> ~/.zshenv
+* echo 'export ARM_CLIENT_SECRET=<>' >> ~/.zshenv
+* echo 'export ARM_SUBSCRIPTION_ID=<>' >> ~/.zshenv
+* echo 'export ARM_TENANT_ID=<>' >> ~/.zshenv
+
+
+
+# Terraform cloud API token
+
+* echo 'export TFE_TOKEN=<>' >> ~/.zshenv
 
 # Usage
 
