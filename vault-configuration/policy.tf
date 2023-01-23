@@ -17,7 +17,7 @@ resource "vault_policy" "main" {
     }
 
     # Get secrets from AWS engine
-    path "demo-aws-dynamic-credentials/*" {
+    path "${var.VAULT_PATH}/*" {
       capabilities = ["create", "read", "update", "patch", "delete", "list"]
     }
   EOT
