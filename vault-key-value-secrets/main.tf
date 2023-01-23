@@ -1,3 +1,7 @@
+provider "vault" {
+  address = var.vault_address
+}
+
 # Create a KV secrets engine
 resource "vault_mount" "main" {
   path        = var.kv_secrets_mount

@@ -1,3 +1,7 @@
+provider "vault" {
+  address = var.vault_address
+}
+
 resource "vault_database_secrets_mount" "databases" {
   path = "demo-databases"
 

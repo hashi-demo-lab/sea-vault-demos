@@ -71,6 +71,7 @@ docker run -d --rm --name mysql5.7  \
  -e "MYSQL_DATABASE=$MYSQL_DATABASE" \
  -p 3306:3306 \
  mysql/mysql-server:5.7
+#sleep required for MySQL to be in a ready state for command execution
 sleep 10
 
 # Execute mysql commands to populate database and create accounts
