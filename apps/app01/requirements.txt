@@ -1,0 +1,5 @@
+Flask==1.1.1
+hvac==0.9.6
+requests==2.22.0
+mysql-connector-python==8.0.21
+azure-identity==1.4.0
