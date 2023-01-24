@@ -35,3 +35,28 @@ variable "vault_address" {
   description = "vault address"
   default     = "http://localhost:8200"
 }
+
+variable "tenant_id" {
+  type      = string
+  sensitive = true
+  description = "tenant_id - set using ENV TF_VAR_"
+}
+
+variable "subscription_id" {
+    type      = string
+    sensitive = true
+    description = "subscription_id - set using ENV TF_VAR_"
+}
+
+variable "client_id" {
+  type        = string
+  sensitive = true
+  description = "client_id - set using ENV TF_VAR_"
+}
+
+variable "client_secret" {
+  type        = string
+  sensitive = true
+  description = "client_secret - set using ENV TF_VAR_"
+}
+
