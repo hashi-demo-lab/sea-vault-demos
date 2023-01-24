@@ -52,13 +52,13 @@ fi
 docker run -d --rm --name vault-enterprise --cap-add=IPC_LOCK \
   -e "VAULT_DEV_ROOT_TOKEN_ID=${VAULT_TOKEN}" \
   -e "VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:${VAULT_PORT}" \
-  -e "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" \
-  -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
-  -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" \
   -e "VAULT_LICENSE"=${VAULT_LICENSE} \
   -p ${VAULT_PORT}:${VAULT_PORT} \
 hashicorp/vault-enterprise:latest
 
+ # -e "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" \
+ # -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
+ # -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" \
 # Start MySQL
 echo "---STARTING MYSQL5.7 CONTAINER---"
 if [ "$(docker ps -q -f name=mysql5.7)" ]; then
