@@ -9,7 +9,7 @@ resource "vault_database_secrets_mount" "databases" {
     name           = var.mysql_database_name
     username       = var.mysql_username
     password       = var.mysql_password
-    connection_url = "{{username}}:{{password}}@tcp(172.19.0.3:3306)/"
+    connection_url = "{{username}}:{{password}}@tcp(mysql:3306)/"
     allowed_roles = [
       "db-user-static",
       "db-user-readonly",
