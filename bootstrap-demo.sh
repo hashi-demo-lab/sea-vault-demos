@@ -54,9 +54,8 @@ docker run -d --rm --name vault-enterprise --network mynetwork --cap-add=IPC_LOC
   -p ${VAULT_PORT}:${VAULT_PORT} \
 hashicorp/vault-enterprise:latest
 
-#THIS SHOULD BE MOVED TO the sub directory for that use case rather than
-#IN this bootstrap script
-# Run Terraform to configure Vault back to a good state
+# TERRAFORM COMMANDS SHOULD BE MOVED TO USECASES SUB DIRECTORY
+# EXAMPLE IN mysql-dynamic-credentials
 #cd aws-dynamic-workload-identity-vault-customhooks
 #terraform init
 #terraform apply -auto-approve -var doormat_user_arn=$DOORMAT_USER_ARN
