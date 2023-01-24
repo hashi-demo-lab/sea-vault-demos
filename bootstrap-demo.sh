@@ -32,7 +32,7 @@ docker pull hashicorp/vault-enterprise:latest
 docker pull mysql/mysql-server:5.7
 
 # Start Terraform Cloud Agent 
-echo "---starting tfc-agent container---"
+echo "---STARTING THE TFC-AGENT CONTAINER---"
 if [ "$(docker ps -q -f name=$TFC_AGENT_NAME)" ]; then
   echo "tfc-agent container is running"
 else
@@ -43,7 +43,7 @@ else
 fi
 
 # Start Vault Enterpise
-echo "---starting vault container---"
+echo "---STARTING HASHICORP VAULT CONTAINER---"
 if [ "$(docker ps -q -f name=vault-enterprise)" ]; then
   echo "Container is running"
   docker kill vault-enterprise
@@ -60,12 +60,13 @@ docker run -d --rm --name vault-enterprise --cap-add=IPC_LOCK \
 hashicorp/vault-enterprise:latest
 
 # Start MySQL
+echo "---STARTING MYSQL5.7 CONTAINER---"
 if [ "$(docker ps -q -f name=mysql5.7)" ]; then
   echo "mysql 5.7 container is running"
   docker kill mysql5.7
   sleep 3
 fi
-echo "---starting mysql5.7 container--- \n"
+
 docker run -d --rm --name mysql5.7  \
  -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" \
  -e "MYSQL_DATABASE=$MYSQL_DATABASE" \
@@ -118,6 +119,6 @@ mysql -u root -proot \
   -e "GRANT ALL PRIVILEGES ON *.* TO 'vaultadmin'@'%' WITH GRANT OPTION;"
 
 # Run Terraform to configure Vault back to a good state
-cd vault-configuration
+cd aws-dynamic-workload-identity-vault-customhooks
 terraform init
 terraform apply -auto-approve -var doormat_user_arn=$DOORMAT_USER_ARN
