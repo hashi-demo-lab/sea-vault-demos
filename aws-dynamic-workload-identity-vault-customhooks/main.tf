@@ -56,7 +56,7 @@ provider "vault" {
 # Enable AWS Secrets Engine
 resource "vault_aws_secret_backend" "main" {
   description = "Demo of the AWS secrets engine"
-  path        = var.VAULT_PATH
+  path        = "${var.tfc_workspace}/${var.VAULT_PATH}"
 }
 
 # Configure AWS Secrets Engine with Assumed Role

@@ -17,7 +17,7 @@ resource "vault_policy" "main" {
     }
 
     # Get secrets from AWS engine
-    path "${var.VAULT_PATH}/*" {
+    path "${var.tfc_workspace}/${var.VAULT_PATH}/*" {
       capabilities = ["create", "read", "update", "patch", "delete", "list"]
     }
   EOT
