@@ -22,9 +22,16 @@ DOORMAT_USER_ARN=$(aws sts get-caller-identity | jq -r '.Arn')
 echo AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
 echo DOORMAT_USER_ARN:  $DOORMAT_USER_ARN
 
-# Pull container images
+# Docker prep
 docker pull cloudbrokeraz/tfc-agent-custom:latest
 docker pull hashicorp/vault-enterprise:latest
+
+if [[ "$(docker network ls -q -f name=demo-network)" == "" ]]; then
+    echo "Creating demo-network network..."
+    docker network create demo-network
+else
+    echo "'demo-network' network already exists."
+fi
 
 # Start Terraform Cloud Agent 
 echo "---STARTING THE TFC-AGENT CONTAINER---"
@@ -44,7 +51,7 @@ if [ "$(docker ps -q -f name=vault-enterprise)" ]; then
   docker kill vault-enterprise
   sleep 3
 fi
-docker run -d --rm --name vault-enterprise --network mynetwork --cap-add=IPC_LOCK \
+docker run -d --rm --name vault-enterprise --network demo-network --cap-add=IPC_LOCK \
   -e "VAULT_DEV_ROOT_TOKEN_ID=${VAULT_TOKEN}" \
   -e "VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:${VAULT_PORT}" \
   -e "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" \
@@ -53,9 +60,3 @@ docker run -d --rm --name vault-enterprise --network mynetwork --cap-add=IPC_LOC
   -e "VAULT_LICENSE"=${VAULT_LICENSE} \
   -p ${VAULT_PORT}:${VAULT_PORT} \
 hashicorp/vault-enterprise:latest
-
-# TERRAFORM COMMANDS SHOULD BE MOVED TO USECASES SUB DIRECTORY
-# EXAMPLE IN mysql-dynamic-credentials
-#cd aws-dynamic-workload-identity-vault-customhooks
-#terraform init
-#terraform apply -auto-approve -var doormat_user_arn=$DOORMAT_USER_ARN
