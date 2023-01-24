@@ -60,3 +60,15 @@ variable "client_secret" {
   description = "client_secret - set using ENV TF_VAR_"
 }
 
+variable "ttl" {
+  type        = string
+  description = "default ttl for azure secrets"
+  default = "60"
+}
+
+variable "max_ttl" {
+  type        = string
+  description = "max ttl for azure secrets"
+  default = "120"
+}
+
