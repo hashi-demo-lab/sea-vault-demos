@@ -36,7 +36,8 @@ resource "vault_azure_secret_backend_role" "generated_role" {
   max_ttl = var.max_ttl
 
   azure_roles {
-    role_name = "Reader"
-    scope     = "/subscriptions/${var.subscription_id}/resourceGroups/azure-vault-group"
+    role_name = "Contributor"
+    scope     = "/subscriptions/${var.subscription_id}"
   }
 }
+
