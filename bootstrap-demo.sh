@@ -26,7 +26,7 @@ DOORMAT_USER_ARN=$(aws sts get-caller-identity | jq -r '.Arn')
 echo AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
 echo DOORMAT_USER_ARN:  $DOORMAT_USER_ARN
 
-#pull container images
+# Pull container images
 docker pull cloudbrokeraz/tfc-agent-custom:latest
 docker pull hashicorp/vault-enterprise:latest
 docker pull mysql/mysql-server:5.7
@@ -59,14 +59,12 @@ docker run -d --rm --name vault-enterprise --network mynetwork --cap-add=IPC_LOC
   -p ${VAULT_PORT}:${VAULT_PORT} \
 hashicorp/vault-enterprise:latest
 
- # -e "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" \
- # -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
- # -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" \
 # Start MySQL
 echo "---STARTING MYSQL5.7 CONTAINER---"
 if [ "$(docker ps -q -f name=mysql5.7)" ]; then
   echo "mysql 5.7 container is running"
-  docker kill mysql5.7
+  docker container rm -f mysql5.7 
+  sleep 5
   docker volume rm app-data
   sleep 3 
 fi
@@ -77,10 +75,33 @@ docker run --name mysql5.7 --network mynetwork \
   -e "MYSQL_DATABASE=$MYSQL_DATABASE" \
   -p 3306:3306 \
   -d mysql/mysql-server:5.7.21
-#sleep required for MySQL to be in a ready state for command execution
-sleep 10
+# Sleep required for MySQL to be in a ready state with app-data volume
+sleep 15
+# Create an application service account 
+alias mysql="docker exec -it mysql5.7 mysql"
+mysql -u root -p'root' -e "CREATE USER 'dbsvc1'@'%' IDENTIFIED BY 'dbsvc1';"
+mysql -u root -p'root' -e "GRANT INSERT,SELECT,UPDATE,DELETE ON my_app.* TO 'dbsvc1'@'%';"
+# Create Vault servcie account for configuration of database secrets engine
+mysql -u root -proot -e "CREATE USER 'vaultadmin'@'%' IDENTIFIED BY 'vaultadmin';"
+mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'vaultadmin'@'%' WITH GRANT OPTION;"
 
 # Run Terraform to configure Vault back to a good state
 cd aws-dynamic-workload-identity-vault-customhooks
 terraform init
 terraform apply -auto-approve -var doormat_user_arn=$DOORMAT_USER_ARN
+
+cd ../mysql-dynamic-credentials
+terraform init
+terraform apply -auto-approve
+
+docker run --network mynetwork --name transit-app-example \
+  -p 5000:5000 \
+  -e VAULT_ADDR=http://172.19.0.2:8200 \
+  -e VAULT_DATABASE_CREDS_PATH=demo-databases/creds/db-user-readwrite \
+  -e VAULT_NAMESPACE= \
+  -e VAULT_TOKEN=root \
+  -e VAULT_TRANSFORM_PATH=transform \
+  -e VAULT_TRANSFORM_MASKING_PATH=masking/transform \
+  -e VAULT_TRANSIT_PATH=transit \
+  -e MYSQL_ADDR=172.19.0.3 \
+  -d assareh/transit-app-example:latest
