@@ -63,12 +63,12 @@ variable "client_secret" {
 variable "ttl" {
   type        = string
   description = "default ttl for azure secrets"
-  default = "60"
+  default = "15m"
 }
 
 variable "max_ttl" {
   type        = string
   description = "max ttl for azure secrets"
-  default = "120"
+  default = "60m"
 }
 
