@@ -51,7 +51,8 @@ if [ "$(docker ps -q -f name=vault-enterprise)" ]; then
   docker kill vault-enterprise
   sleep 3
 fi
-docker run -d --rm --name vault-enterprise --network demo-network --cap-add=IPC_LOCK \
+docker run -d --rm --name vault-enterprise --hostname vault-enterprise  \
+  --network demo-network  --cap-add=IPC_LOCK \
   -e "VAULT_DEV_ROOT_TOKEN_ID=${VAULT_TOKEN}" \
   -e "VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:${VAULT_PORT}" \
   -e "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" \
