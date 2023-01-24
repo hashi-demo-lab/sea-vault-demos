@@ -49,7 +49,7 @@ if [ "$(docker ps -q -f name=vault-enterprise)" ]; then
   docker kill vault-enterprise
   sleep 3
 fi
-docker run -d --rm --name vault-enterprise --cap-add=IPC_LOCK \
+docker run -d --rm --network mynetwork --name vault-enterprise --cap-add=IPC_LOCK \
   -e "VAULT_DEV_ROOT_TOKEN_ID=${VAULT_TOKEN}" \
   -e "VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:${VAULT_PORT}" \
   -e "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" \
@@ -67,59 +67,18 @@ echo "---STARTING MYSQL5.7 CONTAINER---"
 if [ "$(docker ps -q -f name=mysql5.7)" ]; then
   echo "mysql 5.7 container is running"
   docker kill mysql5.7
-  sleep 3
+  docker volume rm app-data
+  sleep 3 
 fi
 
-docker run -d --rm --name mysql5.7  \
- -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" \
- -e "MYSQL_DATABASE=$MYSQL_DATABASE" \
- -p 3306:3306 \
- mysql/mysql-server:5.7
+docker run --name mysql5.7 --network mynetwork \
+  -v app-data:/var/lib/mysql \
+  -e "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" \
+  -e "MYSQL_DATABASE=$MYSQL_DATABASE" \
+  -p 3306:3306 \
+  -d mysql/mysql-server:5.7.21
 #sleep required for MySQL to be in a ready state for command execution
 sleep 10
-
-# Execute mysql commands to populate database and create accounts
-alias mysql="docker exec -it mysql5.7 mysql"
-
-#Display existing database users
-mysql -u root -p$MYSQL_ROOT_PASSWORD \
-  -e "select Host,User from mysql.user;"
-
-#Create sample data set in mysql "app"
-mysql -u root -p$MYSQL_ROOT_PASSWORD \
-  -e "CREATE TABLE IF NOT EXISTS my_app.customers (
-  cust_no int(11) NOT NULL AUTO_INCREMENT,
-  birth_date varchar(255) NOT NULL,
-  first_name varchar(255) NOT NULL,
-  last_name varchar(255) NOT NULL,
-  create_date varchar(255) NOT NULL,
-  social_security_number varchar(255) NOT NULL,
-  address varchar(255) NOT NULL,
-  salary varchar(255) NOT NULL,
-  PRIMARY KEY (cust_no)
-  ) ENGINE=InnoDB;"
-
-mysql -u root -proot \
-  -e "INSERT IGNORE into my_app.customers VALUES
-  (2, '3/14/69', 'Larry', 'Johnson', '2020-01-01T14:49:12.301977', '360-56-6750', 'Tyler, Texas', '7000000'),
-  (40, '11/26/69', 'Shawn', 'Kemp', '2020-02-21T10:24:55.985726', '235-32-8091', 'Elkhart, Indiana', '15000000'),
-  (34, '2/20/63', 'Charles', 'Barkley', '2019-04-09T01:10:20.548144', '531-72-1553', 'Leeds, Alabama', '9000000');
-  "
-
-#Create application service account for application access
-mysql -u root -proot \
-  -e "CREATE USER 'dbsvc1'@'%' IDENTIFIED BY 'dbsvc1';"
-mysql -u root -proot \
-  -e "GRANT INSERT,SELECT,UPDATE,DELETE ON my_app.* TO 'dbsvc1'@'%';"
-
-#View sample data populated in the database
-#mysql -u dbsvc1 -pdbsvc1 -e "SELECT * FROM my_app.customers"
-
-#Create Vault account for connecting to mysql database
-mysql -u root -proot \
-  -e "CREATE USER 'vaultadmin'@'%' IDENTIFIED BY 'vaultadmin';"
-mysql -u root -proot \
-  -e "GRANT ALL PRIVILEGES ON *.* TO 'vaultadmin'@'%' WITH GRANT OPTION;"
 
 # Run Terraform to configure Vault back to a good state
 cd aws-dynamic-workload-identity-vault-customhooks
