@@ -62,4 +62,4 @@ docker run --network demo-network --hostname app --name app \
   -e VAULT_TRANSFORM_MASKING_PATH=masking/transform \
   -e VAULT_TRANSIT_PATH=demo-transit \
   -e MYSQL_ADDR=mysql \
-  -d assareh/transit-app-example:latest
+  -d cloudbrokeraz/app01:latest
