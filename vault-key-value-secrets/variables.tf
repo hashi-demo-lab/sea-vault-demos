@@ -1,7 +1,6 @@
 variable "vault_address" {
   type        = string
   description = "vault address"
-  default     = "http://localhost:8200"
 }
 
 variable "kv_secrets_name" {

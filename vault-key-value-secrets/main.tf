@@ -2,22 +2,32 @@ provider "vault" {
   address = var.vault_address
 }
 
-# Create a KV secrets engine
-resource "vault_mount" "main" {
-  path        = var.kv_secrets_mount
-  type        = "kv"
-  options     = { version = "2" }
-  description = "Key/Value mount for Workload Identity demo"
+resource "vault_namespace" "finance" {
+  path = "finance"
 }
 
-# Create a secret in the KV engine
-resource "vault_kv_secret_v2" "main" {
-  mount = vault_mount.main.path
-  name  = var.kv_secrets_name
-  data_json = jsonencode(
-    {
-      team     = "solution engineers and architects",
-      location = "sydney"
-    }
-  )
+resource "vault_namespace" "engineering" {
+  path = "engineering"
+}
+
+resource "vault_namespace" "education" {
+  path = "education"
+}
+
+# Create a childnamespace, 'training' under 'education'
+resource "vault_namespace" "training" {
+  namespace = vault_namespace.education.path
+  path = "training"
+}
+
+# Create a childnamespace, 'vault_cloud' and 'boundary' under 'education/training'
+resource "vault_namespace" "vault_cloud" {
+  namespace = vault_namespace.training.path_fq
+  path = "vault_cloud"
+}
+
+# Create 'education/training/boundary' namespace
+resource "vault_namespace" "boundary" {
+  namespace = vault_namespace.training.path_fq
+  path = "boundary"
 }
