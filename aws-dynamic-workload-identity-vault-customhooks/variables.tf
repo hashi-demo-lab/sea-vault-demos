@@ -14,11 +14,7 @@ variable "tfc_workspace" {
   description = "(Required) The name of the TFC workspace"
   nullable    = false
 }
-variable "role_arns" {
-  type        = string
-  description = "Amazon Resource Name of the role in AWS IAM "
-  nullable    = false
-}
+
 
 variable "VAULT_PATH" {
   type        = string
