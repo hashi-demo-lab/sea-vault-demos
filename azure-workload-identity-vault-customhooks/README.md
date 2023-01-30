@@ -1,4 +1,4 @@
-# Terraform Template Repository
+# This is not feasible today Feb 2023, AzureRm Provider only support OIDC token auth for provider, no other files based auth methods
 
 ## Actions
 
