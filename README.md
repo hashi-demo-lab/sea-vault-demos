@@ -65,8 +65,8 @@ The entry point into creating this demo enviornment is the bootstrap script (`bo
 
 # Usage
 
-```sh
-`. bootstrap-demo.sh`
+```sh { closeTerminalOnSuccess=false }
+. ./bootstrap-demo.sh
 ```
 
 # Notes
