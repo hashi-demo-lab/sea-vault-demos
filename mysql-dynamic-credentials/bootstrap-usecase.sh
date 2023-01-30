@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/bin/zsh
 
 # Unset out current status of the Environment Variables
 unset MYSQL_ROOT_PASSWORD
