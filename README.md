@@ -23,6 +23,7 @@ The entry point into creating this demo enviornment is the bootstrap script (`bo
 2. Sets environment variables for Vault, including VAULT_PORT, VAULT_TOKEN, VAULT_ADDR, ROLE_NAME, and TFC_AGENT_NAME
 3. Pulls the latest version of cloudbrokeraz/tfc-agent-custom and hashicorp/vault-enterprise Docker images
 4. Starts a TFC Agent container if one is not already running
+
    - This is a Custom TFC Agent with custom hooks, using workload identity token to retreive and revoke credentials dynamically using Vault AWS Secrets engine (see below for more detail)
 
 5. Runs doormat login and exports credentials to be used by Vault Enterprise
@@ -30,6 +31,7 @@ The entry point into creating this demo enviornment is the bootstrap script (`bo
 7. Starts a new Vault container, passing in the necessary environment variables and ports
 8. Sleeps for 5 seconds to allow the Vault container to start up
 9. runs the terraform apply command to configure Vault with
+
    - K/V secrets engine & AWS secrets engine,
    - Creates a policy granting access to both engines
    - Configures the JWT auth method (this is used for the OIDC trust using workload identity between a TFC workspace and the Vault-Enterprise container)
@@ -63,7 +65,9 @@ The entry point into creating this demo enviornment is the bootstrap script (`bo
 
 # Usage
 
-```. bootstrap-demo.sh```
+```sh
+`. bootstrap-demo.sh`
+```
 
 # Notes
 
