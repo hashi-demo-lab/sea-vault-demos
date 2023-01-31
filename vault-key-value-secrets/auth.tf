@@ -19,6 +19,18 @@ resource "vault_generic_endpoint" "aaron" {
 EOT
 }
 
+resource "vault_generic_endpoint" "simon" {
+  depends_on           = [vault_auth_backend.userpass]
+  path                 = "auth/userpass/users/simon"
+  ignore_absent_fields = true
+  data_json            = <<EOT
+{
+  "policies": ["demo-simons-access", "demo-sea-access" ],
+  "password": "changeme"
+}
+EOT
+}
+
 
 
 #--------------------------------------------------------------------
