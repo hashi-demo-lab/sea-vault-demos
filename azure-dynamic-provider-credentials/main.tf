@@ -9,6 +9,7 @@ provider "azuread" {
   tenant_id = "0e3e2e88-8caf-41ca-b4da-e3b33b6c52ec"
 }
 
+data "azuread_client_config" "current" {}
 
 # Data source used to get the current subscription's ID.
 #
@@ -20,7 +21,9 @@ data "azurerm_subscription" "current" {
 #
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application
 resource "azuread_application" "tfc_application" {
-  display_name = "tfc-application"
+  display_name = "tfc-application-sea"
+  owners       = [data.azuread_client_config.current.object_id]
+
 }
 
 # Creates a service principal associated with the previously created
@@ -29,6 +32,7 @@ resource "azuread_application" "tfc_application" {
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal
 resource "azuread_service_principal" "tfc_service_principal" {
   application_id = azuread_application.tfc_application.application_id
+  owners       = [data.azuread_client_config.current.object_id]
 }
 
 # Creates a role assignment which controls the permissions the service
