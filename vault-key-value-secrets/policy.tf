@@ -51,3 +51,16 @@ resource "vault_policy" "admin_policy_boundary" {
   name   = "admins"
   policy = file("policies/admin-policy.hcl")
 }
+
+# Create simon's policy in the root namespace
+resource "vault_policy" "simons_policy" {
+  name   = "demo-simons-access"
+  policy = file("policies/simons-access-to-secrets.hcl")
+}
+
+
+# Create aaron's policy in the root namespace
+resource "vault_policy" "aarons_policy" {
+  name   = "demo-aarons-access"
+  policy = file("policies/aarons-access-to-secrets.hcl")
+}
