@@ -7,13 +7,35 @@ resource "vault_mount" "main" {
 }
 
 # Create a secret in the KV engine
-resource "vault_kv_secret_v2" "main" {
+resource "vault_kv_secret_v2" "team_secrets" {
   mount = vault_mount.main.path
-  name  = var.kv_secrets_name
+  name  = var.kv_team_secrets_name
   data_json = jsonencode(
     {
       team     = "solution engineers and architects",
       location = "sydney"
+    }
+  )
+}
+
+resource "vault_kv_secret_v2" "simons_secrets" {
+  mount = vault_mount.main.path
+  name  = var.kv_simons_secrets_name
+  data_json = jsonencode(
+    {
+      role     = "Sr Solutions Architecture Specialist",
+      location = "Sydney"
+    }
+  )
+}
+
+resource "vault_kv_secret_v2" "aarons_secrets" {
+  mount = vault_mount.main.path
+  name  = var.kv_aarons_secrets_name
+  data_json = jsonencode(
+    {
+      role     = "Solutions Engineer",
+      location = "kiama"
     }
   )
 }

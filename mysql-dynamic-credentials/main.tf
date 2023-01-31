@@ -3,7 +3,7 @@ provider "vault" {
 }
 
 resource "vault_database_secrets_mount" "databases" {
-  path = "demo-databases"
+  path        = "demo-databases"
   description = "This is an example database secret engine mount"
   mysql {
     name           = var.mysql_database_name
@@ -45,35 +45,37 @@ resource "vault_database_secret_backend_role" "db-user-readwrite" {
 }
 
 resource "vault_mount" "transit" {
-  path        = "demo-transit"
-  type        = "transit"
-  description = "This is an example transit secret engine mount"
+  path                      = "demo-transit"
+  type                      = "transit"
+  description               = "This is an example transit secret engine mount"
   default_lease_ttl_seconds = 3600
   max_lease_ttl_seconds     = 86400
 }
 
 resource "vault_transit_secret_backend_key" "key" {
-  backend = vault_mount.transit.path
-  name    = "customer-key"
+  backend          = vault_mount.transit.path
+  name             = "customer-key"
+  deletion_allowed = true
 }
 
 resource "vault_mount" "transform" {
-  path = "demo-transform"
-  type = "transform"
+  path        = "demo-transform"
+  type        = "transform"
   description = "This is an example transform secret engine mount"
 }
 
 resource "vault_transform_role" "transform_role" {
-  path = vault_mount.transform.path
-  name = "ssn"
+  path            = vault_mount.transform.path
+  name            = "ssn"
   transformations = ["ssn-fpe"]
 }
 
 resource "vault_transform_transformation" "example" {
-  path          = vault_mount.transform.path
-  name          = "ssn-fpe"
-  type          = "fpe"
-  template      = "builtin/socialsecuritynumber"
-  tweak_source  = "internal"
-  allowed_roles = ["ssn"]
+  path             = vault_mount.transform.path
+  name             = "ssn-fpe"
+  type             = "fpe"
+  template         = "builtin/socialsecuritynumber"
+  tweak_source     = "internal"
+  allowed_roles    = ["ssn"]
+  deletion_allowed = true
 }
