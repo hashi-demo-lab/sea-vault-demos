@@ -7,6 +7,9 @@ unset MYSQL_DATABASE
 # Set envrionment variables
 export MYSQL_ROOT_PASSWORD=root
 export MYSQL_DATABASE=my_app
+export VAULT_PORT=8200
+export VAULT_TOKEN=root
+export VAULT_ADDR=http://localhost:${VAULT_PORT}
 
 # Pull container images
 docker pull mysql/mysql-server:5.7
