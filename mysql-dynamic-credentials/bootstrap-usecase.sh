@@ -49,7 +49,7 @@ terraform apply -auto-approve
 
 # Start app
 echo "---STARTING APP CONTAINER---"
-if [ "$(docker ps -q -f name=app)" ]; then
+if [ "$(docker ps -a -f name=app)" ]; then
   echo "app container is running"
   docker container rm -f app
   sleep 3
