@@ -35,7 +35,7 @@ fi
 
 # Start Terraform Cloud Agent 
 echo "---STARTING THE TFC-AGENT CONTAINER---"
-if [ "$(docker ps -q -f name=$TFC_AGENT_NAME)" ]; then
+if [ "$(docker ps -a -f name=$TFC_AGENT_NAME)" ]; then
   echo "tfc-agent container is running"
 else
   docker run -d --rm --name tfc-agent --network host --cap-add=IPC_LOCK \
@@ -46,7 +46,7 @@ fi
 
 # Start Vault Enterpise
 echo "---STARTING HASHICORP VAULT CONTAINER---"
-if [ "$(docker ps -q -f name=vault-enterprise)" ]; then
+if [ "$(docker ps -a -f name=vault-enterprise)" ]; then
   echo "Container is running"
   docker kill vault-enterprise
   sleep 3
