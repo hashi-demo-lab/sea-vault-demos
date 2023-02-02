@@ -26,29 +26,31 @@ echo DOORMAT_USER_ARN:  $DOORMAT_USER_ARN
 docker pull cloudbrokeraz/tfc-agent-custom:latest
 docker pull hashicorp/vault-enterprise:latest
 
+# Create Docker network
+echo "\n\033[32m---CREATING DOCKER NETWORK---\033[0m"
 if [[ "$(docker network ls -q -f name=demo-network)" == "" ]]; then
     echo "Creating demo-network network..."
     docker network create demo-network
 else
-    echo "'demo-network' network already exists."
+    echo "\033[33mDocker network 'demo-network' network already exists. skipping 'docker network create'.\033[0m"
 fi
 
 # Start Terraform Cloud Agent 
-echo "---STARTING THE TFC-AGENT CONTAINER---"
-if [ "$(docker ps -a -f name=$TFC_AGENT_NAME)" ]; then
-  echo "tfc-agent container is running"
+echo "\n\033[32m---STARTING THE TFC-AGENT CONTAINER---\033[0m"
+if docker inspect "$TFC_AGENT_NAME" &> /dev/null; then
+  echo "\033[33mContainer "$TFC_AGENT_NAME" already exists, skipping 'docker run' command.\033[0m"
 else
-  docker run -d --rm --name tfc-agent --network host --cap-add=IPC_LOCK \
+  docker run -d --rm --name "$TFC_AGENT_NAME" --network host --cap-add=IPC_LOCK \
     -e "TFC_AGENT_TOKEN=${TFC_AGENT_TOKEN}" \
     -e "TFC_AGENT_NAME=${TFC_AGENT_NAME}" \
   cloudbrokeraz/tfc-agent-custom:latest
 fi
 
 # Start Vault Enterpise
-echo "---STARTING HASHICORP VAULT CONTAINER---"
-if [ "$(docker ps -a -f name=vault-enterprise)" ]; then
-  echo "Container is running"
-  docker kill vault-enterprise
+echo "\n\033[32m---STARTING HASHICORP VAULT CONTAINER---\033[0m"
+if docker inspect vault-enterprise &> /dev/null; then
+  echo "\033[33mContainer vault-enterprise already exists, killing container and redeploying.\033[0m"
+  docker kill vault-enterprise &> /dev/null
   sleep 3
 fi
 docker run -d --rm --name vault-enterprise --hostname vault-enterprise  \
