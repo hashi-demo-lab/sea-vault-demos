@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!usr/bin/zsh
 
 # Unset out current status of the Environment Variables
 unset VAULT_PORT
@@ -18,6 +18,7 @@ export TFC_AGENT_NAME=tfc-agent
 # Set up the AWS CLI Env variables so that Vault can use them for setting up the AWS Secrets Engine
 doormat login -f && eval $(doormat aws export --account ${DOORMAT_AWS_USER})
 DOORMAT_USER_ARN=$(aws sts get-caller-identity | jq -r '.Arn')
+export TF_VAR_doormat_user_arn=$DOORMAT_USER_ARN
 
 echo AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
 echo DOORMAT_USER_ARN:  $DOORMAT_USER_ARN
