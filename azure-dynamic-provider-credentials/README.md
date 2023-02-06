@@ -26,5 +26,6 @@ To interact with Azure AD you will need an Azure SP with some additional Graph A
 
 ```sh
 . ../bootstrap-demo.sh
+terraform init
 terraform apply --auto-approve
 ```

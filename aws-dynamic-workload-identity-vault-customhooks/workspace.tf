@@ -1,7 +1,7 @@
 
 
 
-module "workpace" {
+module "workspace" {
   source = "github.com/hashicorp-demo-lab/terraform-tfe-onboarding-module"
 
   organization = var.organization

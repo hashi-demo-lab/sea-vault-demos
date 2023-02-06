@@ -28,17 +28,9 @@ resource "tfe_workspace" "my_workspace" {
   description = "Enable the Workload Identity integration for Azure."
 } */
 
-resource "tfe_variable" "tfc_azure_client_id" {
-  workspace_id = tfe_workspace.my_workspace.id
 
-  key      = "TFC_AZURE_RUN_CLIENT_ID"
-  value    = azuread_application.tfc_application.application_id
-  category = "env"
 
-  description = "The Azure Client ID runs will use to authenticate."
-}
-
-module "workpace" {
+module "workspace" {
   source = "github.com/hashicorp-demo-lab/terraform-tfe-onboarding-module"
 
   organization = var.organization
@@ -54,6 +46,15 @@ module "workpace" {
 
 }
 
+resource "tfe_variable" "tfc_azure_client_id" {
+  workspace_id = module.workspace.workspace_id
+
+  key      = "TFC_AZURE_RUN_CLIENT_ID"
+  value    = azuread_application.tfc_application.application_id
+  category = "env"
+
+  description = "The Azure Client ID runs will use to authenticate."
+}
 
 
 # The following variables are optional; uncomment the ones you need!
