@@ -8,10 +8,10 @@ region                     = "ap-southeast-2"
 # workspace variables
 organization = "hashi-demos-apj"
 workspace_name = "aws-future-app"
-agent_pool_name = "aaron_pool"
+agent_pool_name = "AaronPool"
 
 vcs_repo = {
-    "identifier" : "",
+    "identifier" : "hashicorp-demo-lab/app-the-future-aws",
     "branch" : "main",
     "ingress_submodules": null,
     "oauth_token_id": ""
