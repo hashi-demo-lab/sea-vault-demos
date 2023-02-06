@@ -56,7 +56,7 @@ provider "vault" {
 # Enable AWS Secrets Engine
 resource "vault_aws_secret_backend" "main" {
   description = "Demo of the AWS secrets engine"
-  path        = "${var.tfc_workspace}/${var.VAULT_PATH}"
+  path        = "${var.workspace_name}/${var.VAULT_PATH}"
 }
 
 # Configure AWS Secrets Engine with Assumed Role
@@ -80,10 +80,10 @@ resource "vault_jwt_auth_backend_role" "main" {
   role_name         = "vault-demo-assumed-role"
   token_policies    = [vault_policy.main.name]
   token_max_ttl     = "100"
-  bound_audiences   = ["vault.testing"]
+  bound_audiences   = ["vault.workload.identity"]
   bound_claims_type = "glob"
   bound_claims = {
-    sub = "organization:${var.tfc_organization}:project:${var.tfc_project}:workspace:${var.tfc_workspace}:run_phase:*"
+    sub = "organization:${var.tfc_organization}:project:${var.tfc_project}:workspace:${var.workspace_name}:run_phase:*"
   }
   user_claim = "terraform_full_workspace"
   role_type  = "jwt"

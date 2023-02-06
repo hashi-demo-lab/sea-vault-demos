@@ -9,12 +9,6 @@ variable "tfc_project" {
   description = "(Required) The name of the TFC Project that the workspace is located within"
   nullable    = false
 }
-variable "tfc_workspace" {
-  type        = string
-  description = "(Required) The name of the TFC workspace"
-  nullable    = false
-}
-
 
 variable "VAULT_PATH" {
   type        = string
@@ -94,7 +88,50 @@ variable "workspace_vcs_directory" {
 variable "variables" {
   description = "Map of all variables for workspace"
   type        = map(any)
-  default     = {}
+  default     = {
+    "CLOUD_PROVIDER_AWS": {
+      "value": "true",
+      "description": "",
+      "category": "env",
+      "sensitive": false,
+      "hcl": false
+    },
+    "VAULT_PATH": {
+      "value": "aws-dynamic-credentials",
+      "description": "",
+      "category": "env",
+      "sensitive": false,
+      "hcl": false
+    },
+    "TFC_VAULT_APPLY_ROLE": {
+      "value": "vault-demo-assumed-role",
+      "description": "",
+      "category": "env",
+      "sensitive": false,
+      "hcl": false
+    },
+    "TFC_VAULT_PLAN_ROLE": {
+      "value": "vault-demo-assumed-role",
+      "description": "",
+      "category": "env",
+      "sensitive": false,
+      "hcl": false
+    },
+    "TFC_WORKLOAD_IDENTITY_AUDIENCE": {
+      "value": "vault.workload.identity",
+      "description": "",
+      "category": "env",
+      "sensitive": false,
+      "hcl": false
+    },
+    "VAULT_ADDR": {
+      "value": "http://localhost:8200",
+      "description": "",
+      "category": "env",
+      "sensitive": false,
+      "hcl": false
+    }
+  }
 }
 
 variable "create_project" {
