@@ -157,19 +157,19 @@ variable "agent_pool_name" {
 variable "workspace_agents" {
   type        = bool
   description = "(Optional) Conditional that allows for the use of existing or new agents within a given workspace"
-  default     = false
+  default     = true
 }
 
 variable "workspace_auto_apply" {
   type        = string
   description = "(Optional)  Setting if the workspace should automatically apply changes when a plan succeeds."
-  default     = false
+  default     = true
 }
 
 variable "execution_mode" {
   type        = string
-  description = "(Optional) Defines the execution mode of the Workspace. Defaults to remote"
-  default     = "remote"
+  description = "Defines the execution mode of the Workspace. Defaults to remote"
+  default     = "agent"
 }
 
 variable "remote_state" {
