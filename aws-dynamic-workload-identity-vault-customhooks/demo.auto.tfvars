@@ -14,5 +14,5 @@ vcs_repo = {
     "identifier" : "hashicorp-demo-lab/app-the-future-aws",
     "branch" : "main",
     "ingress_submodules": null,
-    "oauth_token_id": ""
+    "oauth_token_id": "ot-EEzS6zKkh8tEBC7o"
 }
