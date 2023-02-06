@@ -100,7 +100,7 @@ variable "variables" {
 variable "create_project" {
   description = "(Optional) Boolean that allows for the creation of a Project in Terraform Cloud that the workspace will use. This feature is in beta and currently doesn't have a datasource"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "project_name" {
