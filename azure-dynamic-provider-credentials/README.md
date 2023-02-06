@@ -23,3 +23,8 @@ Congratulations! You now have a Terraform Cloud workspace where runs will automa
 To interact with Azure AD you will need an Azure SP with some additional Graph API permissions allocation.
 
 * See <https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application>
+
+```sh
+. ../bootstrap-demo.sh
+terraform apply --auto-approve
+```
