@@ -33,7 +33,7 @@ variable "doormat_user_arn" {
 }
 
 variable "github_organization" {
-  type = string
+  type        = string
   description = "Name of the GitHub Organisation used for GitHub Authentication method"
 }
 
@@ -88,48 +88,48 @@ variable "workspace_vcs_directory" {
 variable "variables" {
   description = "Map of all variables for workspace"
   type        = map(any)
-  default     = {
-    "CLOUD_PROVIDER_AWS": {
-      "value": "true",
-      "description": "",
-      "category": "env",
-      "sensitive": false,
-      "hcl": false
+  default = {
+    "CLOUD_PROVIDER_AWS" : {
+      "value" : "true",
+      "description" : "",
+      "category" : "env",
+      "sensitive" : false,
+      "hcl" : false
     },
-    "VAULT_PATH": {
-      "value": "aws-dynamic-credentials",
-      "description": "",
-      "category": "env",
-      "sensitive": false,
-      "hcl": false
+    "VAULT_PATH" : {
+      "value" : "aws-dynamic-credentials",
+      "description" : "",
+      "category" : "env",
+      "sensitive" : false,
+      "hcl" : false
     },
-    "TFC_VAULT_APPLY_ROLE": {
-      "value": "vault-demo-assumed-role",
-      "description": "",
-      "category": "env",
-      "sensitive": false,
-      "hcl": false
+    "TFC_VAULT_APPLY_ROLE" : {
+      "value" : "vault-demo-assumed-role",
+      "description" : "",
+      "category" : "env",
+      "sensitive" : false,
+      "hcl" : false
     },
-    "TFC_VAULT_PLAN_ROLE": {
-      "value": "vault-demo-assumed-role",
-      "description": "",
-      "category": "env",
-      "sensitive": false,
-      "hcl": false
+    "TFC_VAULT_PLAN_ROLE" : {
+      "value" : "vault-demo-assumed-role",
+      "description" : "",
+      "category" : "env",
+      "sensitive" : false,
+      "hcl" : false
     },
-    "TFC_WORKLOAD_IDENTITY_AUDIENCE": {
-      "value": "vault.workload.identity",
-      "description": "",
-      "category": "env",
-      "sensitive": false,
-      "hcl": false
+    "TFC_WORKLOAD_IDENTITY_AUDIENCE" : {
+      "value" : "vault.workload.identity",
+      "description" : "",
+      "category" : "env",
+      "sensitive" : false,
+      "hcl" : false
     },
-    "VAULT_ADDR": {
-      "value": "http://localhost:8200",
-      "description": "",
-      "category": "env",
-      "sensitive": false,
-      "hcl": false
+    "VAULT_ADDR" : {
+      "value" : "http://localhost:8200",
+      "description" : "",
+      "category" : "env",
+      "sensitive" : false,
+      "hcl" : false
     }
   }
 }
