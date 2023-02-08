@@ -33,7 +33,8 @@ resource "aws_iam_policy" "policy" {
   "Statement": [
     {
       "Action": [
-        "ec2:*"
+        "ec2:*",
+        "route53:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
