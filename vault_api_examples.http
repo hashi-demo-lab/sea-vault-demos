@@ -1,22 +1,22 @@
 @vault_host=localhost:8200
 @username=
 @password=
+@auth_method=
 @path=
 @secret_key=
 @authToken = {{login.response.body.auth.client_token}}
 
-
-
 ## Authenticate to Vault with userpass method;
+
 # @name login
-POST http://{{vault_host}}/v1/auth/userpass/login/{{username}}
+POST http://{{vault_host}}/v1/auth/{{auth_method}}/login/{{username}}
 Accept: application/json
 Content-Type: application/json
-
 
 {"password": "{{password}}" }
 
 ###
 ## Get Secrets
+
 GET http://{{vault_host}}/v1/{{path}}/data/{{secret_key}}
 X-Vault-Token: {{authToken}}
