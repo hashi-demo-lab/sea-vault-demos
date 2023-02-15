@@ -30,7 +30,7 @@ resource "vault_database_secret_backend_role" "db-user-readonly" {
   backend             = vault_database_secrets_mount.databases.path
   name                = "db-user-readonly"
   db_name             = vault_database_secrets_mount.databases.mysql[0].name
-  default_ttl         = 600
+  default_ttl         = 60
   max_ttl             = 900
   creation_statements = ["CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON my_app.* TO '{{name}}'@'%';"]
 }
@@ -39,7 +39,7 @@ resource "vault_database_secret_backend_role" "db-user-readwrite" {
   backend             = vault_database_secrets_mount.databases.path
   name                = "db-user-readwrite"
   db_name             = vault_database_secrets_mount.databases.mysql[0].name
-  default_ttl         = 3600
+  default_ttl         = 180
   max_ttl             = 7200
   creation_statements = ["CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT ALL ON *.* TO '{{name}}'@'%';"]
 }
