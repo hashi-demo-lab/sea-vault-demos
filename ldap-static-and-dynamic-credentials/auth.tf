@@ -5,4 +5,5 @@ resource "vault_ldap_auth_backend" "ldap" {
   binddn   = "cn=admin,dc=example,dc=org"
   bindpass = "admin"
   groupdn  = "ou=groups,dc=example,dc=org"
+  token_policies = [ "demo-aarons-access" ]
 }
