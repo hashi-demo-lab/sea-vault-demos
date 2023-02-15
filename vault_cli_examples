@@ -1,0 +1,38 @@
+export VAULT_ADDR='http://127.0.0.1:8200'
+export VAULT_PORT=8200
+
+unset VAULT_TOKEN
+
+echo VAULT_ADDR:    $VAULT_ADDR
+echo VAULT_PORT:    $VAULT_PORT
+echo VAULT_TOKEN:   $VAULT_TOKEN
+
+# Key/Value Secrets Engine CLI Examples
+
+vault login -method=userpass username=aaron password=changeme
+vault login -method=ldap username=aaron password=password123
+vault read demo-key-value/data/aarons-secrets
+vault kv get demo-key-value/aarons-secrets
+vault kv get demo-key-value/simons-secrets
+vault kv get -format=json -mount=demo-key-value  aarons-secrets
+vault kv get -field=location -mount=demo-key-value  aarons-secrets
+
+# Dynamic Database Secrets Engine CLI Examples
+
+alias mysql="docker exec -it mysql mysql"
+mysql -u root -p'root' -e "select user from mysql.user;"
+vault login root
+vault read demo-databases/creds/db-user-readonly
+vault read demo-databases/creds/db-user-readwrite
+alias dbdemo="mysql -u <username>  -p'<password>'"
+dbdemo -e "select Host,User from mysql.user;"
+dbdemo -e "select first_name from my_app.customers;"
+
+# Encryption as a Service CLI Examples
+dbdemo -e "select birth_date from my_app.customers;"
+echo "This is my super secret" | base64
+echo "<base64_value>" | base64 -D
+
+# Examples of Merging entities
+ldap_entity_id:   
+github_entity_id: 
