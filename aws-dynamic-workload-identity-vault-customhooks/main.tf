@@ -35,7 +35,21 @@ resource "aws_iam_policy" "policy" {
       "Action": [
         "ec2:*",
         "route53:*",
-        "ssm:*"
+        "ssm:*",
+        "iam:CreateRole",
+        "iam:GetRole",
+        "iam:GetInstanceProfile",
+        "iam:ListRolePolicies",
+        "iam:ListAttachedRolePolicies",
+        "iam:ListInstanceProfilesForRole",
+        "iam:AttachRolePolicy",
+        "iam:PassRole",
+        "iam:AddRoleToInstanceProfile",
+        "iam:CreateInstanceProfile",
+        "iam:DeleteRole",
+        "iam:DetachRolePolicy",
+        "iam:DeleteInstanceProfile",
+        "iam:RemoveRoleFromInstanceProfile"
       ],
       "Effect": "Allow",
       "Resource": "*"
