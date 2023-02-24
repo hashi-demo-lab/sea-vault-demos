@@ -1,0 +1,24 @@
+server:
+  enterpriseLicense:
+    secretName: "my-vault-license"
+    secretKey: "license"
+  image:
+    repository: "hashicorp/vault-enterprise"
+    tag: "1.12.1-ent"
+    # Overrides the default Image Pull Policy
+    pullPolicy: IfNotPresent
+  affinity: ""
+  ha:
+    enabled: true
+    raft:
+      enabled: true
+  ingress:
+    enabled: true
+    activeService: true
+    hosts:
+      - host: localhost
+ui:
+  enabled: true
+  serviceType: "LoadBalancer"
+  serviceNodePort: null
+  externalPort: 32000
