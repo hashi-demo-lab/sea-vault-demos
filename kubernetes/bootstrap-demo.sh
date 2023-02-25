@@ -14,7 +14,7 @@ datacentres[dc2]=32001
 # Iterate over the keys of the array
 for dc in "${(@k)datacentres}"; do
   # Use the key as a variable
-  echo "External port for $dc: ${datacentres[$dc]}"
+  echo "\n\033[32m---External port for $dc: ${datacentres[$dc]}\033[0m"
   # Override the values of the Helm chart. Allowing access to each Vault cluster UI
   yq -i '.ui.externalPort = '${datacentres[$dc]}'' ./helm-vault-raft-values.yml
   # Install Vault via Helm chart
@@ -53,7 +53,8 @@ for dc in "${(@k)datacentres}"; do
   fi
 done
 
-  # Initalise Vault, join and unseal all nodes
+  # Initialise Vault, join and unseal all cluster nodes 
+  echo "\n\033[32m---Configuring Vault for ${dc}---\033[0m"
   kubectl exec "vault-${dc}-0" -- vault operator init -key-shares=1 -key-threshold=1 -format=json > $dc-vault-cluster-keys.json
   kubectl exec "vault-${dc}-0" -- vault operator unseal $(jq -r ".unseal_keys_b64[]" ${dc}-vault-cluster-keys.json)
   kubectl exec -ti "vault-${dc}-1" -- vault operator raft join "http://vault-$dc-0.vault-${dc}-internal:8200"
@@ -66,3 +67,4 @@ done
   # kubectl exec -it "vault-${dc}-1" -- vault status
   # kubectl exec -it "vault-${dc}-2" -- vault status
 done
+helm list
