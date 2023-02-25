@@ -25,27 +25,27 @@ for dc in "${(@k)datacentres}"; do
   # create the array of pod names
   POD_NAMES=(vault-${dc}-0 vault-${dc}-1 vault-${dc}-2)
 
-  # check the status of each pod
+  # Check the status of each pod
   while true; do
     # initialize array to hold pod statuses
     POD_STATUSES=()
 
-    # loop through the pod names and get the pod status
+    # Loop through the pod names and get the pod status
     for pod_name in "${POD_NAMES[@]}"; do
-      # get the pod status
+      # Get the pod status
       pod_status=$(kubectl get pods -l "statefulset.kubernetes.io/pod-name=$pod_name" -o json | jq -r ".items[] | select(.metadata.labels.\"statefulset.kubernetes.io/pod-name\" == \"$pod_name\").status.phase")
 
-      # check if the pod status is running
+      # Check if the pod status is running
       if [[ "$pod_status" != "Running" ]]; then
         echo "ERROR: Pod $pod_name is not running. Status: $pod_status"
       else
         echo "Pod $pod_name is running"
       fi
-    # add the pod status to the array
+    # Add the pod status to the array
     POD_STATUSES+=("$pod_status")
   done
 
-  # check if all pods are in the Running state
+  # Check if all pods are in the Running state
   if echo "${POD_STATUSES[@]}" | grep -qEv "Running"; then
     echo "Not all pods are in the Running state, waiting..."
     sleep 3
