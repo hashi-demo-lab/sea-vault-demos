@@ -45,10 +45,10 @@ for dc in "${(@k)datacentres}"; do
 
   # Check if all pods are in the Running state
   if echo "${POD_STATUSES[@]}" | grep -qEv "Running"; then
-    echo "Not all pods are in the Running state, waiting..."
+    echo "Not all pods are in the Running state, waiting...\n"
     sleep 5
   else
-    echo "All pods are in the Running state."
+    echo "All pods are in the Running state.\n"
     break
   fi
 done
@@ -63,8 +63,8 @@ done
   kubectl exec -ti "vault-${dc}-2" -- vault operator unseal $(jq -r ".unseal_keys_b64[]" ${dc}-vault-cluster-keys.json)
 
   # Troubleshooting purposes
-  # kubectl exec -it "vault-${dc}-0" -- vault status
-  # kubectl exec -it "vault-${dc}-1" -- vault status
-  # kubectl exec -it "vault-${dc}-2" -- vault status
+  # helm list
+  # for i in {0..2} ; do kubectl exec vault-${dc}-$i -- vault status ; done
+  # vault operator raft list-peers
+  # kubectl describe pod vault-${dc}
 done
-helm list
