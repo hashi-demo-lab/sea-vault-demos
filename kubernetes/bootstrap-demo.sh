@@ -82,6 +82,7 @@ for dc in "${(@k)datacentres}"; do
   # helm list
   # for i in {0..2} ; do kubectl exec vault-${dc}-$i -- vault status ; done
   # kubectl describe pod vault-${dc}
-  # kubectl logs vault-${dc}-0,1,2
+  # kubectl logs vault-${dc}-0
+  # kubectl exec -it vault-${dc}-0 -- /bin/sh
   # vault operator raft list-peers (need to authenticate to vault first)
 done
