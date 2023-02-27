@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp
+  namespace: default
+  annotations:
+    vault.hashicorp.com/agent-inject: 'true'
+    vault.hashicorp.com/role: 'webapp'  
+spec:
+  containers:
+  - image: nginx:latest
+    name: nginx
+  serviceAccountName: vault-auth
