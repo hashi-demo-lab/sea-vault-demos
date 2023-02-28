@@ -14,24 +14,24 @@ This repository contains instructions and example code to demonstrate how to use
 
 1. Set the `VAULT_ADDR` environment variable to the address of your running Vault instance:
 
-```export VAULT_ADDR='http://localhost:32000'```
+    ```export VAULT_ADDR='http://localhost:32000'```
 
-```echo "\n\033[32mRoot token for dc1: $(eval echo "\${dc1_root_token}")\033[0m"```
+    ```echo "\n\033[32mRoot token for dc1: $(eval echo "\${dc1_root_token}")\033[0m"```
 
 2. Create a Kubernetes service account that will be used to authenticate to Vault and an application pod. This example uses an `nginx` container:
 
-```kubectl create serviceaccount vault-auth```
+    ```kubectl create serviceaccount vault-auth```
 
-```kubectl apply -f pod.yaml```
+    ```kubectl apply -f pod.yaml```
 
 
 3. Set up the Vault instance with a key/value secrets engine and a policy:
 
-```cd ../vault-key-value-secrets```
+    ```cd ../vault-key-value-secrets```
 
-```vault login```
+    ```vault login```
 
-```terraform apply --auto-approve```
+    ```terraform apply --auto-approve```
 
 
 ## Usage
@@ -56,15 +56,15 @@ This repository contains instructions and example code to demonstrate how to use
 
 5. Retrieve a Vault secret from the application container using JWT:
 
-```kubectl exec -it vault-client -- /bin/sh```
+    ```kubectl exec -it vault-client -- /bin/sh```
 
-```jwt_token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)```
+    ```jwt_token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)```
 
-```curl --request POST --data '{"jwt": "'$jwt_token'", "role": "webapp"}' http://10.1.2.192:8200/v1/auth/kubernetes/login | jq -r '.auth.client_token'```
+    ```curl --request POST --data '{"jwt": "'$jwt_token'", "role": "webapp"}' http://10.1.2.192:8200/v1/auth/kubernetes/login | jq -r '.auth.client_token'```
 
 export VAULT_TOKEN=<insert_token_here>
 
-```curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET http://10.1.2.192:8200/v1/demo-key-value/data/aarons-secrets | jq -r '.data'```
+    ```curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET http://10.1.2.192:8200/v1/demo-key-value/data/aarons-secrets | jq -r '.data'```
 
 
 ## Contributing
