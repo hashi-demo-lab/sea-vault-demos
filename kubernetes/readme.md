@@ -54,7 +54,7 @@ This repository contains instructions and example code to demonstrate how to use
 
     ```vault write auth/kubernetes/role/webapp bound_service_account_names=vault-auth bound_service_account_namespaces=default policies=demo-aarons-access ttl=72h```
 
-5. Retrieve a Vault secret from the application container using JWT:
+5. Retrieve a Vault secret from the application container using JWT and cURL :
 
      ```vault_ip=$(kubectl get pod vault-dc1-0 --output=json | jq -r '.status.podIP')```
 
@@ -65,6 +65,17 @@ This repository contains instructions and example code to demonstrate how to use
      ```client_token=$(echo "$response" | jq -r '.auth.client_token')```
 
      ```data=$(kubectl exec -it vault-client -- sh -c 'curl -H "X-Vault-Token: '"$client_token"'" -X GET http://$vault_ip:8200/v1/demo-key-value/data/aarons-secrets')```
+
+6. Retrieve a Vault secret from the application container using Vault Agent
+
+     ```kubectl apply -f pod2.yaml```
+
+     ```kubectl describe pod webapp```
+
+     ```kubectl logs webapp -c vault-agent-init```
+     
+     ```kubectl exec -it webapp -c nginx -- cat /vault/secrets/config.txt```
+
 
 ## Contributing
 
