@@ -27,7 +27,7 @@ for dc in "${(@k)datacentres}"; do
     # Check the status of each pod
     for i in {0..2}; do
       pod_name="vault-${dc}-$i"
-      pod_status=$(kubectl get pod "$pod_name" -o jsonpath='{.status.phase}')
+      pod_status=$(kubectl get pod "$pod_name" -o jsonpath='{.status.phase}') &> /dev/null
 
       # Add the pod status to the array
       pod_statuses+=("$pod_status")
@@ -49,7 +49,7 @@ for dc in "${(@k)datacentres}"; do
       break
     fi
   done
-
+  sleep 5
   # Initialise Vault  
   echo "\n\033[32m---Configuring Vault for ${dc}---\033[0m"
   vault_operator_pod="vault-${dc}-0"
@@ -61,7 +61,7 @@ for dc in "${(@k)datacentres}"; do
 
   # Unseal leader
   kubectl exec "${vault_operator_pod}" -- vault operator unseal $(eval echo "\${${dc}_unseal_key}")
-
+ 
   # Join each cluster node to the leader
   for i in {1..2}; do
     pod_name="vault-${dc}-$i"
