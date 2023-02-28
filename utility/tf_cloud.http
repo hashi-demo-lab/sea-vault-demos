@@ -1,0 +1,41 @@
+
+@tf_cloud=app.terraform.io
+@ORG_NAME=hashi-demos-apj
+
+@token=
+@org_token=
+
+## Get Workspace by Name;
+GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces/api HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+
+## Get Audit logs
+GET https://{{tf_cloud}}/api/v2/organization/audit-trail
+Authorization: Bearer {{org_token}}
+
+
+###
+## Get Workspace by Id
+GET https://{{tf_cloud}}/api/v2/workspaces/ws-JAGLNVyogairr22o
+Authorization: Bearer {{token}}
+
+###
+GET https://{{tf_cloud}}/api/v2/workspaces/ws-JAGLNVyogairr22o/configuration-versions
+Authorization: Bearer {{token}}
+
+###
+
+
+POST https://{{tf_cloud}}/api/v2/workspaces/ws-JAGLNVyogairr22o/configuration-versions HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/vnd.api+json
+
+{
+  "data": {
+    "type": "configuration-versions",
+    "attributes": {
+    }
+  }
+}
