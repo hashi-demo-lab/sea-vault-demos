@@ -33,33 +33,33 @@ terraform apply --auto-approve
 
 1. Log in to the Vault container:
 
-kubectl exec -it vault-dc1-0 -- /bin/sh
-vault login
+```kubectl exec -it vault-dc1-0 -- /bin/sh```
+```vault login```
 
 2. Enable the Kubernetes auth method:
 
-vault auth enable kubernetes
+```vault auth enable kubernetes```
 
 3. Configure the Kubernetes auth method to use the Vault service account token, Kubernetes URL, and API CA certificate:
 
-vault write auth/kubernetes/config token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" kubernetes_host="https://$KUBERNETES_PORT_443_TCP_ADDR:443" kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+```vault write auth/kubernetes/config token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" kubernetes_host="https://$KUBERNETES_PORT_443_TCP_ADDR:443" kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt```
 
 4. Create an AppRole binding a service account `vault-auth` and attaching the Vault policy. This allows any pod with that service account to request secrets under `demo-aarons-access`:
 
-vault write auth/kubernetes/role/webapp bound_service_account_names=vault-auth bound_service_account_namespaces=default policies=demo-aarons-access ttl=72h
+```vault write auth/kubernetes/role/webapp bound_service_account_names=vault-auth bound_service_account_namespaces=default policies=demo-aarons-access ttl=72h```
 
 
 5. Retrieve a Vault secret from the application container using JWT:
 
-kubectl exec -it vault-client -- /bin/sh
+```kubectl exec -it vault-client -- /bin/sh```
 
-jwt_token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+```jwt_token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)```
 
-curl --request POST --data '{"jwt": "'$jwt_token'", "role": "webapp"}' http://10.1.2.192:8200/v1/auth/kubernetes/login | jq -r '.auth.client_token'
+```curl --request POST --data '{"jwt": "'$jwt_token'", "role": "webapp"}' http://10.1.2.192:8200/v1/auth/kubernetes/login | jq -r '.auth.client_token'```
 
 export VAULT_TOKEN=<insert_token_here>
 
-curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET http://10.1.2.192:8200/v1/demo-key-value/data/aarons-secrets | jq -r '.data'
+```curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET http://10.1.2.192:8200/v1/demo-key-value/data/aarons-secrets | jq -r '.data'```
 
 
 ## Contributing
