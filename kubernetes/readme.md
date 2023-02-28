@@ -56,16 +56,15 @@ This repository contains instructions and example code to demonstrate how to use
 
 5. Retrieve a Vault secret from the application container using JWT:
 
-    ```kubectl exec -it vault-client -- /bin/sh```
+     ```vault_ip=$(kubectl get pod vault-dc1-0 --output=json | jq -r '.status.podIP')```
 
-    ```jwt_token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)```
+     ```jwt_token=$(kubectl exec -it vault-client -- sh -c 'cat /var/run/secrets/kubernetes.io/serviceaccount/token')```
 
-    ```curl --request POST --data '{"jwt": "'$jwt_token'", "role": "webapp"}' http://10.1.2.192:8200/v1/auth/kubernetes/login | jq -r '.auth.client_token'```
+     ```response=$(kubectl exec -it vault-client -- sh -c "curl --request POST --data '{\"jwt\": \"$jwt_token\", \"role\": \"webapp\"}' http://$vault_ip:8200/v1/auth/kubernetes/login")```
 
-export VAULT_TOKEN=<insert_token_here>
+     ```client_token=$(echo "$response" | jq -r '.auth.client_token')```
 
-    ```curl -H "X-Vault-Token: $VAULT_TOKEN" -X GET http://10.1.2.192:8200/v1/demo-key-value/data/aarons-secrets | jq -r '.data'```
-
+     ```data=$(kubectl exec -it vault-client -- sh -c 'curl -H "X-Vault-Token: '"$client_token"'" -X GET http://$vault_ip:8200/v1/demo-key-value/data/aarons-secrets')```
 
 ## Contributing
 

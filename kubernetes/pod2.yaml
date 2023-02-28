@@ -6,7 +6,20 @@ metadata:
   namespace: default
   annotations:
     vault.hashicorp.com/agent-inject: 'true'
-    vault.hashicorp.com/role: 'webapp'  
+    vault.hashicorp.com/role: 'webapp'
+    vault.hashicorp.com/agent-pre-populate-only: 'true'
+    vault.hashicorp.com/agent-inject-secret-config.txt: 'demo-key-value/aarons-secrets'
+    vault.hashicorp.com/agent-inject-template-config.txt: |
+          {{ with secret "demo-key-value/aarons-secrets" }}
+          [DEFAULT]
+          LogLevel = DEBUG
+          [DATABASE]
+          Address=127.0.0.1
+          Port=3306
+          Location={{ .Data.data.location }}
+          Role={{ .Data.data.role }}
+          Database=app
+          {{ end }}
 spec:
   containers:
   - image: nginx:latest
