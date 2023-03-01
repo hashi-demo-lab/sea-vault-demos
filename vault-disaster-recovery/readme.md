@@ -1,0 +1,1 @@
+![Architecture diagram](vault_dr.png)
