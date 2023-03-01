@@ -77,6 +77,22 @@ This repository contains instructions and example code to demonstrate how to use
      ```kubectl exec -it webapp -c nginx -- cat /vault/secrets/config.txt```
 
 
+## Cleanup
+
+```
+for dc in dc1 dc2; do
+    helm uninstall vault-${dc}
+    echo "sleeping..."
+    sleep 5
+   for i in {0..2}; do
+     kubectl delete pvc --field-selector metadata.name=data-vault-${dc}-${i}
+   done
+  done
+  kubectl get pods --namespace=default --field-selector=status.phase=Running
+  lsof -nP -iTCP -sTCP:LISTEN | grep 32000
+```
+
+
 ## Contributing
 
 Contributions are welcome! If you find a bug or want to add a feature, please open an issue or submit a pull request.
