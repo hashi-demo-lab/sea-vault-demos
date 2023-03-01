@@ -27,7 +27,7 @@ This repository contains instructions and example code to demonstrate how to use
 
 3. Set up the Vault instance with a key/value secrets engine and a policy:
 
-    ```cd ../vault-key-value-secrets```
+    ```cd ../vault-kv-secrets-engine```
 
     ```vault login```
 
