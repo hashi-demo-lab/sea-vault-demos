@@ -77,6 +77,14 @@ This repository contains instructions and example code to demonstrate how to use
      ```kubectl exec -it webapp -c nginx -- cat /vault/secrets/config.txt```
 
 
+## Other helpful commands
+```
+  kubectl apply -f rbac.yaml
+  kubectl apply -f pod2.yaml
+  kubectl describe pod webapp
+  kubectl logs webapp -c vault-agent-init  
+```
+
 ## Cleanup
 
 ```

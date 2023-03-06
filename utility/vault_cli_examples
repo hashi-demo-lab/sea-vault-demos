@@ -3,12 +3,12 @@ unset VAULT_PORT
 unset VAULT_TOKEN
 unset VAULT_ADDR
 
-export VAULT_PORT=8200
-export VAULT_TOKEN=root
+export VAULT_PORT=32000
+export VAULT_TOKEN=$dc1_root_token
 export VAULT_ADDR=http://localhost:${VAULT_PORT}
 
-echo VAULT_TOKEN=root
-echo VAULT_ADDR=http://localhost:${VAULT_PORT}
+echo $VAULT_TOKEN
+echo $VAULT_ADDR
 
 # Key/Value Secrets Engine CLI Examples
 cd vault-kv-secrets-engine
@@ -21,6 +21,17 @@ vault kv get demo-key-value/simons-secrets
 vault kv get -format=json -mount=demo-key-value  aarons-secrets
 vault kv get -field=location -mount=demo-key-value  aarons-secrets
 
+
+unset VAULT_PORT
+unset VAULT_TOKEN
+unset VAULT_ADDR
+
+export VAULT_PORT=8200
+export VAULT_TOKEN=root
+export VAULT_ADDR=http://localhost:${VAULT_PORT}
+
+echo $VAULT_TOKEN
+echo $VAULT_ADDR
 # Dynamic Database Secrets Engine CLI Examples
 cd vault-database-dynamic-credentials
 export VAULT_TOKEN=root

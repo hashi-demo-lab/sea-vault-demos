@@ -1,4 +1,4 @@
-vault_address          = "http://localhost:8200"
+vault_address          = "http://localhost:32000"
 kv_secrets_mount       = "demo-key-value"
 kv_team_secrets_name   = "team_pipelines_secrets"
 kv_simons_secrets_name = "simons-secrets"
