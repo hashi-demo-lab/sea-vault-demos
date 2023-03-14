@@ -1,12 +1,13 @@
 
 @tf_cloud=app.terraform.io
 @ORG_NAME=hashi-demos-apj
-
 @token=
 @org_token=
+@workspace_id=
+@run_id=
 
 ## Get Workspace by Name;
-GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces/api HTTP/1.1
+GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces/aws-future-app HTTP/1.1
 Authorization: Bearer {{token}}
 
 ###
@@ -39,3 +40,13 @@ Content-Type: application/vnd.api+json
     }
   }
 }
+
+###
+## Get Workspace Runs
+GET https://{{tf_cloud}}/api/v2/workspaces/{{workspace_id}}/runs/
+Authorization: Bearer {{token}}
+
+###
+## List Policy Checks
+GET https://{{tf_cloud}}/api/v2/runs/{{run_id}}/policy-checks
+Authorization: Bearer {{token}}
