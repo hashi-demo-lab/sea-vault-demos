@@ -10,29 +10,17 @@
 GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces/aws-future-app HTTP/1.1
 Authorization: Bearer {{token}}
 
-### Get Users
+### Get a User example
 GET https://{{tf_cloud}}/api/v2/users/user-BFWHxa8UmcyQVhk1
 Authorization: Bearer {{token}}
 
-###
+### Get a users Authentication tokens 
 
 GET https://{{tf_cloud}}/api/v2/users/user-BFWHxa8UmcyQVhk1/authentication-tokens
 Authorization: Bearer {{token}}
 ###
 
-{
-              "id": "user-LJkpuy2zGteEuRaW",
-              "type": "users"
-            },
-            {
-              "id": "user-nboxJkU2spA52KR7",
-              "type": "users"
-            },
-            {
-              "id": "user-BFWHxa8UmcyQVhk1",
-              "type": "users"
-            }
-###
+
 ### Get Teams
 GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/teams
 Authorization: Bearer {{token}}
