@@ -1,3 +1,4 @@
+vault_address              = "http://localhost:32000"
 mysql_username             = "vaultadmin"
 mysql_password             = "vaultadmin"
 mysql_application_username = "dbsvc1"
