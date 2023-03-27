@@ -1,3 +1,10 @@
+#Get root token and unseal key from vault clusters
+clear
+for dc in dc1 dc2; do
+  echo "\033[32mRoot token for $dc: $(eval echo "\${${dc}_root_token}")\033[0m"
+  echo "\033[32mUnseal key for $dc: $(eval echo "\${${dc}_unseal_key}")\033[0m\n"
+done
+
 #Setup Environment Variables
 unset VAULT_PORT
 unset VAULT_TOKEN
@@ -21,7 +28,6 @@ vault kv get demo-key-value/simons-secrets
 vault kv get -format=json -mount=demo-key-value  aarons-secrets
 vault kv get -field=location -mount=demo-key-value  aarons-secrets
 
-
 unset VAULT_PORT
 unset VAULT_TOKEN
 unset VAULT_ADDR
@@ -34,13 +40,13 @@ echo $VAULT_TOKEN
 echo $VAULT_ADDR
 # Dynamic Database Secrets Engine CLI Examples
 cd vault-database-dynamic-credentials
-export VAULT_TOKEN=root
-alias mysql="docker exec -it mysql mysql"
+export VAULT_TOKEN=$dc1_root_token
+alias mysql="kubectl --namespace=my-vault-demo exec mysql-0 -- mysql"
 mysql -u root -p'root' -e "select user from mysql.user;"
-vault login root
+vault login $VAULT_TOKEN
 vault read demo-databases/creds/db-user-readonly
 vault read demo-databases/creds/db-user-readwrite
-alias dbdemo="mysql -u v-token-db-user-re-6e3gnJ31SDF5N  -p'OjmW88wtk-BeEBBmOPGj'"
+alias dbdemo="mysql -u v-root-db-user-re-lNjbuzezRQc7Ig  -p'yOkL3DP8xzi-Kr18CAYd'"
 dbdemo -e "select Host,User from mysql.user;"
 dbdemo -e "select first_name from my_app.customers;"
 

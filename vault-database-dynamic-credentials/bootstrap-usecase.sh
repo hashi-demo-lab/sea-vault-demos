@@ -7,7 +7,7 @@ unset MYSQL_DATABASE
 # Set envrionment variables
 export MYSQL_ROOT_PASSWORD=root
 export MYSQL_DATABASE=my_app
-export VAULT_PORT=8200
+export VAULT_PORT=32000
 export VAULT_TOKEN=root
 export VAULT_ADDR=http://localhost:${VAULT_PORT}
 
@@ -55,7 +55,7 @@ if docker inspect "transit-app" &> /dev/null; then
 fi
 docker run --network demo-network --hostname transit-app --name transit-app \
   -p 5000:5000 \
-  -e VAULT_ADDR=http://vault-enterprise:8200 \
+  -e VAULT_ADDR=http://vault-enterprise:32000 \
   -e VAULT_DATABASE_CREDS_PATH=demo-databases/creds/db-user-readwrite \
   -e VAULT_NAMESPACE= \
   -e VAULT_TOKEN=root \

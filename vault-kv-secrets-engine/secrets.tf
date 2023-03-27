@@ -12,8 +12,8 @@ resource "vault_kv_secret_v2" "team_secrets" {
   name  = var.kv_team_secrets_name
   data_json = jsonencode(
     {
-      team     = "solution engineers and architects",
-      location = "sydney"
+      team     = "Solution Engineers and Architects",
+      location = "Sydney"
     }
   )
 }
@@ -35,7 +35,7 @@ resource "vault_kv_secret_v2" "aarons_secrets" {
   data_json = jsonencode(
     {
       role     = "Solutions Engineer",
-      location = "kiama"
+      location = "Kiama"
     }
   )
 }

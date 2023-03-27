@@ -82,24 +82,45 @@ This repository contains instructions and example code to demonstrate how to use
   kubectl apply -f rbac.yaml
   kubectl apply -f pod2.yaml
   kubectl describe pod webapp
-  kubectl logs webapp -c vault-agent-init  
+  kubectl logs webapp -c vault-agent-init
+```
+
+## Troubleshooting purposes
+```
+  helm list
+  for i in {0..2} ; do kubectl exec vault-${dc}-$i -- vault status ; done
+  kubectl describe pod vault-${dc}
+  kubectl logs vault-${dc}-0
+  kubectl exec -it vault-${dc}-0 -- /bin/sh
+  vault operator raft list-peers (need to authenticate to vault first)  
 ```
 
 ## Cleanup
 
 ```
 for dc in dc1 dc2; do
-    helm uninstall vault-${dc}
+    helm uninstall vault-${dc} --namespace=my-vault-demo
     echo "sleeping..."
     sleep 5
-   for i in {0..2}; do
-     kubectl delete pvc --field-selector metadata.name=data-vault-${dc}-${i}
-   done
   done
-  kubectl get pods --namespace=default --field-selector=status.phase=Running
+  kubectl delete pvc --all --namespace=my-vault-demo
+  kubectl delete secret my-vault-license --namespace=my-vault-demo
+  kubectl get pods -o wide --namespace=my-vault-demo
   lsof -nP -iTCP -sTCP:LISTEN | grep 32000
-```
 
+  kubectl delete statefulset transit-app --namespace=my-vault-demo
+  kubectl delete service transit-app-svc  --namespace=my-vault-demo
+  kubectl delete pvc transit-app-pvc --namespace=my-vault-demo
+
+  kubectl delete statefulset mysql --namespace=my-vault-demo
+  kubectl delete service mysql  --namespace=my-vault-demo
+  kubectl delete pvc mysql-pvc  --namespace=my-vault-demo
+
+  kubectl get all --namespace=my-vault-demo
+  kubectl get pvc --namespace=my-vault-demo
+  kubectl get pods --namespace=my-vault-demo
+
+```
 
 ## Contributing
 
