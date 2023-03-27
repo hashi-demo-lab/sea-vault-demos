@@ -18,10 +18,10 @@ echo $VAULT_TOKEN
 echo $VAULT_ADDR
 
 # Key/Value Secrets Engine CLI Examples
-cd vault-kv-secrets-engine
+# vault-kv-secrets-engine 
 unset VAULT_TOKEN
-vault login -method=userpass username=aaron password=changeme
 vault login -method=ldap username=aaron password=password123
+vault login -method=userpass username=aaron password=changeme
 vault read demo-key-value/data/aarons-secrets
 vault kv get demo-key-value/aarons-secrets
 vault kv get demo-key-value/simons-secrets
@@ -46,7 +46,7 @@ mysql -u root -p'root' -e "select user from mysql.user;"
 vault login $VAULT_TOKEN
 vault read demo-databases/creds/db-user-readonly
 vault read demo-databases/creds/db-user-readwrite
-alias dbdemo="mysql -u v-root-db-user-re-lNjbuzezRQc7Ig  -p'yOkL3DP8xzi-Kr18CAYd'"
+alias dbdemo="mysql -u v-root-db-user-re-0dSguzOHv0VjpO  -p'RQaGLhTMIPF-ZgFJclD0'"
 dbdemo -e "select Host,User from mysql.user;"
 dbdemo -e "select first_name from my_app.customers;"
 

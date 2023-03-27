@@ -98,7 +98,7 @@ This repository contains instructions and example code to demonstrate how to use
 ## Cleanup
 
 ```
-for dc in dc1 dc2; do
+  for dc in dc1 dc2; do
     helm uninstall vault-${dc} --namespace=my-vault-demo
     echo "sleeping..."
     sleep 5
