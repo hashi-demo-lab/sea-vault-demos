@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: transit-app
+  namespace: my-vault-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transit-app
+  serviceName: transit-app
+  template:
+    metadata:
+      labels:
+        app: transit-app
+    spec:
+      containers:
+        - env:
+            - name: VAULT_ADDR
+              value: http://vault-dc1-ui:32000
+            - name: VAULT_DATABASE_CREDS_PATH
+              value: demo-databases/creds/db-user-readwrite
+            - name: VAULT_NAMESPACE
+            - name: VAULT_TOKEN
+              value: null
+            - name: VAULT_TRANSFORM_PATH
+              value: demo-transform
+            - name: VAULT_TRANSFORM_MASKING_PATH
+              value: masking/transform
+            - name: VAULT_TRANSIT_PATH
+              value: demo-transit
+            - name: MYSQL_ADDR
+              value: mysql
+          image: cloudbrokeraz/app01:latest
+          name: transit-app
+          ports:
+            - containerPort: 5000
+      volumes:
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transit-app-svc
+  namespace: my-vault-demo
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+  selector:
+    app: transit-app
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: transit-app-pvc
+  namespace: my-vault-demo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
