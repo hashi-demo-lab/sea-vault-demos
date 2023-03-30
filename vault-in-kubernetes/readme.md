@@ -108,14 +108,6 @@ This repository contains instructions and example code to demonstrate how to use
   kubectl get pods -o wide --namespace=my-vault-demo
   lsof -nP -iTCP -sTCP:LISTEN | grep 32000
 
-  kubectl delete statefulset transit-app --namespace=my-vault-demo
-  kubectl delete service transit-app-svc  --namespace=my-vault-demo
-  kubectl delete pvc transit-app-pvc --namespace=my-vault-demo
-
-  kubectl delete statefulset mysql --namespace=my-vault-demo
-  kubectl delete service mysql  --namespace=my-vault-demo
-  kubectl delete pvc mysql-pvc  --namespace=my-vault-demo
-
   kubectl get all --namespace=my-vault-demo
   kubectl get pvc --namespace=my-vault-demo
   kubectl get pods --namespace=my-vault-demo
