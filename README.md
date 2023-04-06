@@ -69,6 +69,25 @@ The entry point into creating this demo enviornment is the bootstrap script (`bo
 . ./bootstrap-demo.sh
 ```
 
+
+# Clean up
+```# Clean up steps
+   kubectl delete --all pods,deployments,services,replicaset --namespace=my-vault-demo 
+   kubectl get deployment | grep '^cert-' | awk '{print $1}' | xargs kubectl delete deployment
+   kubectl get replicaset | grep '^cert-' | awk '{print $1}' | xargs kubectl delete replicaset
+   kubectl get service | grep '^cert-' | awk '{print $1}' | xargs kubectl delete service
+   kubectl get clusterroles | grep '^cert-' | awk '{print $1}' | xargs kubectl delete clusterrole
+   kubectl get clusterrolebinding | grep '^cert-' | awk '{print $1}' | xargs kubectl delete clusterrolebinding
+   kubectl get crds | grep '^cert-' | awk '{print $1}' | xargs kubectl delete crds
+   kubectl get role | grep '^cert-' | awk '{print $1}' | xargs kubectl delete role
+   kubectl delete role cert-manager:leaderelection  --namespace=kube-system
+
+
+   kubectl delete --all pods,deployments,services,replicaset --namespace=my-vault-demo 
+   kubectl delete all --namespace=my-vault-demo  
+   kubectl delete namespace my-vault-demo
+```
+
 # Notes
 
 * This script is intended for demo purposes only and is not recommended for production use

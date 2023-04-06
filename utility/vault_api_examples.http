@@ -1,11 +1,11 @@
-@vault_host=localhost:8200
-@username=
-@password=root
-@auth_method=token
+@vault_host=localhost:32000
+@username=aaron
+@password=changeme
+@auth_method=userpass
 @path=demo-key-value
 @secret_key=aarons-secrets
-#@authToken = {{login.response.body.auth.client_token}}
-@authToken = root
+@authToken = {{login.response.body.auth.client_token}}
+#@authToken=
 ## Authenticate to Vault with userpass method;
 
 # @name login

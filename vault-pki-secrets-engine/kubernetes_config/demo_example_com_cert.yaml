@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata: 
+  name: demo-example-com
+  namespace: my-vault-demo
+spec:
+  secretName: demo-example-com-tls
+  issuerRef:
+    name: vault-issuer
+  commonName: demo.example.com
+  dnsNames:
+  - demo.example.com
+  duration: 1m
+  subject:
+    organizations:
+      - hashi-demo-lab
+    organizationalUnits:
+      - Solutions Engineering and Architecture

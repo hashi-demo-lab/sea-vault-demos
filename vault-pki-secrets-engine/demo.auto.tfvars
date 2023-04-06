@@ -1,1 +1,1 @@
-vault_address              = "http://localhost:32000"
+vault_address  = "http://localhost:32000"
