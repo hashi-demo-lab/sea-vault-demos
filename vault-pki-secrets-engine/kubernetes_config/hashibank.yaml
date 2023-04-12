@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hashibank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hashibank
+  template:
+    metadata:
+      labels:
+        app: hashibank
+    spec:
+      containers:
+      - name: hashibank
+        image: jamiewri/hashibank:0.0.3
+        args:
+        - -dev
+        ports:
+        - containerPort: 8080

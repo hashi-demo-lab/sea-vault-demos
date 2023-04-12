@@ -29,10 +29,9 @@ resource "vault_pki_secret_backend_config_urls" "this" {
 resource "vault_pki_secret_backend_role" "this" {
   backend          = vault_mount.this.path
   name             = "my_role"
-  ttl              = 60
-  allow_ip_sans    = true
-  key_type         = "rsa"
-  key_bits         = 2048
-  allowed_domains  = ["example.com"]
+  allowed_domains  = ["example.com", "hashibank.com"]
   allow_subdomains = true
+  max_ttl          = 60
+  organization     = ["hashi-demo-lab"]
+  ou               = ["Solutions Engineering and Architecture"]
 }

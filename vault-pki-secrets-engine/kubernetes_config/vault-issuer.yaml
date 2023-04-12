@@ -1,29 +1,3 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  namespace: my-vault-demo
-  name: issuer-read-secrets
-rules:
-- apiGroups: [""]
-  resources: ["secrets"]
-  verbs: ["get", "watch", "list"]
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: secret-reader-binding
-  namespace: my-vault-demo
-subjects:
-- kind: ServiceAccount
-  name: issuer
-  namespace: my-vault-demo
-roleRef:
-  kind: Role
-  name: issuer-read-secrets
-  apiGroup: rbac.authorization.k8s.io
-
----
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
