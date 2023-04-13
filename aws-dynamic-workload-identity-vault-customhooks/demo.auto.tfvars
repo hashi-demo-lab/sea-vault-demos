@@ -1,5 +1,5 @@
 tfc_organization    = "hashi-demos-apj"
-github_organization = "hashicorp-demo-lab"
+github_organization = "hashi-demo-lab"
 tfc_project         = "Default Project"
 VAULT_PATH          = "aws-dynamic-credentials"
 region              = "ap-southeast-2"
@@ -10,7 +10,7 @@ workspace_name  = "aws-future-app"
 agent_pool_name = "AaronPool"
 
 vcs_repo = {
-  "identifier" : "hashicorp-demo-lab/app-the-future-aws",
+  "identifier" : "hashi-demo-lab/app-the-future-aws",
   "branch" : "main",
   "ingress_submodules" : null,
   "oauth_token_id" : "ot-EEzS6zKkh8tEBC7o"
