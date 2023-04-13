@@ -1,4 +1,14 @@
 server:
+  extraSecretEnvironmentVars:
+    - envName: AWS_ACCESS_KEY_ID
+      secretName: aws-access-key-id-secret
+      secretKey: AWS_ACCESS_KEY_ID
+    - envName: AWS_SECRET_ACCESS_KEY
+      secretName: aws-secret-access-key-secret
+      secretKey: AWS_SECRET_ACCESS_KEY
+    - envName: AWS_SESSION_TOKEN
+      secretName: aws-session-token-secret
+      secretKey: AWS_SESSION_TOKEN
   enterpriseLicense:
     secretName: "my-vault-license"
     secretKey: "license"

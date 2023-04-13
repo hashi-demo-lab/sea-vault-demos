@@ -19,7 +19,7 @@ variable "VAULT_PATH" {
 variable "vault_address" {
   type        = string
   description = "vault address"
-  default     = "http://localhost:8200"
+  default     = "http://localhost:32000"
 }
 
 variable "region" {
@@ -125,7 +125,7 @@ variable "variables" {
       "hcl" : false
     },
     "VAULT_ADDR" : {
-      "value" : "http://localhost:32000",
+      "value" : "http://vault-dc1-active:8200",
       "description" : "",
       "category" : "env",
       "sensitive" : false,
