@@ -2,11 +2,11 @@
 
 This repository contains the necessary files to build and configure:
 
-- HashiCorp Vault Enterprise
 - Terraform Cloud Agent
+- 2 x HashiCorp Vault Enterprise clusters running in Kubernetes
+- 
 
-The objective of this repository is to to create an end-to-end orchestration demo environment that allows for members of the SEA team to
-demonstrate the capabilities of using Vault Enterprise and the TFC Agent.
+The objective of this repository is to to create an end-to-end orchestration demo environment that allows for members of the SEA team todemonstrate the capabilities of using HashiCorp Solutions
 
 The demo environment was created with the following principles in mind
 
@@ -15,26 +15,11 @@ The demo environment was created with the following principles in mind
 - Easliy redeployable with a principle of being idempotant
 - Low impact on cost for running a demo environment
 
-The entry point into creating this demo enviornment is the bootstrap script (`bootstrap-demo.sh`) which is used to set up the demo.
+The entry point into creating this demo enviornment is a bootstrap script (`bootstrap-demo.sh`) located in every subfolder to set up a particular demo.
 
-# What the script does
+For example, the first script to run is the `bootstrap-demo.sh` located in the `vault-in-kubernets` to build the base vault clusters. Once this is run, you can utilise other sub directories to build upon that layer with particualr use cases.
 
-1. Unsets current environment variables
-2. Sets environment variables for Vault, including VAULT_PORT, VAULT_TOKEN, VAULT_ADDR, ROLE_NAME, and TFC_AGENT_NAME
-3. Pulls the latest version of cloudbrokeraz/tfc-agent-custom and hashicorp/vault-enterprise Docker images
-4. Starts a TFC Agent container if one is not already running
 
-   - This is a Custom TFC Agent with custom hooks, using workload identity token to retreive and revoke credentials dynamically using Vault AWS Secrets engine (see below for more detail)
-
-5. Runs doormat login and exports credentials to be used by Vault Enterprise
-6. If a Vault container is already running, stops and removes it
-7. Starts a new Vault container, passing in the necessary environment variables and ports
-8. Sleeps for 5 seconds to allow the Vault container to start up
-9. runs the terraform apply command to configure Vault with
-
-   - K/V secrets engine & AWS secrets engine,
-   - Creates a policy granting access to both engines
-   - Configures the JWT auth method (this is used for the OIDC trust using workload identity between a TFC workspace and the Vault-Enterprise container)
 
 # Pre-requisites
 
@@ -43,17 +28,25 @@ The entry point into creating this demo enviornment is the bootstrap script (`bo
 * aws cli
 * jq
 * [Doormat](https://docs.prod.secops.hashicorp.services/doormat/cli/) - command line tool must be installed and configured with appropriate credentials
-* [Docker](https://www.docker.com/products/docker-desktop/)
+* [Docker Desktop Kubernetes](https://docs.docker.com/desktop/kubernetes/)
 
 ## Licenses
 
 * A valid Vault license key
 
 ## Set required environment variables
+Certain unique environment variables are required prior:
 
+# Terraform Cloud Agent Authentication
 * echo 'export TFC_AGENT_TOKEN=<>' >> ~/.zshenv
+
+
 * echo 'export DOORMAT_AWS_USER=<>' >> ~/.zshenv
+
+# Vault Enterprise License Key
 * echo 'export VAULT_LICENSE=<>' >> ~/.zshenv
+
+# For Azure authentiation
 * echo 'export ARM_CLIENT_ID=<>' >> ~/.zshenv
 * echo 'export ARM_CLIENT_SECRET=<>' >> ~/.zshenv
 * echo 'export ARM_SUBSCRIPTION_ID=<>' >> ~/.zshenv
@@ -82,7 +75,6 @@ The entry point into creating this demo enviornment is the bootstrap script (`bo
    kubectl get role | grep '^cert-' | awk '{print $1}' | xargs kubectl delete role
    kubectl delete role cert-manager:leaderelection  --namespace=kube-system
 
-
    kubectl delete --all pods,deployments,services,replicaset --namespace=my-vault-demo 
    kubectl delete all --namespace=my-vault-demo  
    kubectl delete namespace my-vault-demo
@@ -90,5 +82,5 @@ The entry point into creating this demo enviornment is the bootstrap script (`bo
 
 # Notes
 
-* This script is intended for demo purposes only and is not recommended for production use
+* The files are intended for demo purposes only and is not recommended for production use
 * The script uses docker kill to stop and remove the Vault container. Be aware that this command will remove any data manually stored in the container.

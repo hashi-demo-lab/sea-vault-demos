@@ -125,7 +125,7 @@ variable "variables" {
       "hcl" : false
     },
     "VAULT_ADDR" : {
-      "value" : "http://localhost:8200",
+      "value" : "http://localhost:32000",
       "description" : "",
       "category" : "env",
       "sensitive" : false,
