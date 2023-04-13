@@ -1,19 +1,14 @@
 #!usr/bin/zsh
 
 # Unset out current status of the Environment Variables
-unset VAULT_PORT
-unset VAULT_TOKEN
-unset VAULT_ADDR
 unset AWS_ACCESS_KEY_ID
 unset AWS_SECRET_ACCESS_KEY
 unset AWS_SESSION_TOKEN
-unset TFC_AGENT_NAME
 
 # Set envrionment variables
 export VAULT_PORT=8200
 export VAULT_TOKEN=root
 export VAULT_ADDR=http://localhost:${VAULT_PORT}
-export TFC_AGENT_NAME=tfc-agent
 
 # Set up the AWS CLI Env variables so that Vault can use them for setting up the AWS Secrets Engine
 doormat login -f && eval $(doormat aws export --account ${DOORMAT_AWS_USER})
@@ -24,7 +19,6 @@ echo AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
 echo DOORMAT_USER_ARN:  $DOORMAT_USER_ARN
 
 # Docker prep
-docker pull cloudbrokeraz/tfc-agent-custom:latest
 docker pull hashicorp/vault-enterprise:latest
 
 # Create Docker network
@@ -34,17 +28,6 @@ if [[ "$(docker network ls -q -f name=demo-network)" == "" ]]; then
     docker network create demo-network
 else
     echo "\033[33mDocker network 'demo-network' network already exists. skipping 'docker network create'.\033[0m"
-fi
-
-# Start Terraform Cloud Agent 
-echo "\n\033[32m---STARTING THE TFC-AGENT CONTAINER---\033[0m"
-if docker inspect "$TFC_AGENT_NAME" &> /dev/null; then
-  echo "\033[33mContainer "$TFC_AGENT_NAME" already exists, skipping 'docker run' command.\033[0m"
-else
-  docker run -d --rm --name "$TFC_AGENT_NAME" --network host --cap-add=IPC_LOCK \
-    -e "TFC_AGENT_TOKEN=${TFC_AGENT_TOKEN}" \
-    -e "TFC_AGENT_NAME=${TFC_AGENT_NAME}" \
-  cloudbrokeraz/tfc-agent-custom:latest
 fi
 
 # Start Vault Enterpise
