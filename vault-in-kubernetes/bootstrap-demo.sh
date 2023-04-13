@@ -14,8 +14,12 @@ export namespace="my-vault-demo"
 kubectl create namespace "$namespace"
 kubectl config set-context --current --namespace="$namespace"
 
-# Setup K8s secret for passing licenese file into helm chart
-kubectl create secret generic my-vault-license --from-literal=license="${VAULT_LICENSE}"
+# Setup K8s secret for passing into helm chart
+kubectl create secret generic vault-secrets \
+    --from-literal=license="${VAULT_LICENSE}" \
+    --from-literal=AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \
+    --from-literal=AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
+    --from-literal=AWS_SESSION_TOKEN="${AWS_SESSION_TOKEN}"
 
 # Define an associative array to store the datacenter names and port numbers
 # This allows for a Vault per "datacentre" with a unique port for access via http://localhost:port

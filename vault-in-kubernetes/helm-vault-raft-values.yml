@@ -1,16 +1,16 @@
 server:
   extraSecretEnvironmentVars:
     - envName: AWS_ACCESS_KEY_ID
-      secretName: aws-access-key-id-secret
+      secretName: vault-secrets
       secretKey: AWS_ACCESS_KEY_ID
     - envName: AWS_SECRET_ACCESS_KEY
-      secretName: aws-secret-access-key-secret
+      secretName: vault-secrets
       secretKey: AWS_SECRET_ACCESS_KEY
     - envName: AWS_SESSION_TOKEN
-      secretName: aws-session-token-secret
+      secretName: vault-secrets
       secretKey: AWS_SESSION_TOKEN
   enterpriseLicense:
-    secretName: "my-vault-license"
+    secretName: "vault-secrets"
     secretKey: "license"
   image:
     repository: "hashicorp/vault-enterprise"
