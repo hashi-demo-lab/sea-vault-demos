@@ -1,0 +1,1 @@
+![PKI Certificates](img/hashibank.png)

@@ -65,18 +65,16 @@ Certain unique environment variables are required prior:
 
 # Clean up
 ```# Clean up steps
-   kubectl delete --all pods,deployments,services,replicaset --namespace=my-vault-demo 
-   kubectl get deployment | grep '^cert-' | awk '{print $1}' | xargs kubectl delete deployment
-   kubectl get replicaset | grep '^cert-' | awk '{print $1}' | xargs kubectl delete replicaset
-   kubectl get service | grep '^cert-' | awk '{print $1}' | xargs kubectl delete service
+   kubectl delete all --all -n my-vault-demo
+   kubectl delete pvc --all
+   kubectl delete roles --all
    kubectl get clusterroles | grep '^cert-' | awk '{print $1}' | xargs kubectl delete clusterrole
-   kubectl get clusterrolebinding | grep '^cert-' | awk '{print $1}' | xargs kubectl delete clusterrolebinding
-   kubectl get crds | grep '^cert-' | awk '{print $1}' | xargs kubectl delete crds
-   kubectl get role | grep '^cert-' | awk '{print $1}' | xargs kubectl delete role
-   kubectl delete role cert-manager:leaderelection  --namespace=kube-system
+   kubectl delete clusterroles ingress-nginx vault-dc1-agent-injector-clusterrole vault-dc2-agent-injector-clusterrole
+   kubectl get clusterrolebinding | grep '^cert-' | awk '{print $1}' | xargs kubectl delete
+   kubectl delete $(kubectl get clusterrolebinding -o=name | grep cert-)
+   kubectl delete $(kubectl get clusterrolebinding -o=name | grep vault)
 
-   kubectl delete --all pods,deployments,services,replicaset --namespace=my-vault-demo 
-   kubectl delete all --namespace=my-vault-demo  
+   kubectl get crds -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | grep '\.cert-manager\.io$' | xargs kubectl delete crds 
    kubectl delete namespace my-vault-demo
 ```
 
