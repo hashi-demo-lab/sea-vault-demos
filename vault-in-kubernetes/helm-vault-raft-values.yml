@@ -31,4 +31,4 @@ ui:
   enabled: true
   serviceType: "LoadBalancer"
   serviceNodePort: null
-  externalPort: 32001
+  externalPort: 32000
