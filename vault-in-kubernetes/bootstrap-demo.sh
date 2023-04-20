@@ -35,6 +35,9 @@ for dc in "${(@k)datacentres}"; do
   # Replace the externalPort value in the Helm chart values file
   yq -i '.ui.externalPort = '${datacentres[$dc]}'' ./helm-vault-raft-values.yml
 
+  # add hashicorp heml repo
+  helm repo add hashicorp https://helm.releases.hashicorp.com
+
   # Install Vault via Helm chart
   helm install "vault-${dc}" hashicorp/vault --values ./helm-vault-raft-values.yml --namespace my-vault-demo --create-namespace
 

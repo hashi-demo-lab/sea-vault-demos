@@ -5,6 +5,7 @@ This repository contains instructions and example code to demonstrate how to use
 ## Prerequisites
 
 - A Kubernetes cluster
+- you can enable K8s in docker 
 - `helm` command line tool
 - A running instance of HashiCorp Vault
 - `kubectl` command line tool
@@ -15,6 +16,7 @@ This repository contains instructions and example code to demonstrate how to use
 brew install helm
 brew install jq
 brew install yq
+brew install kubectl
 ```
 
 ```sh
