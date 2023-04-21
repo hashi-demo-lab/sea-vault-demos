@@ -1,5 +1,5 @@
 resource "vault_github_auth_backend" "example" {
-  organization = "hashicorp-demo-lab"
+  organization = "hashi-demo-lab"
 }
 
 resource "vault_auth_backend" "userpass" {
