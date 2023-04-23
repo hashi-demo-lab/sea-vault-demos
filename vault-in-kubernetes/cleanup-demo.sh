@@ -3,6 +3,7 @@ for dc in dc1 dc2; do
     echo "sleeping..."
     sleep 5
   done
+  k delete secret vault-secrets 
   kubectl delete pvc --all --namespace=my-vault-demo
   kubectl delete secret my-vault-license --namespace=my-vault-demo
   kubectl get pods -o wide --namespace=my-vault-demo
