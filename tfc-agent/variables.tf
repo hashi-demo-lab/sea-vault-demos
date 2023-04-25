@@ -6,4 +6,5 @@ variable "agent_name" {
 variable "agent_token" {
   type        = string
   description = "Terraform Cloud agent token"
-  default = ""
+  default = null
+}

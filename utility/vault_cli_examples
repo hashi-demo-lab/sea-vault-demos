@@ -32,13 +32,11 @@ unset VAULT_PORT
 unset VAULT_TOKEN
 unset VAULT_ADDR
 
-export VAULT_PORT=8200
-export VAULT_TOKEN=root
+export VAULT_PORT=32000
 export VAULT_ADDR=http://localhost:${VAULT_PORT}
 
 echo $VAULT_TOKEN
 echo $VAULT_ADDR
-
 
 # Dynamic Database Secrets Engine CLI Examples
 cd vault-dynamic-database-credentials
@@ -46,9 +44,10 @@ export VAULT_TOKEN=$dc1_root_token
 alias mysql="kubectl --namespace=my-vault-demo exec mysql-0 -- mysql"
 mysql -u root -p'root' -e "select user from mysql.user;"
 vault login $VAULT_TOKEN
+vault login -method=userpass username=alice password=changeme
 vault read demo-databases/creds/db-user-readonly
 vault read demo-databases/creds/db-user-readwrite
-alias dbdemo="mysql -u v-root-db-user-re-0dSguzOHv0VjpO  -p'RQaGLhTMIPF-ZgFJclD0'"
+alias dbdemo="mysql -u v-userpass-a-db-user-re-stc4y1t7  -p'1b-2p8VAkUCFReIm8gGh'"
 dbdemo -e "select Host,User from mysql.user;"
 dbdemo -e "select first_name from my_app.customers;"
 
