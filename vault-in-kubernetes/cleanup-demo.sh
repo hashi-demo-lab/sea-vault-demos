@@ -1,3 +1,8 @@
+#!/bin/zsh
+
+# Define variables
+namespace="my-vault-demo"
+
 for dc in dc1 dc2; do
     helm uninstall vault-${dc} --namespace=my-vault-demo
     echo "sleeping..."
@@ -12,10 +17,7 @@ for i in {0..2}; do
   kubectl delete pvc data-vault-dc2-$i
 done
 
-kubectl delete secret my-vault-license --namespace=my-vault-demo
-kubectl get all -o wide --namespace=my-vault-demo
-kubectl get pvc --namespace=my-vault-demo
+kubectl delete secret vault-secrets -n "$namespace"
+kubectl get all -o wide -n "$namespace"
+kubectl get pvc -n "$namespace"
 lsof -nP -iTCP -sTCP:LISTEN | grep 32000
-
-
-
