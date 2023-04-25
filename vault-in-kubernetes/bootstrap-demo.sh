@@ -1,5 +1,9 @@
 #!usr/bin/zsh
 
+unset AWS_ACCESS_KEY_ID
+unset AWS_SECRET_ACCESS_KEY
+unset AWS_SESSION_TOKEN
+
 # Set up the AWS CLI Env variables so that Vault can use them for setting up the AWS Secrets Engine
 doormat login -f && eval $(doormat aws export --account ${DOORMAT_AWS_USER})
 DOORMAT_USER_ARN=$(aws sts get-caller-identity | jq -r '.Arn')
@@ -98,4 +102,14 @@ for dc in "${(@k)datacentres}"; do
   done
   echo "\033[32mRoot token for ${dc}: $(eval echo "\${${dc}_root_token}")\033[0m"
   echo "\033[32mUnseal key for ${dc}: $(eval echo "\${${dc}_unseal_key}")\033[0m\n"
+done
+
+#setup base variables
+export VAULT_TOKEN=$dc1_root_token
+export VAULT_PORT=32000
+export VAULT_ADDR=http://localhost:${VAULT_PORT}
+clear 
+for dc in dc1 dc2; do
+  echo "\033[32mRoot token for $dc: $(eval echo "\${${dc}_root_token}")\033[0m"
+  echo "\033[32mUnseal key for $dc: $(eval echo "\${${dc}_unseal_key}")\033[0m\n"
 done
