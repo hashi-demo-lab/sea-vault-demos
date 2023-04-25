@@ -31,7 +31,7 @@ resource "vault_database_secret_backend_role" "db-user-readonly" {
   name                = "db-user-readonly"
   db_name             = vault_database_secrets_mount.databases.mysql[0].name
   default_ttl         = 3
-  max_ttl             = 3
+  max_ttl             = 5
   creation_statements = ["CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON my_app.* TO '{{name}}'@'%';"]
 }
 
