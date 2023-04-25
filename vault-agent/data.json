@@ -1,9 +1,9 @@
 {
-   "organization": "ACME Inc.",
+   "organization": "HashiBank Inc.",
    "customer_id": "ABXX2398YZPIE7391",
-   "region": "US-West",
-   "zip_code": "94105",
+   "region": "AU-Sydney",
+   "post_code": "2000",
    "type": "premium",
-   "contact_email": "james@acme.com",
+   "contact_email": "aaron@hashibank.com",
    "status": "active"
 }
