@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+terraform destroy --auto-approve
+
 # Define variables
 namespace="my-vault-demo"
 
@@ -12,3 +14,4 @@ kubectl delete svc hashibank -n "$namespace"
 kubectl delete secret "$ISSUER_SECRET_REF" -n "$namespace"
 helm delete ingress-nginx -n "$namespace"
 helm delete cert-manager -n "$namespace"
+
