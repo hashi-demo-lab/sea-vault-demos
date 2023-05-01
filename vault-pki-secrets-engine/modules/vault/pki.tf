@@ -31,7 +31,7 @@ resource "vault_pki_secret_backend_role" "this" {
   name             = "my_role"
   allowed_domains  = ["example.com", "hashibank.com"]
   allow_subdomains = true
-  max_ttl          = 60
+  max_ttl          = 180
   organization     = ["hashi-demo-lab"]
   ou               = ["Solutions Engineering and Architecture"]
 }
