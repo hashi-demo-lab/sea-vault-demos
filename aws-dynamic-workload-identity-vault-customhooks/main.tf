@@ -95,7 +95,7 @@ resource "vault_jwt_auth_backend_role" "main" {
   backend           = vault_jwt_auth_backend.main.path
   role_name         = "vault-demo-assumed-role"
   token_policies    = [vault_policy.main.name]
-  token_max_ttl     = "100"
+  token_max_ttl     = "900"
   bound_audiences   = ["vault.workload.identity"]
   bound_claims_type = "glob"
   bound_claims = {
