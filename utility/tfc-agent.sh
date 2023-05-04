@@ -1,6 +1,6 @@
 #!usr/bin/zsh
 export TFC_AGENT_NAME=tfc-agent
-docker pull --platform amd64 cloudbrokeraz/tfc-agent-custom:latest
+docker pull --platform amd64 hashicorp/tfc-agent:latest
 
 
 # Start Terraform Cloud Agent 
@@ -12,5 +12,5 @@ else
   docker run -d --rm --platform linux/amd64 --name "$TFC_AGENT_NAME" --network host --cap-add=IPC_LOCK \
     -e "TFC_AGENT_TOKEN=${TFC_AGENT_TOKEN}" \
     -e "TFC_AGENT_NAME=${TFC_AGENT_NAME}" \
-  cloudbrokeraz/tfc-agent-custom:latest
+  hashicorp/tfc-agent:latest
 fi

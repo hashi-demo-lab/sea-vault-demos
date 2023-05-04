@@ -4,7 +4,7 @@
 @token=
 @org_token=
 @workspace_id=
-@run_id=
+@run_id=run-QvcNTrTt9fQMVpUc
 
 ## Get Workspace by Name;
 GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces/aws-future-app HTTP/1.1
@@ -30,12 +30,52 @@ GET https://{{tf_cloud}}/api/v2/organization/audit-trail
 Authorization: Bearer {{org_token}}
 
 
-###
-## Get Workspace by Id
-GET https://{{tf_cloud}}/api/v2/workspaces/ws-JAGLNVyogairr22o
-Authorization: Bearer {{token}}
+### List worksapces
+GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces?fields[workspace][]=name
+Authorization: Bearer {{org_token}}
 
 ###
+
+https://app.terraform.io/api/v2/organizations/hashi-demos-apj/workspaces?fields[workspace][]=current_run&fields[workspace][]=latest_change_at&fields[workspace][]=name&fields[workspace][]=vcs_repo_identifier&fields[workspace][]=locked&fields[workspace][]=tag_names&fields[workspace][]=project&fields[workspace][]=permissions&fields[workspace][]=assessments_enabled&fields[workspace][]=current_assessment_result&fields[workspace][]=execution_mode&fields[workspace][]=organization&fields[run][]=status&fields[assessment-result][]=drifted&fields[assessment-result][]=succeeded&fields[assessment-result][]=all_checks_succeeded&include=current_run,current_assessment_result,organization&organization_name=hashi-demos-apj&page[number]=1&page[size]=20&sort=name
+
+###
+## Get Workspace by Id
+GET https://{{tf_cloud}}/api/v2/workspaces/ws-DqxskiMdxo8bDcJd
+Authorization: Bearer {{token}}
+###
+
+## Current State Version
+GET https://{{tf_cloud}}/api/v2/workspaces/ws-DqxskiMdxo8bDcJd/current-state-version
+Authorization: Bearer {{token}}
+###
+
+## Current Run - configuration version
+GET https://{{tf_cloud}}//api/v2/runs/run-PhXtS21zhwQuAgrn/configuration-version
+Authorization: Bearer {{token}}
+###
+ 
+
+### ingress-attribute 
+GET https://{{tf_cloud}}/api/v2/configuration-versions/cv-CCuDECibq4ZMjyX1/ingress-attributes
+Authorization: Bearer {{token}}
+###
+
+###
+GET https://{{tf_cloud}}/api/v2/configuration-versions/cv-CCuDECibq4ZMjyX1
+Authorization: Bearer {{token}}
+
+
+### 
+GET https://{{tf_cloud}}//api/v2/configuration-versions/cv-CCuDECibq4ZMjyX1/download
+Authorization: Bearer {{token}}
+###
+
+
+### state versions
+GET https://{{tf_cloud}}/api/v2/state-versions/sv-WSDXsKJVxrxGV5Cn/outputs
+Authorization: Bearer {{token}}
+###
+
 GET https://{{tf_cloud}}/api/v2/workspaces/ws-JAGLNVyogairr22o/configuration-versions
 Authorization: Bearer {{token}}
 
@@ -61,5 +101,26 @@ Authorization: Bearer {{token}}
 
 ###
 ## List Policy Checks
+GET https://{{tf_cloud}}/api/v2/runs/{{run_id}}
+Authorization: Bearer {{token}}
+
+
+###
+
+GET https://{{tf_cloud}}/api/v2/runs/{{run_id}}/task-stages
+Authorization: Bearer {{token}}
+
+###
+
 GET https://{{tf_cloud}}/api/v2/runs/{{run_id}}/policy-checks
+Authorization: Bearer {{token}}
+
+###
+
+GET https://{{tf_cloud}}/api/v2/runs/{{run_id}}/run-events
+Authorization: Bearer {{token}}
+
+###
+
+GET https://{{tf_cloud}}/api/v2/policy-evaluations/poleval-1u86pBhiQGaLJrga/policy-set-outcomes?filter[0][status]=errored&filter[1][status]=failed&filter[1][enforcement_level]=mandatory
 Authorization: Bearer {{token}}
