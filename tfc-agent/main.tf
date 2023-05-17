@@ -16,8 +16,10 @@ module "terraform-cloud-agent-kubernetes" {
   source  = "redeux/terraform-cloud-agent/kubernetes"
   version = "1.0.1"
 
-  namespace          = "my-vault-demo"
-  agent_name         = var.agent_name
-  agent_token        = var.agent_token
-  cluster_access     = true
+  namespace      = "my-vault-demo"
+  agent_name     = var.agent_name
+  agent_token    = var.agent_token
+  agent_image   = "cloudbrokeraz/tfc-agent-custom"
+  agent_version = "2.6"
+  cluster_access = true
 }
