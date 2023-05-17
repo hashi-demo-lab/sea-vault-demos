@@ -1,8 +1,8 @@
-/*provider "vault" {
+provider "vault" {
   address = var.vault_address
 }
 
-resource "vault_database_secrets_mount" "databases" {
+/*resource "vault_database_secrets_mount" "databases" {
   path        = "demo-databases"
   description = "This is an example database secret engine mount"
   mysql {
