@@ -23,13 +23,15 @@ kubectl create secret generic vault-secrets \
     --from-literal=license="${VAULT_LICENSE}" \
     --from-literal=AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \
     --from-literal=AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
-    --from-literal=AWS_SESSION_TOKEN="${AWS_SESSION_TOKEN}"
+    --from-literal=AWS_SESSION_TOKEN="${AWS_SESSION_TOKEN}" \
+    --from-file=tls.key=./vault_tls.key \
+    --from-file=tls.crt=./vault_tls.crt
 
 # Define an associative array to store the datacenter names and port numbers
 # This allows for a Vault per "datacentre" with a unique port for access via http://localhost:port
 declare -A datacentres
 datacentres[dc1]=32000
-datacentres[dc2]=32001
+#datacentres[dc2]=32001
 
 # Loop through the datacenters
 for dc in "${(@k)datacentres}"; do
@@ -37,7 +39,7 @@ for dc in "${(@k)datacentres}"; do
   echo "\n\033[32m---External port for $dc: ${datacentres[$dc]}---\033[0m"
 
   # Replace the externalPort value in the Helm chart values file
-  yq -i '.ui.externalPort = '${datacentres[$dc]}'' ./helm-vault-raft-values.yml
+  #yq -i '.ui.externalPort = '${datacentres[$dc]}'' ./helm-vault-raft-values.yml
 
   # add hashicorp heml repo
   helm repo add hashicorp https://helm.releases.hashicorp.com
