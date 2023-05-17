@@ -67,6 +67,7 @@ resource "aws_iam_role_policy_attachment" "test-attach" {
 
 provider "vault" {
   address = var.vault_address
+  skip_tls_verify = true
 }
 
 # Enable AWS Secrets Engine
