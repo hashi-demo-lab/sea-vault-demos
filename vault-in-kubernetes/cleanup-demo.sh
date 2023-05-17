@@ -18,6 +18,3 @@ for i in {0..2}; do
 done
 
 kubectl delete secret vault-secrets -n "$namespace"
-kubectl get all -o wide -n "$namespace"
-kubectl get pvc -n "$namespace"
-lsof -nP -iTCP -sTCP:LISTEN | grep 32000
