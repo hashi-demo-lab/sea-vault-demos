@@ -20,6 +20,11 @@ resource "vault_policy" "main" {
     path "${var.workspace_name}/${var.VAULT_PATH}/*" {
       capabilities = ["read"]
     }
+
+    # Get secrets from K/V engine
+    path "demo-key-value/*" {
+      capabilities = ["read"]
+    }
   EOT
 }
 
