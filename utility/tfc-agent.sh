@@ -2,7 +2,6 @@
 export TFC_AGENT_NAME=tfc-agent
 docker pull --platform amd64 hashicorp/tfc-agent:latest
 
-
 # Start Terraform Cloud Agent 
 echo "\n\033[32m---STARTING THE TFC-AGENT CONTAINER---\033[0m"
 
@@ -14,3 +13,7 @@ else
     -e "TFC_AGENT_NAME=${TFC_AGENT_NAME}" \
   hashicorp/tfc-agent:latest
 fi
+
+export container_id=$(docker ps -aqf "name=tfc-agent")
+export local_ip=$(ifconfig | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}' | head -n 1)
+docker exec -it --user root ${container_id} sh -c "echo '${local_ip} vault.hashibank.com' >> /etc/hosts"
