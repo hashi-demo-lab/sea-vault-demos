@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tfc-agent
+  namespace: my-vault-demo
 spec:
   replicas: 1
   selector:
@@ -14,7 +15,19 @@ spec:
     spec:
       containers:
       - name: tfc-agent-k8s
-        image: cloudbrokeraz/tfc-agent-custom
+        image: cloudbrokeraz/tfc-agent-custom:3.0
         env:
         - name: TFC_AGENT_TOKEN
-          value: "<TFC_AGEnt_TOKEN>"
+          value: "<TFC_AGENT_TOKEN>"
+        - name: TFC_AGENT_NAME
+          value: "k8s_agent"
+        resources:
+          requests:
+            memory: 4Gi
+            cpu: 4
+          limits:
+            memory: 8Gi
+            cpu: 8
+      nodeSelector:
+        kubernetes.io/arch: arm64
+        kubernetes.io/os: linux
