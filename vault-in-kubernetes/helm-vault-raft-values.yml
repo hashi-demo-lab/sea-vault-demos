@@ -23,12 +23,17 @@ server:
     raft:
       enabled: true
   ingress:
+    labels:
+      traffic: external
+    annotations:
+      kubernetes.io/ingress.class: nginx
     enabled: true
-    activeService: true
+    pathType: Prefix
+    activeService: false
     hosts:
-      - host: localhost
-ui:
-  enabled: true
-  serviceType: "LoadBalancer"
-  serviceNodePort: null
-  externalPort: 32000
+      - host: vault.hashibank.com
+        paths: []
+    tls:
+      - secretName: vault-secrets
+        hosts:
+          - vault.hashibank.com

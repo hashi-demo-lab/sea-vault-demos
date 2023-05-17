@@ -30,6 +30,9 @@ override.tf.json
 
 # Ignore PEM files
 *.pem
+*.crt
+*.key
+output_base64.txt
 
 # Ignore license files
 *.hclic
