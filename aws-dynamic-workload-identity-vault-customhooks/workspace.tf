@@ -1,4 +1,4 @@
-module "workspace" {
+/*module "workspace" {
   source = "github.com/hashicorp-demo-lab/terraform-tfe-onboarding-module"
 
   organization                = var.organization
@@ -29,6 +29,6 @@ module "workspace" {
   workspace_write_access_emails = var.workspace_write_access_emails
   workspace_plan_access_emails  = var.workspace_plan_access_emails
 }
-
+*/
 
 
