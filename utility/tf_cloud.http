@@ -6,6 +6,31 @@
 @workspace_id=
 @run_id=run-QvcNTrTt9fQMVpUc
 
+
+api=ws-TZcst86yTV1UZsH7
+cli=ws-XEfCwfjBRxq32Rh5
+
+###
+https://{{tf_cloud}}//api/v2/runs/run-pnaFfHFpLu2DdUfe/plan
+Authorization: Bearer {{token}}
+###
+https://{{tf_cloud}}//api/v2/runs/run-7gvAH6ozykbpL3Ey/plan
+Authorization: Bearer {{token}}
+###
+
+https://{{tf_cloud}}//api/v2/plans/plan-scpBRTe6PqDWRikk/json-output
+Authorization: Bearer {{token}}
+
+## Get Workspace by Id - API
+GET https://{{tf_cloud}}/api/v2/workspaces/ws-TZcst86yTV1UZsH7
+Authorization: Bearer {{token}}
+###
+
+## Get Workspace by Id
+GET https://{{tf_cloud}}/api/v2/workspaces/ws-XEfCwfjBRxq32Rh5
+Authorization: Bearer {{token}}
+###
+
 ## Get Workspace by Name;
 GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces/aws-future-app HTTP/1.1
 Authorization: Bearer {{token}}
@@ -50,7 +75,7 @@ Authorization: Bearer {{token}}
 ###
 
 ## Current Run - configuration version
-GET https://{{tf_cloud}}//api/v2/runs/run-PhXtS21zhwQuAgrn/configuration-version
+GET https://{{tf_cloud}}//api/v2/runs/run-PhXtS21zhwQuAgrn/
 Authorization: Bearer {{token}}
 ###
  
