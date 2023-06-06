@@ -1,0 +1,25 @@
+
+@consul=consul-cluster.consul.8f401e26-b086-451f-b61a-4ffb6dd26304.aws.hashicorp.cloud
+@token=
+
+
+###
+
+## recurse all keys include encoded values
+https://{{consul}}/v1/kv/policy?recurse=true
+Authorization: Bearer {{token}}
+
+###
+https://consul-cluster.consul.8f401e26-b086-451f-b61a-4ffb6dd26304.aws.hashicorp.cloud/v1/kv/policy?recurse=true
+Authorization: Bearer {{token}}
+### recurse keys with base64 encoded values
+https://{{consul}}/v1/kv/policy/mygroup1?recurse=true
+Authorization: Bearer {{token}}
+
+### recursive keys only json
+https://{{consul}}/v1/kv/policy/mygroup1/myapp1/uat?keys=true
+Authorization: Bearer {{token}}
+
+### raw value for a single key
+https://{{consul}}/v1/kv/policy/mygroup1/myapp1/uat/enable_rule1?raw=true
+Authorization: Bearer {{token}}

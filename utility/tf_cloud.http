@@ -4,25 +4,46 @@
 @token=
 @org_token=
 @workspace_id=
-@run_id=run-QvcNTrTt9fQMVpUc
+@run_id=
 
 
-api=ws-TZcst86yTV1UZsH7
-cli=ws-XEfCwfjBRxq32Rh5
+
+###
+
+https://{{tf_cloud}}/api/v2/runs/run-YsUANVUZGCz81KFr
+Authorization: Bearer {{token}}
+
+###
+https://{{tf_cloud}}/api/v2/runs/run-YsUANVUZGCz81KFr/configuration-version
+Authorization: Bearer {{token}}
+
+### outputs - current
+https://{{tf_cloud}}/api/v2/workspaces/ws-G28ckT1jdT8Q1wwg/current-state-version-outputs
+Authorization: Bearer {{token}}
 
 ###
 https://{{tf_cloud}}//api/v2/runs/run-pnaFfHFpLu2DdUfe/plan
 Authorization: Bearer {{token}}
 ###
-https://{{tf_cloud}}//api/v2/runs/run-7gvAH6ozykbpL3Ey/plan
+https://{{tf_cloud}}/api/v2/runs/run-7gvAH6ozykbpL3Ey/plan
 Authorization: Bearer {{token}}
 ###
 
-https://{{tf_cloud}}//api/v2/plans/plan-scpBRTe6PqDWRikk/json-output
+### - Notes this endpoint
+https://{{tf_cloud}}//api/v2/plans/plan-5K8JFcmiN9PaDiww/json-output
 Authorization: Bearer {{token}}
+###
 
+https://{{tf_cloud}}//api/v2/plans/plan-5K8JFcmiN9PaDiww/json-output-redacted
+Authorization: Bearer {{token}}
+###
+###
+
+https://{{tf_cloud}}//api/v2/applies/apply-Q435h9hGbRS6Anjz
+Authorization: Bearer {{token}}
+###
 ## Get Workspace by Id - API
-GET https://{{tf_cloud}}/api/v2/workspaces/ws-TZcst86yTV1UZsH7
+GET https://{{tf_cloud}}/api/v2/workspaces/ws-G28ckT1jdT8Q1wwg
 Authorization: Bearer {{token}}
 ###
 
