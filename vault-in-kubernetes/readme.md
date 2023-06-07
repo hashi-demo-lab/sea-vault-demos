@@ -28,7 +28,7 @@ zsh ./bootstrap-demo.sh
 
 1. Set the `VAULT_ADDR` environment variable to the address of your running Vault instance:
 
-   `export VAULT_ADDR='http://localhost:32000'`
+   `export VAULT_ADDR='http://localhost:443'`
 
    `echo "\n\033[32mRoot token for dc1: $(eval echo "\${dc1_root_token}")\033[0m"`
 
