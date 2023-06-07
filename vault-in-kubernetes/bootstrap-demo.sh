@@ -30,7 +30,7 @@ kubectl create secret generic vault-secrets \
 # Define an associative array to store the datacenter names and port numbers
 # This allows for a Vault per "datacentre" with a unique port for access via http://localhost:port
 declare -A datacentres
-datacentres[dc1]=32000
+datacentres[dc1]=443
 #datacentres[dc2]=32001
 
 # Loop through the datacenters
