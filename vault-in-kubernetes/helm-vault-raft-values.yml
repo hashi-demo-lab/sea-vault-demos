@@ -14,7 +14,7 @@ server:
     secretKey: "license"
   image:
     repository: "hashicorp/vault-enterprise"
-    tag: "1.13.0-rc1-ent"
+    tag: "latest"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
   affinity: ""

@@ -28,7 +28,11 @@ zsh ./bootstrap-demo.sh
 
 1. Set the `VAULT_ADDR` environment variable to the address of your running Vault instance:
 
-   `export VAULT_ADDR='http://localhost:443'`
+### Install ingress controller first
+
+   `helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace my-vault-demo`
+
+   `export VAULT_ADDR='http://vault.hashibank.com:443'`
 
    `echo "\n\033[32mRoot token for dc1: $(eval echo "\${dc1_root_token}")\033[0m"`
 
