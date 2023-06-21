@@ -24,28 +24,29 @@ kubectl create secret generic vault-secrets \
     --from-literal=AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}" \
     --from-literal=AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}" \
     --from-literal=AWS_SESSION_TOKEN="${AWS_SESSION_TOKEN}" \
-    --from-file=tls.key=./vault_tls.key \
-    --from-file=tls.crt=./vault_tls.crt
+    --from-file=tls.key=./cert/vault_tls.key \
+    --from-file=tls.crt=./cert/vault_tls.crt
 
-# Define an associative array to store the datacenter names and port numbers
-# This allows for a Vault per "datacentre" with a unique port for access via http://localhost:port
-declare -A datacentres
-datacentres[dc1]=443
-#datacentres[dc2]=32001
+# Deploy ingress-nginx
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace my-vault-demo
+sleep 10
+# Define an array to store the datacenter names
+datacentres=("dc1" "dc2")
 
 # Loop through the datacenters
-for dc in "${(@k)datacentres}"; do
+for dc in "${datacentres[@]}"; do
   # Print the external port for the datacenter
-  echo "\n\033[32m---External port for $dc: ${datacentres[$dc]}---\033[0m"
-
-  # Replace the externalPort value in the Helm chart values file
-  #yq -i '.ui.externalPort = '${datacentres[$dc]}'' ./helm-vault-raft-values.yml
+  echo "\n\033[32m---Datacenter: $dc---\033[0m"
 
   # add hashicorp heml repo
   helm repo add hashicorp https://helm.releases.hashicorp.com
 
   # Install Vault via Helm chart
-  helm install "vault-${dc}" hashicorp/vault --values ./helm-vault-raft-values.yml --namespace my-vault-demo --create-namespace
+  #helm install "vault-${dc}" hashicorp/vault --values ./helm-vault-raft-values.yml --namespace my-vault-demo --create-namespace
+  helm install "vault-${dc}" hashicorp/vault --values ./helm-vault-raft-values.yml \
+  --set "server.ingress.hosts[0].host=vault-$dc.hashibank.com" \
+  --set "server.ingress.tls[0].hosts[0]=vault-$dc.hashibank.com" \
+  --namespace my-vault-demo --create-namespace
 
   # Wait for the pods to be in a running state
   echo "\n\033[32m---Waiting for pods to be in a running state---\033[0m"
@@ -108,8 +109,8 @@ done
 
 #setup base variables
 export VAULT_TOKEN=$dc1_root_token
-export VAULT_PORT=32000
-export VAULT_ADDR=http://localhost:${VAULT_PORT}
+export VAULT_PORT=443
+export VAULT_ADDR=https://vault.hashibank.com:${VAULT_PORT}
 clear 
 for dc in dc1 dc2; do
   echo "\033[32mRoot token for $dc: $(eval echo "\${${dc}_root_token}")\033[0m"
