@@ -3,6 +3,42 @@ provider "vault" {
   skip_tls_verify = true
 }
 
+resource "vault_namespace" "IT" {
+  path = "IT"
+}
+
+resource "vault_namespace" "IT_Prod" {
+  namespace = vault_namespace.IT.path
+  path      = "IT_Prod"
+}
+resource "vault_namespace" "IT_Dev" {
+  namespace = vault_namespace.IT.path
+  path      = "IT_Dev"
+}
+
+resource "vault_namespace" "Payments" {
+  path = "payments"
+}
+
+resource "vault_namespace" "Payments_TeamA" {
+  namespace = vault_namespace.Payments.path
+  path      = "Payments_TeamA"
+}
+resource "vault_namespace" "Payments_TeamB" {
+  namespace = vault_namespace.Payments.path
+  path      = "Payments_TeamB"
+}
+
+resource "vault_namespace" "Payments_TeamA_Prod" {
+  namespace = vault_namespace.Payments_TeamA.path_fq
+  path      = "Payments_TeamA_Prod"
+}
+resource "vault_namespace" "Payments_TeamB_Prod" {
+  namespace = vault_namespace.Payments_TeamB.path_fq
+  path      = "Payments_TeamB_Prod"
+}
+
+
 resource "vault_namespace" "finance" {
   path = "finance"
 }

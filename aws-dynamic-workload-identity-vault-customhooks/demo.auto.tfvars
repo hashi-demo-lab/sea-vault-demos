@@ -1,3 +1,4 @@
+vault_address       = "https://vault-dc1.hashibank.com:443"
 tfc_organization    = "hashi-demos-apj"
 github_organization = "hashi-demo-lab"
 tfc_project         = "Aarons AWS Projects"
@@ -6,7 +7,7 @@ region              = "ap-southeast-2"
 
 # workspace variables
 organization    = "hashi-demos-apj"
-workspace_name  = "cli-aws-future-app"
+workspace_name  = "vcs-aws-future-app"
 project_name    = "Aarons AWS Projects"
 agent_pool_name = "AaronPool"
 

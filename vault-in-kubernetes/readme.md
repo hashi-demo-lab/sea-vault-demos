@@ -5,36 +5,45 @@ This repository contains instructions and example code to demonstrate how to use
 ## Prerequisites
 
 - A Kubernetes cluster
-- you can enable K8s in docker 
 - `helm` command line tool
 - A running instance of HashiCorp Vault
 - `kubectl` command line tool
 - `jq` command line tool
+- `aws` CLI for AWS integration
+- `doormat` utility for AWS credentials
+- A certificate and private key stored within the /cert dir (openssl is the easiest solution) 
 
 ```sh
-#pre-requisite
+# pre-requisite
 brew install helm
 brew install jq
-brew install yq
+brew install awscli
 brew install kubectl
 ```
+### Install ingress controller first
+
+   `helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace my-vault-demo`
+
+   `export VAULT_ADDR='http://vault-dc1.hashibank.com:443'`
+
+
+## Deploy
+
+Run the bootstrap-demo.sh script. This will:
+
+1. Unset any existing AWS environment variables.
+2. Set up the AWS CLI Environment variables so that Vault can use them for setting up the AWS Secrets Engine.
+3. Create a Kubernetes namespace and switch the current context to it.
+4. Set up a Kubernetes secret for passing into the helm chart.
+5. Deploy ingress-nginx.
+6. Deploy Vault via the Helm chart and initialize it.
+
 
 ```sh
 # run bootstrap for doormat creds and pod deployment
 zsh ./bootstrap-demo.sh 
 ```
-
-## Setup
-
-1. Set the `VAULT_ADDR` environment variable to the address of your running Vault instance:
-
-### Install ingress controller first
-
-   `helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace my-vault-demo`
-
-   `export VAULT_ADDR='http://vault.hashibank.com:443'`
-
-   `echo "\n\033[32mRoot token for dc1: $(eval echo "\${dc1_root_token}")\033[0m"`
+## Other configuration
 
 2. Create a Kubernetes service account that will be used to authenticate to Vault and an application pod. This example uses an `nginx` container:
 

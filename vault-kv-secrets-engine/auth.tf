@@ -6,6 +6,21 @@ resource "vault_auth_backend" "userpass" {
   type = "userpass"
 }
 
+resource "vault_auth_backend" "userpass_IT" {
+  type = "userpass"
+  namespace = "IT"
+}
+
+resource "vault_auth_backend" "userpass_IT_Prod" {
+  type = "userpass"
+  namespace = "IT/IT_Prod"
+}
+
+resource "vault_auth_backend" "userpass_IT_Dev" {
+  type = "userpass"
+  namespace = "IT/IT_Dev"
+}
+
 # Create local users
 resource "vault_generic_endpoint" "aaron" {
   depends_on           = [vault_auth_backend.userpass]

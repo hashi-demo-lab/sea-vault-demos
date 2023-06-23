@@ -19,7 +19,6 @@ variable "VAULT_PATH" {
 variable "vault_address" {
   type        = string
   description = "vault address"
-  default     = "https://vault.hashibank.com:443"
 }
 
 variable "region" {
