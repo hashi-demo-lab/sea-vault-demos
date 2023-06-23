@@ -1,4 +1,4 @@
-@vault_host=localhost:32000
+@vault_host=vault-dc1.hashibank.com:443
 @username=aaron
 @password=changeme
 @auth_method=userpass
@@ -9,7 +9,7 @@
 ## Authenticate to Vault with userpass method;
 
 # @name login
-POST http://{{vault_host}}/v1/auth/{{auth_method}}/login/{{username}}
+POST https://{{vault_host}}/v1/auth/{{auth_method}}/login/{{username}}
 Accept: application/json
 Content-Type: application/json
 
@@ -18,5 +18,5 @@ Content-Type: application/json
 ###
 ## Get Secrets
 
-GET http://{{vault_host}}/v1/{{path}}/data/{{secret_key}}
+GET https://{{vault_host}}/v1/{{path}}/data/{{secret_key}}
 X-Vault-Token: {{authToken}}
