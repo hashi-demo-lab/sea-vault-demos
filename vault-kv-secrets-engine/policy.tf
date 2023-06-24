@@ -10,6 +10,25 @@ resource "vault_policy" "admin_policy" {
   policy = file("policies/admin-policy.hcl")
 }
 
+# Create simon's policy in the root namespace
+resource "vault_policy" "simons_policy" {
+  name   = "demo-simons-access"
+  policy = file("policies/simons-access-to-secrets.hcl")
+}
+
+# Create aaron's policy in the root namespace
+resource "vault_policy" "aarons_policy" {
+  name   = "demo-aarons-access"
+  policy = file("policies/aarons-access-to-secrets.hcl")
+}
+
+# Create SEA's teams policy in the root namespace
+resource "vault_policy" "sea_policy" {
+  name   = "demo-sea-access"
+  policy = file("policies/sea-access-to-secrets.hcl")
+}
+
+/*
 # Create admin policy in the finance namespace
 resource "vault_policy" "admin_policy_finance" {
   namespace = vault_namespace.finance.path
@@ -50,23 +69,4 @@ resource "vault_policy" "admin_policy_boundary" {
   namespace = vault_namespace.boundary.path_fq
   name      = "admins"
   policy    = file("policies/admin-policy.hcl")
-}
-
-# Create simon's policy in the root namespace
-resource "vault_policy" "simons_policy" {
-  name   = "demo-simons-access"
-  policy = file("policies/simons-access-to-secrets.hcl")
-}
-
-
-# Create aaron's policy in the root namespace
-resource "vault_policy" "aarons_policy" {
-  name   = "demo-aarons-access"
-  policy = file("policies/aarons-access-to-secrets.hcl")
-}
-
-# Create SEA's teams policy in the root namespace
-resource "vault_policy" "sea_policy" {
-  name   = "demo-sea-access"
-  policy = file("policies/sea-access-to-secrets.hcl")
-}
+}*/

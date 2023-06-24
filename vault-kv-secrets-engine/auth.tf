@@ -6,21 +6,6 @@ resource "vault_auth_backend" "userpass" {
   type = "userpass"
 }
 
-resource "vault_auth_backend" "userpass_IT" {
-  type = "userpass"
-  namespace = "IT"
-}
-
-resource "vault_auth_backend" "userpass_IT_Prod" {
-  type = "userpass"
-  namespace = "IT/IT_Prod"
-}
-
-resource "vault_auth_backend" "userpass_IT_Dev" {
-  type = "userpass"
-  namespace = "IT/IT_Dev"
-}
-
 # Create local users
 resource "vault_generic_endpoint" "aaron" {
   depends_on           = [vault_auth_backend.userpass]
@@ -46,7 +31,20 @@ resource "vault_generic_endpoint" "simon" {
 EOT
 }
 
+/*resource "vault_auth_backend" "userpass_IT" {
+  type      = "userpass"
+  namespace = "IT"
+}
 
+resource "vault_auth_backend" "userpass_IT_Prod" {
+  type      = "userpass"
+  namespace = "IT/IT_Prod"
+}
+
+resource "vault_auth_backend" "userpass_IT_Dev" {
+  type      = "userpass"
+  namespace = "IT/IT_Dev"
+}
 
 #--------------------------------------------------------------------
 # Enable approle auth method in the 'education/training' namespace
@@ -64,4 +62,4 @@ resource "vault_approle_auth_backend_role" "test-role" {
   namespace      = vault_namespace.training.path_fq
   role_name      = "test-role"
   token_policies = ["default", "admins"]
-}
+}*/
