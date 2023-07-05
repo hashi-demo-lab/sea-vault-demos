@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ldap
+  namespace: my-vault-demo
+spec:
+  serviceName: ldap-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ldap-service
+  template:
+    metadata:
+      labels:
+        app: ldap-service
+    spec:
+      containers:
+      - name: ldap-container
+        image: osixia/openldap:latest
+        env:
+        - name: LDAP_ORGANISATION
+          value: "engineers"
+        - name: LDAP_DOMAIN
+          value: "hashibank.com"
+        - name: LDAP_ADMIN_PASSWORD
+          value: "admin"
+        ports:
+        - containerPort: 389
+          protocol: TCP
+        - containerPort: 636
+          protocol: TCP
+      - name: phpldapadmin-container
+        image: osixia/phpldapadmin:latest
+        env:
+        - name: PHPLDAPADMIN_LDAP_HOSTS
+          value: ldap-service
+        ports:
+        - containerPort: 443
+          protocol: TCP
+      hostname: ldap-service
+      dnsPolicy: ClusterFirst
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpldapadmin-service
+  labels:
+    app: phpldapadmin
+spec:
+  type: NodePort
+  selector:
+    app: ldap-service
+  ports:
+  - name: https
+    port: 443
+    targetPort: 443
+    nodePort: 30000

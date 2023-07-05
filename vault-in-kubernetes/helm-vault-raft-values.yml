@@ -1,4 +1,16 @@
+global:
+  enabled: true
+  tlsDisable: true
 server:
+  enabled: "-"
+  enterpriseLicense:
+    secretName: "vault-secrets"
+    secretKey: "license"
+  image:
+    repository: "hashicorp/vault-enterprise"
+    tag: "latest"
+    # Overrides the default Image Pull Policy
+    pullPolicy: IfNotPresent
   extraSecretEnvironmentVars:
     - envName: AWS_ACCESS_KEY_ID
       secretName: vault-secrets
@@ -9,19 +21,30 @@ server:
     - envName: AWS_SESSION_TOKEN
       secretName: vault-secrets
       secretKey: AWS_SESSION_TOKEN
-  enterpriseLicense:
-    secretName: "vault-secrets"
-    secretKey: "license"
-  image:
-    repository: "hashicorp/vault-enterprise"
-    tag: "latest"
-    # Overrides the default Image Pull Policy
-    pullPolicy: IfNotPresent
   affinity: ""
   ha:
     enabled: true
     raft:
       enabled: true
+      setNodeId: true
+      config: |
+        ui = true
+
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+          # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+          #telemetry {
+          #  unauthenticated_metrics_access = "true"
+          #}
+        }
+
+        storage "raft" {
+          path = "/vault/data"
+        }
+
+        service_registration "kubernetes" {}
   ingress:
     labels:
       traffic: external
