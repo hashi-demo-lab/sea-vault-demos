@@ -110,7 +110,7 @@ done
 #setup base variables
 export VAULT_TOKEN=$dc1_root_token
 export VAULT_PORT=443
-export VAULT_ADDR=https://vault.hashibank.com:${VAULT_PORT}
+export VAULT_ADDR=https://vault-dc1.hashibank.com:${VAULT_PORT}
 clear 
 for dc in dc1 dc2; do
   echo "\033[32mRoot token for $dc: $(eval echo "\${${dc}_root_token}")\033[0m"
