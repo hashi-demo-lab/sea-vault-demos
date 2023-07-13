@@ -2,6 +2,10 @@ provider "aws" {
   region = var.region
 }
 
+provider "vault" {
+  address = var.vault_address
+}
+
 resource "aws_iam_role" "role" {
   name = "test-role"
 
@@ -64,16 +68,10 @@ resource "aws_iam_role_policy_attachment" "test-attach" {
   policy_arn = aws_iam_policy.policy.arn
 }
 
-
-provider "vault" {
-  address         = var.vault_address
-  skip_tls_verify = true
-}
-
 # Enable AWS Secrets Engine
 resource "vault_aws_secret_backend" "main" {
   description = "Demo of the AWS secrets engine"
-  path        = "${var.VAULT_PATH}"
+  path        = var.VAULT_PATH
 }
 
 # Configure AWS Secrets Engine with Assumed Role
