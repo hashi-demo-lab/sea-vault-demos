@@ -4,12 +4,14 @@ rm ../vault-kv-secrets-engine/*.tfstate*
 cd ../vault-in-kubernetes
 . ./cleanup-demo.sh  
 sleep 2
+
 . ./bootstrap-demo.sh
 sleep 2
+
 cd ../vault-kv-secrets-engine
 terraform apply -auto-approve
-terraform apply -auto-approve
 sleep 2
+
 cd ../aws-dynamic-workload-identity-vault-customhooks
 terraform apply -auto-approve
 
