@@ -16,7 +16,7 @@ cd ../vault-kv-secrets-engine
 terraform apply -auto-approve
 sleep 2
 
-cd ../aws-dynamic-workload-identity-vault-customhooks
+cd ../vault-aws-dynamic-credentials
 terraform apply -auto-approve
 
 clear
