@@ -1,4 +1,4 @@
-HashiCorp Vault Demonstrations
+# HashiCorp Vault Demonstrations
 
 This repository contains the necessary files to demonstrate HashiCorp Vault. 
 The objective of this repository is to to create an easy deployable environment
@@ -14,7 +14,7 @@ The repo was created with the following principles in mind
 - Easliy redeployable and idempotant
 - Low impact on cost for running a demo environment
 
-# Get Started
+## Get Started
 The entry point into this repo is the (`vault-in-kubernetes`) directory.
 Within this directory there is a (`bootstrap-demo.sh`) script. 
 As the name suggests this will deploy HashiCorp Vault into a Kubernetes environment.
@@ -23,5 +23,5 @@ in that directory to get a better understanding of how it works
 
  Once the base Vault, you can utilise the other directories to build with particular use cases.
 
-# Notes
+## Notes
 * The files are intended for demo purposes only and is not recommended for production use
