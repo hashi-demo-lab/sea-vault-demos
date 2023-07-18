@@ -2,18 +2,25 @@
 resource "vault_policy" "main" {
   name   = "aws_demo_policy"
   policy = <<EOT
-    # Generate child tokens with Terraform provider
-    path "auth/token/create" {
-    capabilities = ["update"]
+
+    # Allow tokens to query themselves
+    path "auth/token/lookup-self" {
+      capabilities = ["read"]
     }
 
+    # Allow tokens to renew themselves
+    path "auth/token/renew-self" {
+      capabilities = ["update"]
+    }
+
+    # Allow tokens to revoke themselves
     path "auth/token/revoke-self" {
       capabilities = ["update"]
     }
 
-    # Used by the token to query itself
-    path "auth/token/lookup-self" {
-    capabilities = ["read"]
+    # Generate child tokens with Terraform provider
+    path "auth/token/create" {
+      capabilities = ["update"]
     }
 
     # Get secrets from AWS engine
