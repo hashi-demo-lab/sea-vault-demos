@@ -1,7 +1,6 @@
 # HashiCorp Vault Kubernetes Auth Method
 
 This repository contains instructions and example code to demonstrate how to use the Kubernetes auth method with HashiCorp Vault to retrieve secrets in a Kubernetes environment.
-
 ## Prerequisites
 
 - A Kubernetes cluster
@@ -12,6 +11,11 @@ This repository contains instructions and example code to demonstrate how to use
 - `aws` CLI for AWS integration
 - `doormat` utility for AWS credentials
 - A certificate and private key stored within the /cert dir (openssl is the easiest solution) 
+
+* aws cli
+* jq
+* [Doormat](https://docs.prod.secops.hashicorp.services/doormat/cli/) - command line tool must be installed and configured with appropriate credentials
+* [Docker Desktop Kubernetes](https://docs.docker.com/desktop/kubernetes/)
 
 ```sh
 # pre-requisite
@@ -143,3 +147,48 @@ zsh ./bootstrap-demo.sh
 ## Contributing
 
 Contributions are welcome! If you find a bug or want to add a feature, please open an issue or submit a pull request.
+
+
+## Set required environment variables
+Certain unique environment variables are required prior:
+
+# Terraform Cloud Agent Authentication
+* echo 'export TFC_AGENT_TOKEN=<>' >> ~/.zshenv
+
+
+* echo 'export DOORMAT_AWS_USER=<>' >> ~/.zshenv
+
+# Vault Enterprise License Key
+* echo 'export VAULT_LICENSE=<>' >> ~/.zshenv
+
+# For Azure authentiation
+* echo 'export ARM_CLIENT_ID=<>' >> ~/.zshenv
+* echo 'export ARM_CLIENT_SECRET=<>' >> ~/.zshenv
+* echo 'export ARM_SUBSCRIPTION_ID=<>' >> ~/.zshenv
+* echo 'export ARM_TENANT_ID=<>' >> ~/.zshenv
+
+# Terraform cloud API token
+
+* echo 'export TFE_TOKEN=<>' >> ~/.zshenv
+
+# Usage
+
+```sh { closeTerminalOnSuccess=false }
+. ./bootstrap-demo.sh
+```
+
+
+# Clean up
+```# Clean up steps
+   kubectl delete all --all -n my-vault-demo
+   kubectl delete pvc --all
+   kubectl delete roles --all
+   kubectl get clusterroles | grep '^cert-' | awk '{print $1}' | xargs kubectl delete clusterrole
+   kubectl delete clusterroles ingress-nginx vault-dc1-agent-injector-clusterrole vault-dc2-agent-injector-clusterrole
+   kubectl get clusterrolebinding | grep '^cert-' | awk '{print $1}' | xargs kubectl delete
+   kubectl delete $(kubectl get clusterrolebinding -o=name | grep cert-)
+   kubectl delete $(kubectl get clusterrolebinding -o=name | grep vault)
+
+   kubectl get crds -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | grep '\.cert-manager\.io$' | xargs kubectl delete crds 
+   kubectl delete namespace my-vault-demo
+```

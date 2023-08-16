@@ -6,6 +6,15 @@ resource "vault_mount" "main" {
   description = "Key/Value mount for Workload Identity demo"
 }
 
+resource "vault_kv_secret_v2" "empty-secret" {
+  mount = vault_mount.main.path
+  name  = "empty_secret"
+  data_json = jsonencode(
+    {
+    }
+  )
+}
+
 # Create a secret in the KV engine
 resource "vault_kv_secret_v2" "team_secrets" {
   mount = vault_mount.main.path

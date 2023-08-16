@@ -72,7 +72,7 @@ resource "aws_iam_role_policy_attachment" "test-attach" {
 # Enable AWS Secrets Engine
 resource "vault_aws_secret_backend" "main" {
   description = "Demo of the AWS secrets engine"
-  path        = var.VAULT_PATH
+  path        = var.vault_path
 }
 
 # Configure AWS Secrets Engine with Assumed Role
@@ -85,8 +85,8 @@ resource "vault_aws_secret_backend_role" "main" {
 
 # Enable the JWT authentication method for TFC Workload Identity
 resource "vault_jwt_auth_backend" "main" {
-  description        = "JWT Backend for TFC OIDC"
-  path               = "jwt"
+  description        = "AWS - JWT Backend for TFC OIDC"
+  path               = "aws_jwt"
   type               = "jwt"
   oidc_discovery_url = "https://app.terraform.io"
   bound_issuer       = "https://app.terraform.io"

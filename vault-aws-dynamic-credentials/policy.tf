@@ -24,7 +24,7 @@ resource "vault_policy" "main" {
     }
 
     # Get secrets from AWS engine
-    path "${var.VAULT_PATH}/*" {
+    path "${var.vault_path}/*" {
       capabilities = ["read"]
     }
 
