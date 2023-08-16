@@ -14,7 +14,7 @@ variable "vault_address" {
   type        = string
   description = "vault address"
 }
-variable "VAULT_PATH" {
+variable "vault_path" {
   type        = string
   description = "Vault path used for mount path of secrets engine and Vault policy"
   nullable    = false

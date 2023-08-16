@@ -20,22 +20,25 @@ resource "vault_azure_secret_backend_role" "generated_role" {
 
 # Enable the JWT authentication method for TFC Workload Identity
 resource "vault_jwt_auth_backend" "main" {
-  description        = "JWT Backend for TFC OIDC"
-  path               = "jwt"
+  description        = "Azure - JWT Backend for TFC OIDC"
+  path               = "azure_jwt"
+  type               = "jwt"
   oidc_discovery_url = "https://app.terraform.io"
   bound_issuer       = "https://app.terraform.io"
 }
 
 resource "vault_jwt_auth_backend_role" "main" {
-  backend           = vault_jwt_auth_backend.main.path
-  role_name         = "vault-demo-role"
-  token_policies    = [vault_policy.main.name]
-  token_max_ttl     = "900"
+  backend        = vault_jwt_auth_backend.main.path
+  role_name      = "vault-demo-role"
+  token_policies = [vault_policy.main.name]
+
   bound_audiences   = ["vault.workload.identity"]
   bound_claims_type = "glob"
   bound_claims = {
     sub = "organization:${var.tfc_organization}:project:${var.tfc_project}:workspace:*:run_phase:*"
   }
-  user_claim = "terraform_full_workspace"
-  role_type  = "jwt"
+
+  user_claim    = "terraform_full_workspace"
+  role_type     = "jwt"
+  token_max_ttl = "900"
 }

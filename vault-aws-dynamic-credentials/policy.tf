@@ -34,4 +34,3 @@ resource "vault_policy" "main" {
     }
   EOT
 }
-
