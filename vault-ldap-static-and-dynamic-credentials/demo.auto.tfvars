@@ -1,1 +1,1 @@
-vault_address       = "https://vault-dc1.hashibank.com:443"
+vault_address = "https://vault-dc1.hashibank.com:443"
