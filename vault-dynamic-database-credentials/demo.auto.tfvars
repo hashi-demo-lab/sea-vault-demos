@@ -1,4 +1,4 @@
-vault_address              = "http://localhost:32000"
+vault_address  = "https://vault-dc1.hashibank.com:443"
 mysql_username             = "vaultadmin"
 mysql_password             = "vaultadmin"
 mysql_application_username = "dbsvc1"
