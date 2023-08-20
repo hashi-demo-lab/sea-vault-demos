@@ -4,12 +4,14 @@ resource "vault_github_auth_backend" "example" {
 
 resource "vault_auth_backend" "userpass" {
   type = "userpass"
+  path = "kv-userpass"
+
 }
 
 # Create local users
 resource "vault_generic_endpoint" "aaron" {
   depends_on           = [vault_auth_backend.userpass]
-  path                 = "auth/userpass/users/aaron"
+  path                 = "auth/kv-userpass/users/aaron"
   ignore_absent_fields = true
   data_json            = <<EOT
 {
@@ -21,7 +23,7 @@ EOT
 
 resource "vault_generic_endpoint" "simon" {
   depends_on           = [vault_auth_backend.userpass]
-  path                 = "auth/userpass/users/simon"
+  path                 = "auth/kv-userpass/users/simon"
   ignore_absent_fields = true
   data_json            = <<EOT
 {
