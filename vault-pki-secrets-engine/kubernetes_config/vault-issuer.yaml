@@ -6,11 +6,11 @@ metadata:
 spec:
   vault:
     server: http://vault-dc1-active:8200
-    path: demo-pki/sign/my_role
+    path: demo-pki-intermediate/sign/my_role
     auth:
       kubernetes:
         mountPath: /v1/auth/kubernetes
         role: webapp
         secretRef:
-          name: issuer-token-lmzpj
+          name: issuer-token
           key: token

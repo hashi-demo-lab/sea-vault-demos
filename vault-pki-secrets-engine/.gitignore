@@ -30,3 +30,6 @@ override.tf.json
 
 # Ignore .DS_Store file that's auto generated on MacOS
 **/.DS_Store
+
+ignore demo rootCA.pem
+rootCA.pem

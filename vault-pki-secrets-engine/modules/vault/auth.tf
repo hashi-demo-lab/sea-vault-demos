@@ -12,7 +12,7 @@ resource "vault_kubernetes_auth_backend_config" "this" {
 resource "vault_kubernetes_auth_backend_role" "this" {
   backend                          = vault_auth_backend.this.path
   role_name                        = "webapp"
-  bound_service_account_names      = ["*"]
+  bound_service_account_names      = ["issuer"]
   bound_service_account_namespaces = ["my-vault-demo"]
   token_ttl                        = 259200
   token_policies                   = ["default", "pki"]
