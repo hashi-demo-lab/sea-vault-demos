@@ -28,8 +28,8 @@ kubectl create secret generic vault-secrets \
     --from-file=tls.crt=./cert/vault_tls.crt
 
 # Deploy ingress-nginx
-helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace my-vault-demo
-sleep 10
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace my-vault-demo -f ingress-nginx.yml
+sleep 15
 # Define an array to store the datacenter names
 datacentres=("dc1" "dc2")
 
