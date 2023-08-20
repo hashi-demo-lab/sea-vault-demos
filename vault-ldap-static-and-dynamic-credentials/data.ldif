@@ -1,4 +1,3 @@
-ldapadd -cxD "cn=admin,dc=hashibank,dc=com" -w admin <<EOF
 dn: ou=groups,dc=hashibank,dc=com
 objectClass: organizationalunit
 objectClass: top
@@ -17,7 +16,7 @@ objectClass: top
 description: testing group for dev
 cn: dev
 member: cn=alice,ou=users,dc=hashibank,dc=com
-member: cn=aaron,ou=users,dc=hashibank,dc=com
+member: cn=bob,ou=users,dc=hashibank,dc=com
 
 dn: cn=manager,ou=groups,dc=hashibank,dc=com
 objectClass: groupofnames
@@ -34,10 +33,10 @@ sn: lee
 memberOf: cn=dev,ou=groups,dc=hashibank,dc=com
 userPassword: password123
 
-dn: cn=aaron,ou=users,dc=hashibank,dc=com
+dn: cn=bob,ou=users,dc=hashibank,dc=com
 objectClass: person
 objectClass: top
-cn: aaron
+cn: bob
 sn: villa
 memberOf: cn=dev,ou=groups,dc=hashibank,dc=com
 userPassword: password123
@@ -49,12 +48,3 @@ cn: raymond
 sn: goh
 memberOf: cn=manager,ou=groups,dc=hashibank,dc=com
 userPassword: password123
-
-dn: cn=vault,ou=users,dc=hashibank,dc=com
-objectClass: person
-objectClass: top
-cn: vault
-sn: vault
-memberOf: cn=manager,ou=groups,dc=hashibank,dc=com
-userPassword: vault
-EOF

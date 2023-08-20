@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: ldap-deployment
+  name: ldap
   namespace: my-vault-demo
 spec:
+  serviceName: ldap-service
   replicas: 1
   selector:
     matchLabels:
@@ -13,6 +14,21 @@ spec:
       labels:
         app: ldap-service
     spec:
+      initContainers:
+      - name: copy-certs
+        image: busybox
+        command:
+        - sh
+        - -c
+        - |
+          cp /certs-source/tls.crt /certs-dest/ && 
+          cp /certs-source/tls.key /certs-dest/
+        volumeMounts:
+        - name: certs-source
+          mountPath: /certs-source
+          readOnly: true
+        - name: certs-dest
+          mountPath: /certs-dest
       containers:
       - name: ldap-container
         image: osixia/openldap:latest
@@ -33,11 +49,24 @@ spec:
         env:
         - name: PHPLDAPADMIN_LDAP_HOSTS
           value: ldap-service
+        - name: PHPLDAPADMIN_HTTPS_CRT_FILENAME
+          value: tls.crt
+        - name: PHPLDAPADMIN_HTTPS_KEY_FILENAME
+          value: tls.key
         ports:
         - containerPort: 443
           protocol: TCP
+        volumeMounts:
+        - name: certs-dest
+          mountPath: /container/service/phpldapadmin/assets/apache2/certs
       hostname: ldap-service
       dnsPolicy: ClusterFirst
+      volumes:
+      - name: certs-source
+        secret:
+          secretName: ldap-secrets
+      - name: certs-dest
+        emptyDir: {}
 ---
 
 apiVersion: v1
@@ -47,16 +76,15 @@ metadata:
   labels:
     app: phpldapadmin
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: ldap-service
   ports:
   - name: https
     port: 443
     targetPort: 443
-    nodePort: 30000
----
 
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -67,9 +95,37 @@ spec:
   selector:
     app: ldap-service
   ports:
-  - name: ldap
-    port: 389
-    targetPort: 389
-  - name: ldaps
-    port: 636
-    targetPort: 636
+    - name: ldap
+      port: 389
+      targetPort: 389
+    - name: ldaps
+      port: 636
+      targetPort: 636
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ldap
+  namespace: my-vault-demo
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ldap.hashibank.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: phpldapadmin-service
+                port:
+                  number: 443
+  tls:
+    - hosts:
+        - ldap.hashibank.com
+      secretName: ldap-secrets
