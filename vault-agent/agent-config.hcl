@@ -1,8 +1,8 @@
 pid_file = "./pidfile"
 
 vault {
-   address = "http://localhost:32000"
-   tls_skip_verify = true
+   address = "https://vault-dc1.hashibank.com:443"
+   tls_skip_verify = false
 }
 
 auto_auth {

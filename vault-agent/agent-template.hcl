@@ -1,8 +1,11 @@
-/*template {
-   source      = "/Users/aarone/Documents/sea-demos/vault-agent/customer.json.tmpl"
-   destination = "/Users/aarone/Documents/sea-demos/vault-agent/customer-example.json"
-}*/
+#Demo Key-Value Secrets
 template {
-   source      = "/Users/aarone/Documents/sea-demos/vault-agent/config.yml.tpl"
-   destination = "/Users/aarone/Documents/sea-demos/vault-agent/customer-example.yaml"
+   source      = "/Users/aarone/Documents/sea-demos/vault-agent/kv-demo.tmpl"
+   destination = "/Users/aarone/Documents/sea-demos/vault-agent/kv-demo.json"
+}
+
+#Demo Dynamic Database Credentials
+template {
+   source      = "/Users/aarone/Documents/sea-demos/vault-agent/dynamic-db-demo.tmpl"
+   destination = "/Users/aarone/Documents/sea-demos/vault-agent/dynamic-db-demo.yaml"
 }
