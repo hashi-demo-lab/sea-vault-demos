@@ -1,15 +1,26 @@
 #!usr/bin/zsh
 #AUTHOR: AARON E
 #THIS SCRIPT IS QUICK RESET OF A LOCAL DEMO ENVIRONMENT
-#MAINLY USED FOR WHEN DEMO'ING VAULT-IN-KUBERNETES, 
-#KEY/VALUE SECRET ENGINE AND AWS DYNAMIC CREDS SECRET ENGINE
+#MAINLY USED TO BUILD VAULT WITH MAJORITY OF VAULT USE CASES SETUP
+
 
 rm ../vault-kv-secrets-engine/*.tfstate*
+rm ../vault-ldap-static-and-dynamic-credentials/*.tfstate*
+rm ../vault-pki-secrets-engine/*.tfstate*
+
+cd ../vault-ldap-static-and-dynamic-credentials/  
+. ./cleanup-demo.sh 
+
 cd ../vault-in-kubernetes
 . ./cleanup-demo.sh  
 sleep 2
 
 . ./bootstrap-demo.sh
+sleep 2
+
+cd ../vault-ldap-static-and-dynamic-credentials/  
+. ./bootstrap-usecase.sh
+terraform apply -auto-approve
 sleep 2
 
 cd ../vault-kv-secrets-engine
@@ -18,6 +29,11 @@ sleep 2
 
 cd ../vault-aws-dynamic-credentials
 terraform apply -auto-approve
+sleep 2
+
+cd ../vault-azure-dynamic-credentials
+terraform apply -auto-approve
+sleep 2
 
 clear
 for dc in dc1 dc2; do
