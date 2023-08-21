@@ -3,10 +3,14 @@
 #THIS SCRIPT IS QUICK RESET OF A LOCAL DEMO ENVIRONMENT
 #MAINLY USED TO BUILD VAULT WITH MAJORITY OF VAULT USE CASES SETUP
 
-
+#Clean up old state files
+rm ../vault-dynamic-database-credentials/*.tfstate*
 rm ../vault-kv-secrets-engine/*.tfstate*
 rm ../vault-ldap-static-and-dynamic-credentials/*.tfstate*
 rm ../vault-pki-secrets-engine/*.tfstate*
+
+cd ../vault-dynamic-database-credentials/  
+. ./cleanup-demo.sh
 
 cd ../vault-ldap-static-and-dynamic-credentials/  
 . ./cleanup-demo.sh 
@@ -19,6 +23,11 @@ sleep 2
 sleep 2
 
 cd ../vault-ldap-static-and-dynamic-credentials/  
+. ./bootstrap-usecase.sh
+terraform apply -auto-approve
+sleep 2
+
+cd ../vault-dynamic-database-credentials/  
 . ./bootstrap-usecase.sh
 terraform apply -auto-approve
 sleep 2
