@@ -1,0 +1,5 @@
+{{ with pkiCert "demo-pki-intermediate/issue/my_role" "common_name=server.example.com" "ttl=60s"}}
+{{ .CA }}
+{{ .Cert }}
+{{ .Key }}
+{{ end }}

@@ -37,6 +37,5 @@ output_base64.txt
 # Ignore license files
 *.hclic
 
-# Ignore Vault destination secrets
-dynamic-db-demo.yaml
-kv-demo.json
+# Ignore Vault secrets
+/secrets/*
