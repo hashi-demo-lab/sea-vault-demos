@@ -32,6 +32,8 @@ yq eval '(select(documentIndex == 0) | .spec.template.spec.containers[0].env[] |
 sleep 2
 kubectl apply -f ./kubernetes_config/transit-app.yaml
 
+terraform apply -auto-approve
+
 # Forward port for Transit app
-sleep 2
-kubectl port-forward svc/transit-app-svc 5000:80 -n "$namespace"
+#sleep 2
+#kubectl port-forward svc/transit-app-svc 5000:80 -n "$namespace"
