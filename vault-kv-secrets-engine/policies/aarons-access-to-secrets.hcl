@@ -5,3 +5,7 @@ path "demo-key-value/data/aarons-secrets" {
 path "demo-key-value/*" {
   capabilities = [ "list" ]
 }
+
+path "demo-pki-intermediate/*" {
+  capabilities = [ "create", "read", "update", "delete", "list", "sudo" ]
+}
