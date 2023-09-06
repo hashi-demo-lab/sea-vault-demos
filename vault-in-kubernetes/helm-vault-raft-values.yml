@@ -45,6 +45,19 @@ server:
         }
 
         service_registration "kubernetes" {}
+  auditStorage:
+    enabled: true
+    # Size of the PVC created
+    size: 10Gi
+    # Location where the PVC will be mounted.
+    mountPath: "/vault/audit"
+    # Name of the storage class to use.  If null it will use the
+    # configured default Storage Class.
+    storageClass: null
+    # Access Mode of the storage device being used for the PVC
+    accessMode: ReadWriteOnce
+    # Annotations to apply to the PVC
+    annotations: {}
   ingress:
     labels:
       traffic: external
