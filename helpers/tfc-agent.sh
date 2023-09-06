@@ -20,4 +20,5 @@ do
     export container_id=$(docker ps -aqf "name=$TFC_AGENT_NAME")
     export local_ip=$(ifconfig | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}' | head -n 1)
     docker exec -it --user root ${container_id} sh -c "echo '${local_ip} vault-dc1.hashibank.com' >> /etc/hosts"
+    docker exec -it --user root ${container_id} sh -c "echo '${local_ip} demo.hashibank.com' >> /etc/hosts"
 done
