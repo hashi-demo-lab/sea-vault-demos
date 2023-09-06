@@ -1,7 +1,7 @@
 @vault_host=vault-dc1.hashibank.com:443
 @username=aaron
 @password=changeme
-@auth_method=userpass
+@auth_method=kv-userpass
 @path=demo-key-value
 @secret_key=aarons-secrets
 @authToken = {{login.response.body.auth.client_token}}
@@ -20,3 +20,13 @@ Content-Type: application/json
 
 GET https://{{vault_host}}/v1/{{path}}/data/{{secret_key}}
 X-Vault-Token: {{authToken}}
+
+###
+## Get PKI Certificate
+
+POST https://{{vault_host}}/v1/demo-pki-intermediate/issue/my_role
+X-Vault-Token: {{authToken}}
+Accept: application/json
+Content-Type: application/json
+
+{"common_name": "example.hashibank.com" }
