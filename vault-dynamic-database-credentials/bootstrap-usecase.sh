@@ -25,14 +25,12 @@ kubectl exec -it mysql-0 -- mysql -u root -p'root' -e "CREATE USER '$vaultadmin_
 
 # Terraform Apply
 export VAULT_TOKEN=$dc1_root_token
-tf apply --auto-approve
+terraform apply --auto-approve
 
 # Apply Kubernetes YAML file for Transit app deployment
 yq eval '(select(documentIndex == 0) | .spec.template.spec.containers[0].env[] | select(.name == "VAULT_TOKEN").value) |= strenv(VAULT_TOKEN)' -i -P ./kubernetes_config/transit-app.yaml
 sleep 2
 kubectl apply -f ./kubernetes_config/transit-app.yaml
-
-terraform apply -auto-approve
 
 # Forward port for Transit app
 #sleep 2
