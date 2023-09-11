@@ -23,7 +23,7 @@ Ensure there is a /certs directory in the same location as the script. Populate 
 To execute the script using the zsh shell:
 
 ``` chmod +x bootstrap-demo.sh
-./bootstrap-demo.sh
+. ./bootstrap-demo.sh
 ```
 
 ## Contributing
