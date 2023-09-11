@@ -8,9 +8,6 @@ unset AWS_SESSION_TOKEN
 doormat login -f && eval $(doormat aws export --account ${DOORMAT_AWS_USER})
 DOORMAT_USER_ARN=$(aws sts get-caller-identity | jq -r '.Arn')
 
-echo AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-echo DOORMAT_USER_ARN:  $DOORMAT_USER_ARN
-
 # Define variables
 export TF_VAR_doormat_user_arn=$DOORMAT_USER_ARN
 export namespace="my-vault-demo"
@@ -28,8 +25,10 @@ kubectl create secret generic vault-secrets \
     --from-file=tls.crt=./cert/vault_tls.crt
 
 # Deploy ingress-nginx
-helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace my-vault-demo -f ingress-nginx.yml
-sleep 15
+helm install ingress-nginx ingress-nginx/ingress-nginx \
+--set controller.extraArgs.enable-ssl-passthrough=""
+sleep 30
+
 # Define an array to store the datacenter names
 datacentres=("dc1" "dc2")
 
