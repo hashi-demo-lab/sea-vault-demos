@@ -5,7 +5,205 @@
 @org_token=
 @workspace_id=
 @run_id=
+############################
+#
+#    F5 POV - Queries
+#
+#############################
 
+### Query workspace by tag - f5
+
+### Get all tags
+GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/tags
+Authorization: Bearer {{token}}
+
+### ### Get all tag by name f5
+
+###
+https://app.terraform.io/api/v2/organizations/{{ORG_NAME}}/workspaces
+Authorization: Bearer {{token}}
+
+### all workspaces tagged f5
+https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces?search[tags]=f5&sort=name
+Authorization: Bearer {{token}}
+
+### all workspaces tagged f5 - include only
+https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces?fields[workspace][]=assessments_enabled&search[tags]=f5&sort=name
+Authorization: Bearer {{token}}
+
+###
+https://app.terraform.io/api/v2/organizations/hashi-demos-apj/workspaces?fields[workspace][]=assessments_enabled&search[tags]=f5&sort=name
+Authorization: Bearer {{token}}
+#%26search%5Btags%5D=f5&sort=name
+
+
+### Get workspace - Errored
+GET https://{{tf_cloud}}/api/v2/organizations/hashi-demos-apj/workspaces/ssl_example
+Authorization: Bearer {{token}}
+
+
+################################
+####
+#### Assessment Results
+####
+#################################
+https://app.terraform.io/api/v2/assessment-results/asmtres-K1gg8uP7oGN7Z8mx
+Authorization: Bearer {{token}}
+
+###
+https://app.terraform.io/api/v2/assessment-results/asmtres-K1gg8uP7oGN7Z8mx/json-schema
+Authorization: Bearer {{token}}
+###
+https://app.terraform.io/api/v2/assessment-results/asmtres-K1gg8uP7oGN7Z8mx/log-output
+Authorization: Bearer {{token}}
+###
+
+https://app.terraform.io/api/v2/assessment-results/asmtres-K1gg8uP7oGN7Z8mx/health-json-redacted
+Authorization: Bearer {{token}}
+
+
+###
+https://app.terraform.io/api/v2/assessment-results/asmtres-K1gg8uP7oGN7Z8mx/json-output
+Authorization: Bearer {{token}}
+
+
+
+### Get workspace - Errored
+GET https://{{tf_cloud}}/api/v2/organizations/hashi-demos-apj/workspaces/f5virtualserverSSL
+Authorization: Bearer {{token}}
+
+### Get current assesment result - health assesment result
+GET https://{{tf_cloud}}/api/v2/workspaces/ws-cnfvkvs6MQAQNxxz/current-assessment-result
+Authorization: Bearer {{token}}
+
+### Get current assesment result - health assesment result
+GET https://{{tf_cloud}}/api/v2/workspaces/ws-gZYurYavY23753bP/current-assessment-result
+Authorization: Bearer {{token}}
+
+
+###
+GET https://{{tf_cloud}}/api/v2/assessment-results/asmtres-Hof1rKcDjTzJuABD/log-output
+Authorization: Bearer {{token}}
+### Apply Run with current configversion
+
+POST https://{{tf_cloud}}/api/v2/runs/
+Authorization: Bearer {{token}}
+Content-Type: application/vnd.api+json
+
+{
+    "data": {
+        "attributes": {
+            "is-destroy": false,
+            "refresh": true,
+            "refresh-only": false,
+            "allow-config-generation": true
+        },
+        "relationships": {
+            "workspace": {
+                "data": {
+                    "type": "workspaces",
+                    "id": "ws-gZYurYavY23753bP"
+                }
+            }
+        },
+        "type": "runs"
+    }
+}
+
+###
+GET https://{{tf_cloud}}/api/v2/assessment-results/asmtres-eX9dsdysVcTU4PYA/log-output
+Authorization: Bearer {{token}}
+
+
+
+###
+
+
+
+
+### all  workspaces tagged f5 and named ssl_example
+https://app.terraform.io/api/v2/organizations/hashi-demos-apj/workspaces?fields%5Bworkspace%5D%5B%5D=current_run&fields%5Bworkspace%5D%5B%5D=latest_change_at&fields%5Bworkspace%5D%5B%5D=name&fields%5Bworkspace%5D%5B%5D=tag_names&fields%5Bworkspace%5D%5B%5D=terraform-version&search[tags]=f5&search[name]=ssl_example
+Authorization: Bearer {{token}}
+
+### current-assessment-result
+/api/v2/workspaces/ws-cnfvkvs6MQAQNxxz/current-assessment-result
+
+
+
+
+
+
+
+###
+https://app.terraform.io/api/v2/organizations/hashi-demos-apj/workspaces?fields%5Bassessment-result%5D%5B%5D=drifted&search%5Btags%5D=f5&sort=name
+Authorization: Bearer {{token}}
+
+###
+fields[assessment-result][]: drifted
+
+
+https://app.terraform.io/api/v2/organizations/hashi-demos-apj/workspaces?fields%5Bworkspace%5D%5B%5D=auto_destroy_at&fields%5Bworkspace%5D%5B%5D=auto_destroy_status&fields%5Bworkspace%5D%5B%5D=current_run&fields%5Bworkspace%5D%5B%5D=latest_change_at&fields%5Bworkspace%5D%5B%5D=name&fields%5Bworkspace%5D%5B%5D=vcs_repo_identifier&fields%5Bworkspace%5D%5B%5D=locked&fields%5Bworkspace%5D%5B%5D=tag_names&fields%5Bworkspace%5D%5B%5D=project&fields%5Bworkspace%5D%5B%5D=permissions&fields%5Bworkspace%5D%5B%5D=assessments_enabled&fields%5Bworkspace%5D%5B%5D=current_assessment_result&fields%5Bworkspace%5D%5B%5D=execution_mode&fields%5Bworkspace%5D%5B%5D=organization&fields%5Bproject%5D%5B%5D=name&fields%5Bproject%5D%5B%5D=permissions&fields%5Brun%5D%5B%5D=status&fields%5Bassessment-result%5D%5B%5D=drifted&fields%5Bassessment-result%5D%5B%5D=succeeded&fields%5Bassessment-result%5D%5B%5D=all_checks_succeeded&include=current_run%2Ccurrent_assessment_result%2Corganization%2Cproject&organization_name=hashi-demos-apj&page%5Bnumber%5D=1&page%5Bsize%5D=20&search%5Btags%5D=f5&sort=name
+
+
+fields%5Bworkspace%5D%5B%5D=auto_destroy_at&fields%5Bworkspace%5D%5B%5D=auto_destroy_status&fields%5Bworkspace%5D%5B%5D=current_run&fields%5Bworkspace%5D%5B%5D=latest_change_at&fields%5Bworkspace%5D%5B%5D=name&fields%5Bworkspace%5D%5B%5D=vcs_repo_identifier&fields%5Bworkspace%5D%5B%5D=locked&fields%5Bworkspace%5D%5B%5D=tag_names&fields%5Bworkspace%5D%5B%5D=project&fields%5Bworkspace%5D%5B%5D=permissions&fields%5Bworkspace%5D%5B%5D=assessments_enabled&fields%5Bworkspace%5D%5B%5D=current_assessment_result&fields%5Bworkspace%5D%5B%5D=execution_mode&fields%5Bworkspace%5D%5B%5D=organization&fields%5Bproject%5D%5B%5D=name&fields%5Bproject%5D%5B%5D=permissions&fields%5Brun%5D%5B%5D=status&fields%5Bassessment-result%5D%5B%5D=drifted&fields%5Bassessment-result%5D%5B%5D=succeeded&fields%5Bassessment-result%5D%5B%5D=all_checks_succeeded&include=current_run%2Ccurrent_assessment_result%2Corganization%2Cproject&organization_name=hashi-demos-apj&page%5Bnumber%5D=1&page%5Bsize%5D=20&search%5Btags%5D=f5&sort=name
+
+
+##################################################################
+##################################################################
+##################################################################
+
+
+
+
+
+
+
+###
+GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/workspaces
+Authorization: Bearer {{token}}
+
+
+###
+
+GET https://{{tf_cloud}}/api/v2/organizations/{{ORG_NAME}}/organization-memberships
+Authorization: Bearer {{token}}
+
+###
+GET https://{{tf_cloud}}/api/v2/organization-memberships/ou-ch1Urkk79mcU9kuN
+Authorization: Bearer {{token}}
+###
+
+PATCH https://{{tf_cloud}}/api/v2/organization-memberships/ou-ch1Urkk79mcU9kuN
+Authorization: Bearer {{token}}
+Accept: application/json
+Content-Type: application/vnd.api+json
+
+{
+  "data": {
+    "id": "ou-ss8cKm2DSn1r9ThB",
+    "type": "organization-memberships",
+    "attributes": {
+      "status": "invited"
+    },
+    "relationships": {
+      "teams": {
+        "data": []
+      },
+      "user": {
+        "data": {
+          "id": "user-64Th4Ud9mzh2hvAL",
+          "type": "users"
+        }
+      },
+      "organization": {
+        "data": {
+          "id": "BHP-OT-tenent1",
+          "type": "organizations"
+        }
+      }
+    }
+  }
+}
 
 
 ###
