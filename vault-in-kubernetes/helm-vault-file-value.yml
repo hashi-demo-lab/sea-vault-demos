@@ -1,0 +1,34 @@
+global:
+  enabled: true
+injector:
+  enabled: false
+server:
+  standalone:
+    enabled: true
+    config: |
+      ui = true
+
+      listener "tcp" {
+        tls_disable = 1
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+        # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+        #telemetry {
+        #  unauthenticated_metrics_access = "true"
+        #}
+      }
+      storage "file" {
+        path = "/vault/data"
+      }
+  replicas: 1
+  ingress:
+    labels:
+      traffic: external
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    enabled: true
+    pathType: Prefix
+    activeService: false
+    hosts:
+      - host: vault.local
+        paths: [] 
