@@ -1,9 +1,4 @@
-provider "vault" {
-  address         = var.vault_address
-  skip_tls_verify = true
-}
 
-/*
 resource "vault_namespace" "IT" {
   path = "IT"
 }
@@ -69,4 +64,4 @@ resource "vault_namespace" "vault_cloud" {
 resource "vault_namespace" "boundary" {
   namespace = vault_namespace.training.path_fq
   path      = "boundary"
-}*/
+}
