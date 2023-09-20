@@ -1,12 +1,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: demo-hashibank-com
+  name: demo-hashibank-com-v2
   namespace: my-vault-demo
 spec:
-  secretName: demo-hashibank-com-tls
+  secretName: demo-hashibank-com-tls-v2
   issuerRef:
-    name: vault-issuer
-  commonName: demo.hashibank.com
+    name: vault-issuer-v2
+  commonName: demov2.hashibank.com
   dnsNames:
-  - demo.hashibank.com
+  - demov2.hashibank.com

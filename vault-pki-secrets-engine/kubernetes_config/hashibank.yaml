@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hashibank
+  name: hashibank-v2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hashibank
+      app: hashibank-v2
   template:
     metadata:
       labels:
-        app: hashibank
+        app: hashibank-v2
     spec:
       containers:
-        - name: hashibank
+        - name: hashibank-v2
           image: jamiewri/hashibank:0.0.3
           args:
             - -dev
@@ -32,12 +32,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hashibank
+  name: hashibank-v2
 spec:
   selector:
-    app: hashibank
+    app: hashibank-v2
   ports:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: ClusterIP
+  type: NodePort

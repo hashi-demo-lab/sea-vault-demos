@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: vault-issuer
+  name: vault-issuer-v2
   namespace: my-vault-demo
 spec:
   vault:
@@ -12,5 +12,5 @@ spec:
         mountPath: /v1/auth/kubernetes
         role: webapp
         secretRef:
-          name: issuer-token
+          name: issuer-token-v2
           key: token

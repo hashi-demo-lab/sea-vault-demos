@@ -12,7 +12,7 @@ vault read -field=certificate demo-pki-root/cert/ca > rootCA.pem
 sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" "./RootCA.pem"
 
 kubectl apply -f ./kubernetes_config/hashibank.yaml
-kubectl create serviceaccount issuer
+kubectl create serviceaccount issuer-v2
 kubectl apply -f ./kubernetes_config/issuer-secret.yaml 
 kubectl apply -f ./kubernetes_config/vault-issuer.yaml
 kubectl apply -f ./kubernetes_config/demo_hashibank_com_cert.yaml
