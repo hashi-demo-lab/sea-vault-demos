@@ -30,3 +30,35 @@ Accept: application/json
 Content-Type: application/json
 
 {"common_name": "example.hashibank.com" }
+
+###
+## Create Empty KV Path
+
+POST https://{{vault_host}}/v1/{{path}}/data/apiDemo
+X-Vault-Token: {{authToken}}
+Accept: application/json
+Content-Type: application/json
+
+{"data": {} }
+
+###
+
+## Get AWS Secret Engine Config
+
+GET https://{{vault_host}}/v1/aws-dynamic-credentials/config/root
+X-Vault-Token: {{authToken}}
+
+###
+
+## Update AWS Secrets Engine Config
+POST https://{{vault_host}}/v1/aws-dynamic-credentials/config/root
+X-Vault-Token: {{authToken}}
+Content-Type: application/json
+
+{
+  "access_key": "",
+  "secret_key": "",
+  "session_token": ""
+}
+
+
