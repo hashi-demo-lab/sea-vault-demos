@@ -16,3 +16,5 @@ kubectl delete serviceaccount issuer-v2 -n "$namespace"
 
 kubectl delete deployment hashibank-v2 -n "$namespace"
 kubectl delete svc hashibank-v2 -n "$namespace"
+
+helm uninstall cert-manager 
