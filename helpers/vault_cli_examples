@@ -59,3 +59,6 @@ echo "VGhpcyBpcyBteSBzdXBlciBzZWNyZXQK" | base64 -D
 # Examples of Merging entities
 ldap_entity_id:   
 github_entity_id: 
+
+# PKI Get Certificate 
+vault write demo-pki-intermediate/issue/my_role common_name=mysupercoolsite.hashibank.com   
