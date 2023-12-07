@@ -98,3 +98,35 @@ resource "vault_jwt_auth_backend_role" "main" {
   role_type     = "jwt"
   token_max_ttl = "900"
 }
+
+resource "vault_jwt_auth_backend_role" "team-a" {
+  backend        = vault_jwt_auth_backend.main.path
+  role_name      = "team-a-assumed-role"
+  token_policies = [vault_policy.main.name]
+
+  bound_audiences   = ["vault.workload.identity"]
+  bound_claims_type = "glob"
+  bound_claims = {
+    sub = "organization:${var.tfc_organization}:project:Team A:workspace:*:run_phase:*"
+  }
+
+  user_claim    = "terraform_full_workspace"
+  role_type     = "jwt"
+  token_max_ttl = "900"
+}
+
+resource "vault_jwt_auth_backend_role" "team-b" {
+  backend        = vault_jwt_auth_backend.main.path
+  role_name      = "team-b-assumed-role"
+  token_policies = [vault_policy.main.name]
+
+  bound_audiences   = ["vault.workload.identity"]
+  bound_claims_type = "glob"
+  bound_claims = {
+    sub = "organization:${var.tfc_organization}:project:Team B:workspace:*:run_phase:*"
+  }
+
+  user_claim    = "terraform_full_workspace"
+  role_type     = "jwt"
+  token_max_ttl = "900"
+}
