@@ -37,5 +37,5 @@ output_base64.txt
 # Ignore license files
 *.hclic
 
-# Ignore Vault cluster keys
-*vault-cluster-keys.json
+# Ignore ay json files
+*.json
