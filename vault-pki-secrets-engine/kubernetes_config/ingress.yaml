@@ -12,7 +12,7 @@ spec:
           - pathType: Prefix
             backend:
               service:
-                name: hashibank
+                name: hashibank-v2
                 port:
                   number: 8080
             path: /
