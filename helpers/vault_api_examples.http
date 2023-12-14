@@ -1,11 +1,12 @@
-@vault_host=vault-dc1.hashibank.com:443
-@username=aaron
-@password=changeme
+@vault_host=vault.hashicorp.local:8200
+@username=
+@password=
 @auth_method=kv-userpass
 @path=demo-key-value
 @secret_key=aarons-secrets
-@authToken = {{login.response.body.auth.client_token}}
-#@authToken=
+#@authToken = {{login.response.body.auth.client_token}}
+#@authToken =
+
 ## Authenticate to Vault with userpass method;
 
 # @name login
@@ -62,3 +63,9 @@ Content-Type: application/json
 }
 
 
+###
+
+## Get LDAP config
+
+GET https://{{vault_host}}/v1/ldap/config
+X-Vault-Token: {{authToken}}
