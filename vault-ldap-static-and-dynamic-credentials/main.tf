@@ -13,7 +13,7 @@ resource "vault_ldap_auth_backend" "ldap" {
 }
 
 resource "vault_ldap_secret_backend" "config" {
-  path         = "my-custom-ldap"
+  path         = "demo-openldap"
   binddn       = "cn=admin,dc=hashibank,dc=com"
   bindpass     = "admin"
   url          = "ldap://ldap-service"
