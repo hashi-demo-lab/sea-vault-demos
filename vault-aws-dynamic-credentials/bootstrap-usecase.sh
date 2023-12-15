@@ -1,4 +1,8 @@
 #!/usr/bin/env zsh
+# Define variables and set Kubernetes context
+namespace="my-vault-demo"
+kubectl get namespace "$namespace" >/dev/null 2>&1 || kubectl create namespace "$namespace"
+kubectl config set-context --current --namespace="$namespace"
 
 # Clear existing AWS credentials
 unset AWS_ACCESS_KEY_ID
@@ -36,6 +40,7 @@ done
 sleep 5
 output_file="../vault-in-kubernetes/vault_keys.json"
 UNSEAL_KEY_DC1=$(jq -r '.dc1.unseal_key' "$output_file")
+VAULT_TOKEN=$(jq -r '.dc1.root_token' "$output_file")
 
 if [ -z "$UNSEAL_KEY_DC1" ]; then
     echo "Unseal key not found in $output_file. Exiting."
