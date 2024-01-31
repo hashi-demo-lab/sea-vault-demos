@@ -368,3 +368,28 @@ Authorization: Bearer {{token}}
 
 GET https://{{tf_cloud}}/api/v2/policy-evaluations/poleval-1u86pBhiQGaLJrga/policy-set-outcomes?filter[0][status]=errored&filter[1][status]=failed&filter[1][enforcement_level]=mandatory
 Authorization: Bearer {{token}}
+
+
+###
+
+GET https://{{tf_cloud}}/api/v2/organizations/hashi-demos-apj/registry-modules/private/hashi-demos-apj/project-team/tfe/
+Authorization: Bearer {{token}}
+
+###
+## get current published versions
+GET https://{{tf_cloud}}/api/registry/v1/modules/hashi-demos-apj/project-team/tfe/
+Authorization: Bearer {{token}}
+###
+
+POST https://{{tf_cloud}}/api/v2/organizations/hashi-demos-apj/registry-modules/private/hashi-demos-apj/project-team/tfe/versions
+Authorization: Bearer {{token}}
+
+{
+  "data": {
+    "type": "registry-module-versions",
+    "attributes": {
+      "commit-sha": "a4eaf4ef08e52de5d536caddf8381f4a777ea459",
+      "version": "0.1.1"
+    }
+  }
+}
