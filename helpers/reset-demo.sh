@@ -3,7 +3,8 @@
 #THIS SCRIPT IS QUICK RESET OF A LOCAL DEMO ENVIRONMENT
 #MAINLY USED TO BUILD VAULT WITH MAJORITY OF VAULT USE CASES SETUP
 
-rm ../vault-kv-secrets-engine/*.tfstate*
+cd ../vault-kv-secrets-engine/  
+. ./cleanup-demo.sh
 
 cd ../vault-dynamic-database-credentials/  
 . ./cleanup-demo.sh
@@ -15,7 +16,7 @@ cd ../vault-pki-secrets-engine
 . ./cleanup-demo.sh 
 
 cd ../vault-in-kubernetes
-. ./cleanup-demo.sh  
+. ./delete-vault.sh  
 sleep 2
 
 . ./bootstrap-demo.sh
