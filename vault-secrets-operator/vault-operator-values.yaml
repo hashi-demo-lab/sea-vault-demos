@@ -1,0 +1,16 @@
+defaultVaultConnection:
+  enabled: true
+  address: "http://vault-dc1-active.my-vault-demo.svc.cluster.local:8200"
+  skipTLSVerify: false
+controller:
+  manager:
+    clientCache:
+      persistenceModel: direct-encrypted
+      storageEncryption:
+        enabled: true
+        mount: demo-auth-mount
+        keyName: vso-client-cache
+        transitMount: demo-transit
+        kubernetes:
+          role: webapp
+          serviceAccount: demo-operator
