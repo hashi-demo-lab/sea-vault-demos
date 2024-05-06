@@ -30,6 +30,7 @@ terraform apply --auto-approve
 # Apply Kubernetes YAML file for Transit app deployment
 yq eval '(select(documentIndex == 0) | .spec.template.spec.containers[0].env[] | select(.name == "VAULT_TOKEN").value) |= strenv(VAULT_TOKEN)' -i -P ./kubernetes_config/transit-app.yaml
 sleep 2
+kubectl apply -f ./kubernetes_config/app-hashibank-com-cert.yaml
 kubectl apply -f ./kubernetes_config/transit-app.yaml
 
 # Forward port for Transit app
