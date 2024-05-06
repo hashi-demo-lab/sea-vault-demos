@@ -1,7 +1,6 @@
 {
-   {{ with secret "demo-key-value/data/hashibank" }}
-   "Organization": "{{ .Data.data.organization }}",
-   "ID": "{{ .Data.data.customer_id }}",
-   "Contact": "{{ .Data.data.contact_email }}"
+   {{ with secret "demo-key-value/data/aarons-secrets" }}
+   "Organization": "{{ .Data.data.role }}",
+   "ID": "{{ .Data.data.location }}",
    {{ end }}
 }
