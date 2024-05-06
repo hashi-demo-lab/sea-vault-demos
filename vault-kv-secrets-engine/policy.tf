@@ -24,7 +24,7 @@ resource "vault_policy" "aarons_policy" {
 
 # Create SEA's teams policy in the root namespace
 resource "vault_policy" "sea_policy" {
-  name   = "demo-sea-access"
+  name   = "team-sea-access"
   policy = file("policies/sea-access-to-secrets.hcl")
 }
 

@@ -16,15 +16,23 @@ resource "vault_kv_secret_v2" "empty-secret" {
 }
 
 # Create a secret in the KV engine
-resource "vault_kv_secret_v2" "team_secrets" {
+resource "vault_kv_secret_v2" "team_sea_secrets" {
   mount = vault_mount.main.path
   name  = var.kv_team_secrets_name
   data_json = jsonencode(
     {
       team     = "Solution Engineers and Architects",
-      location = "Sydney"
+      location = "Australia and New Zealand"
+      football_team = "Sydney Swans"
     }
   )
+  custom_metadata {
+    max_versions = 5
+    data = {
+      demo = "true",
+      account = "Services Australia"
+    }
+  }
 }
 
 resource "vault_kv_secret_v2" "simons_secrets" {
@@ -34,6 +42,7 @@ resource "vault_kv_secret_v2" "simons_secrets" {
     {
       role     = "Sr Solutions Architecture Specialist",
       location = "Sydney"
+      football_team = "Cronulla Sharks"
     }
   )
 }
@@ -45,6 +54,7 @@ resource "vault_kv_secret_v2" "aarons_secrets" {
     {
       role     = "Solutions Engineer",
       location = "Kiama"
+      football_team = "Canterbury-Bankstown Bulldogs"
     }
   )
 }

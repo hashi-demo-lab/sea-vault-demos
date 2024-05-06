@@ -10,7 +10,7 @@ resource "vault_pki_secret_backend_root_cert" "this" {
   depends_on         = [vault_mount.root]
   backend            = vault_mount.root.path
   type               = "internal"
-  common_name        = "Root CA Vault PKI Demo"
+  common_name        = "Vault Enterprise as a Root CA"
   format             = "pem"
   private_key_format = "der"
   key_type           = "rsa"
@@ -33,13 +33,13 @@ resource "vault_mount" "intermediate" {
 resource "vault_pki_secret_backend_intermediate_cert_request" "this" {
   backend     = vault_mount.intermediate.path
   type        = vault_pki_secret_backend_root_cert.this.type
-  common_name = "SubOrg Intermediate CA"
+  common_name = "Vault Enterprise as a Intermediate CA"
 }
 
 resource "vault_pki_secret_backend_root_sign_intermediate" "this" {
   backend      = vault_mount.root.path
   csr          = vault_pki_secret_backend_intermediate_cert_request.this.csr
-  common_name  = "SubOrg Intermediate CA"
+  common_name  = "Vault Enterprise as a Intermediate CA"
   ou           = "SubUnit"
   organization = "SubOrg"
   country      = "AU"
