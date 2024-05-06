@@ -24,6 +24,7 @@ server:
   affinity: ""
   ha:
     enabled: true
+    replicas: 1
     raft:
       enabled: true
       setNodeId: true
