@@ -21,18 +21,18 @@ auto_auth {
 
 #Demo Key-Value Secrets
 template {
-   source      = "/Users/aarone/Documents/sea-demos/vault-agent/kv-demo.tmpl"
-   destination = "/Users/aarone/Documents/sea-demos/vault-agent/secrets/kv-demo.json"
+   source      = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/kv-demo.tmpl"
+   destination = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/secrets/kv-demo.json"
 }
 
 #Demo Dynamic Database Credentials
 template {
-   source      = "/Users/aarone/Documents/sea-demos/vault-agent/dynamic-db-demo.tmpl"
-   destination = "/Users/aarone/Documents/sea-demos/vault-agent/secrets/dynamic-db-demo.yaml"
+   source      = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/dynamic-db-demo.tmpl"
+   destination = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/secrets/dynamic-db-demo.yaml"
 }
 
 #Demo PKI Certificates
-template {
-  source      = "/Users/aarone/Documents/sea-demos/vault-agent/pki-demo.tmpl"
-  destination = "/Users/aarone/Documents/sea-demos/vault-agent/secrets/pki-demo-cert.pem"
-}
+/*template {
+  source      = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/pki-demo.tmpl"
+  destination = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/secrets/pki-demo-cert.pem"
+}*/
