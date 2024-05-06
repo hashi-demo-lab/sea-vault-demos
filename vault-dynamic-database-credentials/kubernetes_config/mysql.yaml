@@ -30,7 +30,7 @@ spec:
       volumes:
         - name: app-data
           persistentVolumeClaim:
-          claimName: mysql-pvc
+            claimName: mysql-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -55,4 +55,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 5Gi
