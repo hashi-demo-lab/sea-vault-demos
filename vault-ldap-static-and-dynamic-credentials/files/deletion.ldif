@@ -1,0 +1,2 @@
+dn: cn={{.Username}},ou=users,dc=hashibank,dc=com
+changetype: delete

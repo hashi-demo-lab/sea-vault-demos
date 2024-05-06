@@ -1,0 +1,20 @@
+dn: CN={{.Username }},ou=users,dc=hashibank,dc=com
+objectClass: top
+objectClass: person
+cn: {{.Username }}
+sn: vault-demo
+
+dn: CN={{.Username}},ou=users,dc=hashibank,dc=com
+changetype: modify
+replace: userPassword
+userPassword: ${password_hash}
+-
+
+%{ for group_name in group_names ~}
+dn: CN=${group_name},ou=groups,dc=hashibank,dc=com
+changetype: modify
+add: member
+member: CN={{.Username }},ou=users,dc=hashibank,dc=com 
+-
+
+%{ endfor }
