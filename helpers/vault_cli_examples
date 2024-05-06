@@ -10,9 +10,9 @@ unset VAULT_PORT
 unset VAULT_TOKEN
 unset VAULT_ADDR
 
-export VAULT_PORT=32000
+export VAULT_PORT=443
 export VAULT_TOKEN=$dc1_root_token
-export VAULT_ADDR=http://localhost:${VAULT_PORT}
+export VAULT_ADDR=https://vault-dc1.hashibank.com:${VAULT_PORT}
 
 echo $VAULT_TOKEN
 echo $VAULT_ADDR
@@ -20,8 +20,8 @@ echo $VAULT_ADDR
 # Key/Value Secrets Engine CLI Examples
 # vault-kv-secrets-engine 
 unset VAULT_TOKEN
-vault login -method=ldap username=aaron password=password123
-vault login -method=userpass username=aaron password=changeme
+vault login -method=ldap username=bob password=password123
+vault login -method=userpass -path kv-userpass  username=aaron password=changeme
 vault read demo-key-value/data/aarons-secrets
 vault kv get demo-key-value/aarons-secrets
 vault kv get demo-key-value/simons-secrets
@@ -43,18 +43,22 @@ cd vault-dynamic-database-credentials
 export VAULT_TOKEN=$dc1_root_token
 alias mysql="kubectl --namespace=my-vault-demo exec mysql-0 -- mysql"
 mysql -u root -p'root' -e "select user from mysql.user;"
+mysql -u root -p'root' -e "SHOW DATABASES;"
+mysql -u root -p'root' -e "select first_name from my_app.customers;"
+mysql -u root -p'root' -e "SHOW TABLES FROM my_app;"
 vault login $VAULT_TOKEN
 vault login -method=userpass username=alice password=changeme
+vault login -method=userpass username=bob password=changeme
 vault read demo-databases/creds/db-user-readonly
 vault read demo-databases/creds/db-user-readwrite
-alias dbdemo="mysql -u v-userpass-a-db-user-re-stc4y1t7  -p'1b-2p8VAkUCFReIm8gGh'"
+alias dbdemo="mysql -u  -p'$(vault read -field=password demo-databases/creds/db-user-readonly)'"
 dbdemo -e "select Host,User from mysql.user;"
 dbdemo -e "select first_name from my_app.customers;"
 
 # Encryption as a Service CLI Examples
 dbdemo -e "select birth_date from my_app.customers;"
 echo "This is my super secret" | base64
-echo "VGhpcyBpcyBteSBzdXBlciBzZWNyZXQK" | base64 -D
+echo "" | base64 -D
 
 # Examples of Merging entities
 ldap_entity_id:   
@@ -62,3 +66,7 @@ github_entity_id:
 
 # PKI Get Certificate 
 vault write demo-pki-intermediate/issue/my_role common_name=mysupercoolsite.hashibank.com   
+
+
+# LDAP Secret Engine
+vault read ldap/static-cred/alice

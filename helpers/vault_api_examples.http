@@ -1,14 +1,13 @@
-@vault_host=vault.hashicorp.local:8200
-@username=
-@password=
+@vault_host=vault-dc1.hashibank.com:443
+@username=aaron
+@password=changeme
 @auth_method=kv-userpass
 @path=demo-key-value
 @secret_key=aarons-secrets
-#@authToken = {{login.response.body.auth.client_token}}
-#@authToken =
+@authToken = {{login.response.body.auth.client_token}}
+#@authToken=root_token
 
 ## Authenticate to Vault with userpass method;
-
 # @name login
 POST https://{{vault_host}}/v1/auth/{{auth_method}}/login/{{username}}
 Accept: application/json
@@ -62,10 +61,34 @@ Content-Type: application/json
   "session_token": ""
 }
 
-
 ###
 
 ## Get LDAP config
 
 GET https://{{vault_host}}/v1/ldap/config
 X-Vault-Token: {{authToken}}
+
+
+@migration_id={{remount.response.body.migration_id}}
+##
+
+
+## Remount Secrets Engine 
+# @name remount
+POST https://{{vault_host}}/v1/sys/remount
+X-Vault-Token: {{authToken}}
+X-Vault-Namespace: admin
+Content-Type: application/json
+
+{
+  "from": "pki",
+  "to": "tfo-apj-demos/pki"
+}
+
+###
+
+## Get Remount Status
+GET https://{{vault_host}}/v1/sys/remount/status/{{migration_id}}
+X-Vault-Token: {{authToken}}
+X-Vault-Namespace: admin
+Content-Type: application/json
