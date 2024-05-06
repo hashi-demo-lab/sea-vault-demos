@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: transit-app-svc
+  namespace: my-vault-demo
+spec:
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+  selector:
+    app: transit-app
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: app-hashibank-com
+  namespace: my-vault-demo
+spec:
+  secretName: app-hashibank-com-tls
+  issuerRef:
+    name: app-vault-issuer
+  commonName: app.hashibank.com
+  dnsNames:
+  - app.hashibank.com
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer 
+metadata:
+  name: app-vault-issuer
+  namespace: my-vault-demo
+spec:
+  vault:
+    server: http://vault-dc1-active:8200
+    path: demo-pki-intermediate/sign/my_role
+    auth:
+      kubernetes:
+        mountPath: /v1/auth/kubernetes
+        role: webapp
+        secretRef:
+          name: app-issuer-token
+          key: token
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-issuer-token
+  namespace: my-vault-demo
+  annotations:
+    kubernetes.io/service-account.name: issuer-v2
+type: kubernetes.io/service-account-token
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: transit-app-ingress
+  namespace: my-vault-demo
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: app.hashibank.com
+      http:
+        paths:
+          - pathType: Prefix
+            backend:
+              service:
+                name: transit-app-svc
+                port:
+                  number: 5000
+            path: /
+  tls:
+  - hosts:
+    - app.hashibank.com
+    secretName: app-hashibank-com-tls
