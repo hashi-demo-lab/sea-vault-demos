@@ -1,16 +1,50 @@
 global:
   enabled: true
-  tlsDisable: true
+  namespace: "my-vault-demo"
+  tlsDisable: false
+  imagePullSecrets: []
+
 server:
-  enabled: "-"
+  enabled: true
   enterpriseLicense:
     secretName: "vault-secrets"
     secretKey: "license"
+
   image:
     repository: "hashicorp/vault-enterprise"
     tag: "latest"
-    # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
+  
+  updateStrategyType: "OnDelete"
+
+  logLevel: "debug"
+
+  logFormat: "json"
+
+  resources: {}
+
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    activeService: true
+    ingressClassName: nginx
+  
+  authDelegator:
+    enabled: true
+  
+  readinessProbe:
+    port: 8200
+    failureThreshold: 2
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 5
+  
+  extraEnvironmentVars:
+    VAULT_CACERT: /vault/tls/ca.crt
+
   extraSecretEnvironmentVars:
     - envName: AWS_ACCESS_KEY_ID
       secretName: vault-secrets
@@ -21,56 +55,79 @@ server:
     - envName: AWS_SESSION_TOKEN
       secretName: vault-secrets
       secretKey: AWS_SESSION_TOKEN
+  
+  volumes:
+    - name: vault-tls
+      secret:
+        secretName: vault-secrets
+        items:
+          - key: tls.crt
+            path: tls.crt
+          - key: tls.key
+            path: tls.key
+          - key: ca.crt
+            path: ca.crt
+
+  volumeMounts:
+    - name: vault-tls
+      mountPath: /vault/tls
+      readOnly: true
+
   affinity: ""
+  
+  dataStorage:
+    enabled: true
+    size: 2Gi
+    mountPath: "/vault/data"
+    storageClass: null
+    accessMode: ReadWriteOnce
+    annotations: {}
+    labels: {}
+  
+  auditStorage:
+    enabled: true
+    size: 2Gi
+    mountPath: "/vault/audit"
+    storageClass: null
+    accessMode: ReadWriteOnce
+    annotations: {}
+    labels: {}
+
   ha:
     enabled: true
-    replicas: 1
+    replicas: 3
+
     raft:
       enabled: true
       setNodeId: true
+      
       config: |
         ui = true
-
-        listener "tcp" {
-          tls_disable = 1
-          address = "[::]:8200"
-          cluster_address = "[::]:8201"
-          # Enable unauthenticated metrics access (necessary for Prometheus Operator)
-          #telemetry {
-          #  unauthenticated_metrics_access = "true"
-          #}
-        }
 
         storage "raft" {
           path = "/vault/data"
         }
+        
+        listener "tcp" {
+          tls_disable = false
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+          tls_cert_file = "/vault/tls/tls.crt"
+          tls_key_file = "/vault/tls/tls.key"
+          tls_client_ca_file = "/vault/tls/ca.crt"
+        }
+        telemetry {
+            prometheus_retention_time = "4h"
+            disable_hostname = true
+          }
 
         service_registration "kubernetes" {}
-  auditStorage:
-    enabled: true
-    # Size of the PVC created
-    size: 10Gi
-    # Location where the PVC will be mounted.
-    mountPath: "/vault/audit"
-    # Name of the storage class to use.  If null it will use the
-    # configured default Storage Class.
-    storageClass: null
-    # Access Mode of the storage device being used for the PVC
-    accessMode: ReadWriteOnce
-    # Annotations to apply to the PVC
+
+  serviceAccount:
+    create: true
+    name: ""
+    createSecret: false
     annotations: {}
-  ingress:
-    labels:
-      traffic: external
-    annotations:
-      kubernetes.io/ingress.class: nginx
-    enabled: true
-    pathType: Prefix
-    activeService: false
-    hosts:
-      - host: vault.hashibank.com
-        paths: []
-    tls:
-      - secretName: vault-secrets
-        hosts:
-          - vault.hashibank.com
+    extraLabels: {}
+    serviceDiscovery:
+      enabled: true

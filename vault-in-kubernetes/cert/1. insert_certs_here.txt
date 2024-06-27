@@ -1,0 +1,21 @@
+---
+### Generate a Self-Signed TLS Certificate for Vault
+
+The following command generates a self-signed TLS certificate for HashiCorp Vault, using OpenSSL. This certificate is valid for 365 days and uses RSA-2048 encryption. The command also specifies a Common Name (CN) for the certificate and includes Subject Alternative Names (SANs) for additional domain names associated with the Vault service.
+
+```
+
+```
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout vault_tls.key -out vault_tls.crt -subj "/CN=vault.hashibank.com" -extensions SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=DNS:vault-dc1.hashibank.com,DNS:vault-dc2.hashibank.com,DNS:vault-dc1.my-vault-demo.svc.cluster.local,DNS:vault-dc2.my-vault-demo.svc.cluster.local,DNS:vault-dc1-active.my-vault-demo.svc.cluster.local,DNS:vault-dc2-active.my-vault-demo.svc.cluster.local,DNS:vault-dc1-0.vault-dc1-internal.my-vault-demo.svc.cluster.local,DNS:vault-dc1-1.vault-dc1-internal.my-vault-demo.svc.cluster.local,DNS:vault-dc1-2.vault-dc1-internal.my-vault-demo.svc.cluster.local,DNS:vault-dc2-0.vault-dc2-internal.my-vault-demo.svc.cluster.local,DNS:vault-dc2-1.vault-dc2-internal.my-vault-demo.svc.cluster.local,DNS:vault-dc2-2.vault-dc2-internal.my-vault-demo.svc.cluster.local,IP:127.0.0.1"))
+
+
+
+
+
+This command is particularly useful for setting up TLS encryption for Vault instances to ensure secure communication.
+
+then base64 encode for setting up trust between Vault Ent and TFC
+```
+base64 -i vault_tls.crt -o vault_tls.b64 
+```
