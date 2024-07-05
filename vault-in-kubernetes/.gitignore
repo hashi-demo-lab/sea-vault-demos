@@ -32,6 +32,9 @@ override.tf.json
 *.pem
 *.crt
 *.key
+*.csr
+*.b64
+*.yaml
 output_base64.txt
 
 # Ignore license files
