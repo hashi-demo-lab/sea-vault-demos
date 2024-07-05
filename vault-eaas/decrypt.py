@@ -10,7 +10,7 @@ def decrypt_data_key(vault_url, vault_token, key_name, ciphertext):
     url = f"{vault_url}/v1/transit/decrypt/{key_name}"
     headers = {'X-Vault-Token': vault_token, 'Content-Type': 'application/json'}
     payload = {'ciphertext': ciphertext}
-    response = requests.post(url, headers=headers, json=payload, verify="../vault-in-kubernetes/cert/ca.crt")
+    response = requests.post(url, headers=headers, json=payload, verify="../vault-in-kubernetes/cert/kubernetes_ca.crt")
     return response.json()
 
 def load_encrypted_data(filepath):
