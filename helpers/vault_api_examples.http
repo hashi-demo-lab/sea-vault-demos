@@ -14,6 +14,12 @@
 GET https://{{vault_host}}/v1/sys/health
 Accept: application/json
 
+###
+## Check metrics based on prometheus format
+
+GET https://{{vault_host}}/v1/sys/metrics?format=prometheus
+X-Vault-Token: {{authToken}}
+Accept: application/json
 
 ###
 ## Authenticate to Vault with userpass method;
