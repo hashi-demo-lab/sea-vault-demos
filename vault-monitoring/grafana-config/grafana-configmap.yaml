@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: my-vault-demo
+data:
+  datasource.yml: |
+    apiVersion: 1
+    datasources:
+    - name: vault
+      type: prometheus
+      access: server
+      orgId: 1
+      url: http://prometheus.my-vault-demo.svc.cluster.local:9090
+      isDefault: true
+      version: 1
+      editable: true
