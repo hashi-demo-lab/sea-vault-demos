@@ -28,6 +28,7 @@ resource "vault_policy" "sea_policy" {
   policy = file("policies/sea-access-to-secrets.hcl")
 }
 
+
 /*
 # Create admin policy in the finance namespace
 resource "vault_policy" "admin_policy_finance" {
