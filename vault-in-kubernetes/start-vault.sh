@@ -93,16 +93,18 @@ for dc in "${datacentres[@]}"; do
     echo "\n\033[32mUnsealing pod: ${pod_name}\033[0m\n"
     kubectl --namespace="$namespace" exec "${pod_name}" -- vault operator unseal $(eval echo "\${${dc}_unseal_key}")
   done
-  echo "\033[32mRoot token for ${dc}: $(eval echo "\${${dc}_root_token}")\033[0m"
-  echo "\033[32mUnseal key for ${dc}: $(eval echo "\${${dc}_unseal_key}")\033[0m\n"
+
+  # Enable audit logging
+  echo "\n\033[32m---Enabling audit logging for ${dc}---\033[0m"
+  kubectl --namespace="$namespace" exec "${vault_operator_pod}" -- vault audit enable file file_path=/vault/audit/vault_audit.log
 done
 
 # Setup base details for access
 export VAULT_TOKEN=$dc1_root_token
-#export VAULT_ADDR=https://vault-dc1.hashibank.com:8200
-output_file="vault_keys.json"
+export VAULT_ADDR=https://vault-dc1.hashibank.com:8200
 
 # Initialize an empty JSON object
+output_file="vault_keys.json"
 echo "{}" > "$output_file"
 
 for dc in dc1 dc2; do
