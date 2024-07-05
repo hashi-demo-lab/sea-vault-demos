@@ -26,13 +26,13 @@ template {
 }
 
 #Demo Dynamic Database Credentials
-template {
+/*template {
    source      = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/dynamic-db-demo.tmpl"
    destination = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/secrets/dynamic-db-demo.yaml"
-}
+}*/
 
 #Demo PKI Certificates
-/*template {
+template {
   source      = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/pki-demo.tmpl"
   destination = "/Users/aarone/Documents/repos/sea-vault-demos/vault-agent/secrets/pki-demo-cert.pem"
-}*/
+}
