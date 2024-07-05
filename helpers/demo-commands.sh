@@ -2,6 +2,7 @@ The commands below are used for demo purposes only
 ---
 Demo KV
 ---
+unset VAULT_TOKEN
 vault login -method=ldap username=bob
 
 vault read demo-key-value/data/team_pipelines_secrets
@@ -15,15 +16,6 @@ vault kv get -version=2 demo-key-value/team_pipelines_secrets
 vault kv get -format=json -mount=demo-key-value  team_pipelines_secrets
 
 vault kv get -field=football_team -mount=demo-key-value  team_pipelines_secrets
-
-
----
-API Explorer
-
-demo-key-value/data/{path}
----
-
-unset VAULT_TOKEN
 
 ----
 Database Demo
@@ -39,12 +31,12 @@ mysql -u root -p'root' -e "select first_name from my_app.customers;"
 mysql -u root -p'root' -e "SELECT * from my_app.customers;"
 
 unset VAULT_TOKEN
-vault login -method=userpass username=bob password=changeme
+vault login -method=userpass username=bob password=
 vault read demo-databases/creds/db-user-readonly
 mysql -u root -p'root' -e "select user from mysql.user;"
 
 unset VAULT_TOKEN
-vault login -method=userpass username=alice password=changeme
+vault login -method=userpass username=alice password=
 vault read demo-databases/creds/db-user-readwrite
 mysql -u root -p'root' -e "select user from mysql.user;"
 
@@ -89,19 +81,39 @@ kubectl delete -f .
 ---
 PKI Demo
 ---
-vault write demo-pki-intermediate/issue/my_role common_name=mysupercoolsite.hashibank.com   
+1. #Basic Vault CLI Commands
+vault write demo-pki-intermediate/issue/my_role common_name=mysupercoolsite.hashibank.com
+vault write demo-pki-intermediate/issue/my_role common_name=mysupercoolsite.hashibank.com ttl=3600s
+vault write demo-pki-intermediate/issue/my_role common_name=mysupercoolsite.hashibank.com ip_sans="127.0.0.1"
 
-k describe certificate demo-hashibank-com-v2
 
-Show it in the UI
+2. #Control Group Demo
+vault login -method=userpass -path=kv-userpass username=aaron password=
+vault write demo-pki-intermediate/issue/my_role common_name=aaron.hashibank.com
+
+vault unwrap {token} # unauthorized token
+vault login -method=userpass -path=kv-userpass username=simon password=
+vault write sys/control-group/authorize accessor=
+
+Kubernetes Environment 
+kubectl describe issuer vault-issuer-v2
+kubectl describe certificate demo-hashibank-com-v2
+
+3. VAULT AGENT
+unset VAULT_TOKEN
+root login
+vault agent -config=agent-config.hcl
+
+
+4. Terraform Cloud - Drift Detection
+terraform apply -auto-approve
 
 ---
 Encryption as a Service
 ---
 unset VAULT_TOKEN
-export VAULT_TOKEN="" 
 
-vault login -method=userpass username=alice password=changeme
+vault login -method=userpass username=alice password=
 
 vault read demo-databases/creds/db-user-readwrite
 
@@ -112,9 +124,3 @@ dynamicCreds -e "select birth_date from my_app.customers;"
 vault write demo-transit/decrypt/customer-key ciphertext="vault:example"
 
 echo "" | base64 -D; echo
-
-
----
-LOGS
----
-unbuffer kubectl exec -it vault-dc1-0 -- tail -f /vault/audit/audit.txt | jq -r 'select(.type == "request") | "\(.time) \(.request.remote_address) \(.request.operation) \(.request.path) \(.auth.display_name)"'
