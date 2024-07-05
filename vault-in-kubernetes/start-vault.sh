@@ -30,6 +30,8 @@ for dc in "${datacentres[@]}"; do
     helm repo add hashicorp https://helm.releases.hashicorp.com
   fi
 
+  docker pull hashicorp/vault-enterprise:latest
+  
   helm install "vault-${dc}" hashicorp/vault --values ./helm-vault-raft-values.yml \
   --set "server.ingress.hosts[0].host=vault-$dc.hashibank.com" \
   --set "server.ingress.tls[0].hosts[0]=vault-$dc.hashibank.com" \
