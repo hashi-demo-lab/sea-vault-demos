@@ -3,7 +3,7 @@
 for i in 1 2 3
 do
     export TFC_AGENT_NAME="tfc-agent$i"
-    docker pull --platform amd64 hashicorp/tfc-agent:latest
+    docker pull --platform amd64 cloudbrokeraz/tfc-agent-custom:5.0
 
     # Start Terraform Cloud Agent 
     echo "\n\033[32m---STARTING THE TFC-AGENT CONTAINER---\033[0m"
@@ -14,7 +14,7 @@ do
       docker run -d --rm --platform linux/amd64 --name "$TFC_AGENT_NAME" --network host --cap-add=IPC_LOCK \
         -e "TFC_AGENT_TOKEN=${TFC_AGENT_TOKEN}" \
         -e "TFC_AGENT_NAME=${TFC_AGENT_NAME}" \
-        hashicorp/tfc-agent:latest
+        cloudbrokeraz/tfc-agent-custom:5.0
     fi
 
     export container_id=$(docker ps -aqf "name=$TFC_AGENT_NAME")
