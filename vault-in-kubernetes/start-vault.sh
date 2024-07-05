@@ -10,7 +10,7 @@ kubectl create secret generic vault-secrets \
     --from-literal=license="${VAULT_LICENSE}" \
     --from-file=tls.key=./cert/vault.key \
     --from-file=tls.crt=./cert/vault.crt \
-    --from-file=ca.crt=./cert/ca.crt \
+    --from-file=ca.crt=./cert/kubernetes_ca.crt \
     --from-literal=AWS_ACCESS_KEY_ID="" \
     --from-literal=AWS_SECRET_ACCESS_KEY="" \
     --from-literal=AWS_SESSION_TOKEN=""
