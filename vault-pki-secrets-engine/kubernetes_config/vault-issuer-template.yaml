@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: vault-issuer-v2
+  namespace: my-vault-demo
+spec:
+  vault:
+    server: https://vault-dc1-active.my-vault-demo.svc.cluster.local:8200
+    path: demo-pki-intermediate/sign/my_role
+    caBundle: "{{CA_BUNDLE}}"  # Placeholder to be replaced
+    auth:
+      kubernetes:
+        mountPath: /v1/auth/kubernetes
+        role: webapp
+        secretRef:
+          name: issuer-token-v2
+          key: token
