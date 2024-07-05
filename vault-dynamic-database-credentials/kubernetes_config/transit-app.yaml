@@ -17,7 +17,7 @@ spec:
       containers:
         - env:
             - name: VAULT_ADDR
-              value: http://vault-dc1-active:8200
+              value: https://vault-dc1-active:8200
             - name: VAULT_DATABASE_CREDS_PATH
               value: demo-databases/creds/db-user-readwrite
             - name: VAULT_NAMESPACE
