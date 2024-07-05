@@ -34,14 +34,19 @@ resource "vault_pki_secret_backend_intermediate_cert_request" "this" {
   backend     = vault_mount.intermediate.path
   type        = vault_pki_secret_backend_root_cert.this.type
   common_name = "Vault Enterprise as a Intermediate CA"
+  ou          = "Vault Enterprise as a Intermediate CA"
+  organization = "Vault Enterprise as a Intermediate CA"
+  country     = "AU"
+  locality    = "Sydney"
+  province    = "NSW"
 }
 
 resource "vault_pki_secret_backend_root_sign_intermediate" "this" {
   backend      = vault_mount.root.path
   csr          = vault_pki_secret_backend_intermediate_cert_request.this.csr
   common_name  = "Vault Enterprise as a Intermediate CA"
-  ou           = "SubUnit"
-  organization = "SubOrg"
+  ou           = "Vault Enterprise as a Intermediate CA"
+  organization = "Vault Enterprise as a Intermediate CA"
   country      = "AU"
   locality     = "Sydney"
   province     = "NSW"
@@ -63,12 +68,23 @@ resource "vault_pki_secret_backend_config_urls" "this" {
   ]
 }
 
+resource "vault_pki_secret_backend_config_cluster" "this" {
+  backend  = vault_mount.intermediate.path
+  path     = "http://127.0.0.1:8200/v1/demo-pki-intermediate"
+  aia_path = "http://127.0.0.1:8200/v1/demo-pki-intermediate"
+}
+
 resource "vault_pki_secret_backend_role" "this" {
   backend          = vault_mount.intermediate.path
   name             = "my_role"
   allowed_domains  = ["example.com", "hashibank.com"]
   allow_subdomains = true
-  max_ttl          = 180
+  max_ttl          = 1800
   organization     = ["hashi-demo-lab"]
   ou               = ["Solutions Engineering and Architecture"]
+  country          = ["Australia"]
+  locality         = ["Sydney"]
+  province         = ["NSW"]
+  not_before_duration = "10s"
+  allow_ip_sans = false
 }
