@@ -1,12 +1,21 @@
 @vault_host=vault-dc1.hashibank.com:443
 @username=aaron
-@password=changeme
+@password=
 @auth_method=kv-userpass
 @path=demo-key-value
 @secret_key=aarons-secrets
-@authToken = {{login.response.body.auth.client_token}}
-#@authToken=root_token
+#@authToken = {{login.response.body.auth.client_token}}
+@authToken=
+@file_path=
+@encoded_content=$(cat {{file_path}})
 
+## Check Vault Status
+
+GET https://{{vault_host}}/v1/sys/health
+Accept: application/json
+
+
+###
 ## Authenticate to Vault with userpass method;
 # @name login
 POST https://{{vault_host}}/v1/auth/{{auth_method}}/login/{{username}}
@@ -92,3 +101,64 @@ GET https://{{vault_host}}/v1/sys/remount/status/{{migration_id}}
 X-Vault-Token: {{authToken}}
 X-Vault-Namespace: admin
 Content-Type: application/json
+
+
+###
+
+## Encrypt Data
+# convert the following curl command
+# Curl –k –header “X-VaultToken: <token>” –request POST –data @<FILE> https://<Vault URL>:8200/v1/transit/encrypt/my-encryption-key
+# to a http command and add a file with the plaintext data to the request
+
+POST https://{{vault_host}}/v1/demo-transit/encrypt/customer-key
+X-Vault-Token: {{authToken}}
+Content-Type: application/json
+
+{
+  "plaintext": "{{encoded_content}}"
+}
+
+###
+## Get entity details
+
+GET https://{{vault_host}}/v1/identity/entity/id/23b4e0bb-424c-3cca-88fe-aab0ef708c7b
+X-Vault-Token: {{authToken}}
+
+###
+## disable entity
+POST https://{{vault_host}}/v1/identity/entity/id/23b4e0bb-424c-3cca-88fe-aab0ef708c7b
+X-Vault-Token: {{authToken}}
+Content-Type: application/json
+
+{
+  "disabled": false
+}
+
+###
+## get RAFT Configuration
+GET https://{{vault_host}}/v1/sys/storage/raft/configuration
+X-Vault-Token: {{authToken}}
+Content-Type: application/json
+
+###
+## Inspect Snapshot?
+GET https://{{vault_host}}/v1/sys/storage/raft/snapshot/inspect
+X-Vault-Token: {{authToken}}
+Content-Type: application/json
+
+
+###
+## Cluster health
+GET https://{{vault_host}}/v1/sys/health
+X-Vault-Token: {{authToken}}
+Content-Type: application/json
+
+###
+## Get DataKey from transit engine with key called my-key
+POST https://{{vault_host}}/v1/transit/datakey/plaintext/my_key
+X-Vault-Token: {{authToken}}
+Content-Type: application/json
+
+{
+  "type": "wrapped"
+}
