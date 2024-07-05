@@ -15,7 +15,7 @@ resource "vault_generic_endpoint" "aaron" {
   ignore_absent_fields = true
   data_json            = <<EOT
 {
-  "policies": ["demo-aarons-access", "demo-sea-access" ],
+  "policies": ["demo-aarons-access", "demo-sea-access", "request-pki-cert" ],
   "password": "changeme"
 }
 EOT
@@ -27,7 +27,7 @@ resource "vault_generic_endpoint" "simon" {
   ignore_absent_fields = true
   data_json            = <<EOT
 {
-  "policies": ["demo-simons-access", "demo-sea-access" ],
+  "policies": ["demo-simons-access", "demo-sea-access", "approve-pki-cert" ],
   "password": "changeme"
 }
 EOT
