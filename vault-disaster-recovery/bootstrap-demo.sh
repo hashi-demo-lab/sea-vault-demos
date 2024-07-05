@@ -1,37 +1,18 @@
-#!/usr/bin/zsh
-
-# Check if necessary environment variables are set
-: "${dc1_root_token:?Need to set dc1_root_token}"
-: "${dc2_root_token:?Need to set dc2_root_token}"
-: "${dc1_unseal_key:?Need to set dc1_unseal_key}"
-
-configure_vault() {
-  local vault_addr=$1
-  local vault_token=$2
-  
-  export VAULT_ADDR="${vault_addr}"
-  export VAULT_TOKEN="${vault_token}"
-  
-  vault login "${VAULT_TOKEN}"
-  if [ $? -ne 0 ]; then
-    echo "Failed to log in to Vault at ${VAULT_ADDR}"
-  fi
+# Function to configure and execute commands inside Vault pods through their services
+execute_vault_command() {
+  local service_name=$1
+  local vault_command=$2
+  echo "Executing command via service $service_name: $vault_command" >&2  # Redirecting status message to stderr
+  kubectl exec -n my-vault-demo -it svc/$service_name -- sh -c "$vault_command"
 }
-
 # Configure DR on Primary Vault (dc1)
-configure_vault 'https://vault-dc1.hashibank.com:443' "${dc1_root_token}"
-vault write -f sys/replication/dr/primary/enable
+primary_commands="vault login $dc1_root_token && vault write -f sys/replication/dr/primary/enable"
+execute_vault_command vault-dc1-active "$primary_commands"
 sleep 5
-secondary_token_output=$(vault write sys/replication/dr/primary/secondary-token id="dr-secondary" -format=json)
-token=$(echo "${secondary_token_output}" | jq -r '.wrap_info.token')
+secondary_token_command="vault write sys/replication/dr/primary/secondary-token id='dr-secondary' -format=json"
+secondary_token_output=$(execute_vault_command vault-dc1-active "$secondary_token_command")
+token=$(echo "$secondary_token_output" | jq -r '.wrap_info.token' 2>&1)  # Ensure to handle stderr in jq processing
 
 # Configure DR on Secondary Vault (dc2)
-configure_vault 'https://vault-dc2.hashibank.com:443' "${dc2_root_token}"
-vault write sys/replication/dr/secondary/enable token="${token}"
-
-# Unseal DR nodes with Primary Vault (dc1) unseal key
-for i in {1..2}; do
-  pod_name="vault-dc2-$i"
-  echo -e "\n\033[32mUnsealing pod: ${pod_name}\033[0m\n"
-  kubectl exec "${pod_name}" -- vault operator unseal "${dc1_unseal_key}"
-done
+secondary_commands="vault login $dc2_root_token && vault write sys/replication/dr/secondary/enable token='$token' primary_api_addr='https://vault-dc1-active.my-vault-demo.svc.cluster.local:8200' ca_file='/vault/tls/ca.crt'"
+execute_vault_command vault-dc2-active "$secondary_commands"
