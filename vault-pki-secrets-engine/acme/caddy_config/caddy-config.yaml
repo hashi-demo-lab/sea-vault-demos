@@ -1,0 +1,17 @@
+# caddy-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy-config
+  namespace: my-vault-demo
+data:
+  Caddyfile: |
+    {
+      acme_ca https://vault-dc1-active.my-vault-demo.svc.cluster.local:8200/v1/pki_int/acme/directory
+    }
+
+    caddy-server {
+      root * /usr/share/caddy
+      file_server browse
+    }
+  index.html: "hello world"

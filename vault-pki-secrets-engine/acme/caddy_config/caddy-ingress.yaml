@@ -1,0 +1,25 @@
+# caddy-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: caddy-ingress
+  namespace: my-vault-demo
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx  # Specify the ingress class
+  rules:
+  - host: caddy.local  # Replace with your desired host
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: caddy-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - caddy.local  # Replace with your desired host
+    secretName: caddy-tls  # This will store the TLS certificates

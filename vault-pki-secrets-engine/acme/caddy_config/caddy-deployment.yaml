@@ -1,0 +1,40 @@
+# caddy-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy-server
+  namespace: my-vault-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      containers:
+      - name: caddy
+        image: caddy:2.6.4
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+        - name: caddy-config
+          mountPath: /etc/caddy/Caddyfile
+          subPath: Caddyfile
+        - name: caddy-index
+          mountPath: /usr/share/caddy/index.html
+          subPath: index.html
+        - name: caddy-data
+          mountPath: /data
+      volumes:
+      - name: caddy-config
+        configMap:
+          name: caddy-config
+      - name: caddy-index
+        configMap:
+          name: caddy-config
+      - name: caddy-data
+        emptyDir: {}

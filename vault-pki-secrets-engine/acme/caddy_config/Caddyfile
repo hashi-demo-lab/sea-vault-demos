@@ -1,0 +1,8 @@
+{
+  acme_ca http://vault-service:8200/v1/pki_int/acme/directory
+}
+
+caddy-server {
+  root * /usr/share/caddy
+  file_server browse
+}
