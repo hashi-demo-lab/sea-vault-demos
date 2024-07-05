@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: my-vault-demo
+data:
+  prometheus.yml: |
+    scrape_configs:
+      - job_name: 'vault'
+        metrics_path: '/v1/sys/metrics'
+        params:
+          format: ['prometheus']
+        scheme: https
+        authorization:
+          credentials_file: '/etc/prometheus/prometheus-token'
+        static_configs:
+          - targets: ['vault-dc1-active.my-vault-demo.svc.cluster.local:8200']
+        tls_config:
+          ca_file: '/etc/prometheus/ca.crt'
+          insecure_skip_verify: false
