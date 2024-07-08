@@ -21,7 +21,7 @@ kubectl create serviceaccount issuer-v2
 kubectl apply -f ./kubernetes_config/issuer-secret.yaml 
 
 # Encode the CA certificate using macOS-specific base64 command
-ca_cert_base64=$(base64 -i ../vault-in-kubernetes/cert/kubernetes-ca.crt)
+ca_cert_base64=$(base64 -i ../vault-in-kubernetes/cert/kubernetes_ca.crt)
 
 # Prepare and apply the Issuer manifest with the encoded CA certificate
 sed "s|{{CA_BUNDLE}}|$ca_cert_base64|g" ./kubernetes_config/vault-issuer-template.yaml > ./kubernetes_config/vault-issuer.yaml
