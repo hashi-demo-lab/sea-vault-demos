@@ -6,7 +6,7 @@ on:
 
 jobs:
   process_secrets:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     permissions:
       contents: read
       id-token: write
