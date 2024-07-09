@@ -1,0 +1,44 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: arc-runner-set
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      matrix:
+        iteration: [1, 2] # Add more numbers to increase the number of runs
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by Kubernetes"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to encrypt data on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: perform token run
+        run: |
+          echo $(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=gha-medium" | base64)
+        shell: bash
+      - name: Import Secrets
+        id: import-secrets
+        uses: hashicorp/vault-action@v2.7.2
+        with:
+          url: http://vault-dc1-active:8200
+          role: github-test-role
+          method: jwt
+          jwtGithubAudience: https://github.com/hashi-demo-lab
+          tlsSkipVerify: true
+          exportEnv: true
+          secrets: demo-key-value/data/aarons-secrets role | ROLE
+      - run: echo "my secret role hash is':' $(echo -n "${{ steps.import-secrets.outputs.ROLE }}" | sha256sum)"
+      - run: echo "my secret role is':' ${{ steps.import-secrets.outputs.ROLE }} " | sed 's/ //g'
