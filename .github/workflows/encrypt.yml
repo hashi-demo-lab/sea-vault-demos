@@ -26,9 +26,11 @@ jobs:
           tlsSkipVerify: true
           outputToken: true
           exportEnv: true
-          secrets: demo-key-value/data/aarons-secrets role | ROLE
-      - run: echo "my secret role hash is':' $(echo -n "${{ steps.import-secrets.outputs.ROLE }}" | sha256sum)"
-      - run: echo "my secret role is':' ${{ steps.import-secrets.outputs.ROLE }} " | sed 's/ //g' 
+          secrets: 'demo-key-value/data/aarons-secrets role | ROLE'
+          
+      - run: echo "my secret role hash is':' $(echo -n "${{ steps.vault_auth.outputs.ROLE }}" | sha256sum)"
+      - run: echo "my secret role is':' ${{ steps.vault_auth.outputs.ROLE }} " | sed 's/ //g'
+ 
 
       - name: Run Encrypt Script
         run: |
