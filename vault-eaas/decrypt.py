@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 import base64
@@ -41,10 +42,10 @@ input_file = sys.argv[1]
 encrypted_data_base64, tag_base64, ciphertext_key = load_encrypted_data(input_file)
 print("Ciphertext Key being used for decryption:", ciphertext_key)  # Print the ciphertext key
 
-# Configuration for Vault
-vault_url = 'https://vault-dc1.hashibank.com:443'
-vault_token = ''
-key_name = 'my_key'
+# Configuration
+vault_url = os.getenv('VAULT_ADDR') # Vault server
+vault_token = os.getenv('VAULT_TOKEN') # Vault token with permissions to access the transit secrets engine
+key_name = os.getenv('KEY_NAME') # Name of the Vault encryption key
 
 # Decrypt the data key using Vault
 decrypted_key_response = decrypt_data_key(vault_url, vault_token, key_name, ciphertext_key)
