@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 import base64
@@ -42,9 +43,9 @@ def save_encrypted_data(encrypted_data, tag, ciphertext_key, filepath):
         }, file, indent=4)
 
 # Configuration
-vault_url = 'https://vault-dc1.hashibank.com:443'  # Vault server URL
-vault_token = ''  # Vault token with permissions to access the transit secrets engine
-key_name = 'my_key'  # Name of the Vault encryption key
+vault_url = os.getenv('VAULT_ADDR') # Vault server
+vault_token = os.getenv('VAULT_TOKEN') # Vault token with permissions to access the transit secrets engine
+key_name = os.getenv('KEY_NAME') # Name of the Vault encryption key
 
 # Generate a new data key
 datakey_response = generate_data_key(vault_url, vault_token, key_name)
