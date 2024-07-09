@@ -1,46 +1,33 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: GitHub Actions with Vault
 
 on:
   workflow_dispatch:
   push:
 
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: arc-runner-set  # Ensure this runner has network access to your Vault instance
+  process_secrets:
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
-
-    strategy:
-      matrix:
-        iteration: [1]
 
     steps:
       - uses: actions/checkout@v3
         name: Check out repository code
 
-      - name: Set up Python environment
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'  # Specify your Python version
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests cryptography  # Ensure all your dependencies are listed here
-
       - name: Authenticate to Vault and Import Secrets
+        id: vault_auth
         uses: hashicorp/vault-action@v2.7.2
         with:
-          url: https://vault-dc1-active:8200
-          role: github-test-role
+          url: ${{ secrets.VAULT_URL }}
+          role: 'github-test-role'
           method: jwt
-          jwtGithubAudience: https://github.com/hashi-demo-lab
+          jwtGithubAudience: 'https://github.com/hashi-demo-lab'
           tlsSkipVerify: true
-          exportEnv: true
-          secrets: |
-            demo-key-value/data/aarons-secrets role | VAULT_ROLE
+          outputToken: true
+          secrets: demo-key-value/data/aarons-secrets role | ROLE
+      - run: echo "my secret role hash is':' $(echo -n "${{ steps.import-secrets.outputs.ROLE }}" | sha256sum)"
+      - run: echo "my secret role is':' ${{ steps.import-secrets.outputs.ROLE }} " | sed 's/ //g'
 
       - name: Run Encrypt Script
         run: |
@@ -48,19 +35,8 @@ jobs:
           python encrypt.py
         env:
           VAULT_URL: ${{ secrets.VAULT_URL }}
-          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-          KEY_NAME: ${{ secrets.KEY_NAME }}
-
-      - name: Run Decrypt Script
-        run: |
-          echo "Running decryption script..."
-          python decrypt.py
-        env:
-          VAULT_URL: ${{ secrets.VAULT_URL }}
-          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+          VAULT_TOKEN: ${{ steps.vault_auth.outputs.vault_token }}
           KEY_NAME: ${{ secrets.KEY_NAME }}
 
       - name: Display Outcome
-        run: |
-          echo "Encryption and Decryption processes completed."
-
+        run: echo "Encryption and Decryption processes completed."
