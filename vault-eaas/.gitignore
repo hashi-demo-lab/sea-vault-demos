@@ -33,3 +33,6 @@ override.tf.json
 
 # Ignore data examples
 *.json
+
+# Local virtual python3 directories
+**/myenv/*
