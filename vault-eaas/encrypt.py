@@ -12,7 +12,7 @@ def generate_data_key(vault_addr, vault_token, key_name):
         'X-Vault-Token': vault_token,
         'Content-Type': 'application/json'
     }
-    response = requests.post(url, headers=headers, verify='../vault-in-kubernetes/cert/kubernetes_ca.crt')  # Change verify path or set True for production
+    response = requests.post(url, headers=headers, verify=False)  # Change verify path or set True for production
     return response.json()
 
 def encrypt_data(plaintext_data, key):
