@@ -5,9 +5,9 @@ import base64
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
-def generate_data_key(vault_url, vault_token, key_name):
+def generate_data_key(vault_addr, vault_token, key_name):
     """ Generate a data key using Vault's Transit Secrets Engine. """
-    url = f"{vault_url}/v1/transit/datakey/plaintext/{key_name}"
+    url = f"{vault_addr}/v1/transit/datakey/plaintext/{key_name}"
     headers = {
         'X-Vault-Token': vault_token,
         'Content-Type': 'application/json'
@@ -43,12 +43,12 @@ def save_encrypted_data(encrypted_data, tag, ciphertext_key, filepath):
         }, file, indent=4)
 
 # Configuration
-vault_url = os.getenv('VAULT_ADDR') # Vault server
+vault_addr = os.getenv('VAULT_ADDR') # Vault server
 vault_token = os.getenv('VAULT_TOKEN') # Vault token with permissions to access the transit secrets engine
 key_name = os.getenv('KEY_NAME') # Name of the Vault encryption key
 
 # Generate a new data key
-datakey_response = generate_data_key(vault_url, vault_token, key_name)
+datakey_response = generate_data_key(vault_addr, vault_token, key_name)
 if 'data' in datakey_response:
     plaintext_key = datakey_response['data']['plaintext']
     ciphertext_key = datakey_response['data']['ciphertext']
