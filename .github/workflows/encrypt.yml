@@ -33,7 +33,7 @@ jobs:
         id: import-secrets
         uses: hashicorp/vault-action@v2.7.2
         with:
-          url: http://vault-dc1-active:8200
+          url: https://vault-dc1-active:8200
           role: github-test-role
           method: jwt
           jwtGithubAudience: https://github.com/hashi-demo-lab
