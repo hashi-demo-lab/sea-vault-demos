@@ -10,7 +10,68 @@ resource "vault_ldap_auth_backend" "ldap" {
   bindpass       = "admin"
   groupdn        = "ou=groups,dc=hashibank,dc=com"
   token_policies = ["team-sea-access"]
-  token_ttl = 90
+  token_ttl = 600
+}
+
+resource "vault_ldap_auth_backend_group" "developers" {
+  backend   = vault_ldap_auth_backend.ldap.path
+  groupname = "developers"
+  policies  = ["dev-policy"]
+}
+
+resource "vault_ldap_auth_backend_group" "testers" {
+  backend   = vault_ldap_auth_backend.ldap.path
+  groupname = "testers"
+  policies  = ["test-policy"]
+}
+
+resource "vault_ldap_auth_backend_group" "administrators" {
+  backend   = vault_ldap_auth_backend.ldap.path
+  groupname = "administrators"
+  policies  = ["prod-policy"]
+}
+
+resource "vault_policy" "dev_policy" {
+  name = "dev-policy"
+
+  policy = <<EOT
+path "demo-pki-intermediate/issue/dev-role" {
+  capabilities = ["create", "update", "read"]
+}
+EOT
+}
+
+resource "vault_policy" "test_policy" {
+  name = "test-policy"
+
+  policy = <<EOT
+path "demo-pki-intermediate/issue/test-role" {
+  capabilities = ["create", "update"]
+}
+
+path "demo-pki-intermediate/roles/test-role" {
+  capabilities = ["read", "list"]
+}
+
+path "demo-pki-intermediate/roles" {
+  capabilities = ["read", "list"]
+}
+EOT
+}
+
+resource "vault_policy" "prod_policy" {
+  name = "prod-policy"
+
+  policy = <<EOT
+path "demo-pki-intermediate/issue/prod-role" {
+  capabilities = ["create", "update", "read"]
+}
+
+path "demo-pki-intermediate/roles/*" {
+  capabilities = ["read", "list"]
+}
+
+EOT
 }
 
 resource "vault_ldap_secret_backend" "config" {
@@ -22,18 +83,17 @@ resource "vault_ldap_secret_backend" "config" {
   userdn       = "ou=users,dc=hashibank,dc=com"
 }
 
-resource "vault_ldap_secret_backend_static_role" "role" {
+/*resource "vault_ldap_secret_backend_static_role" "role" {
   mount           = vault_ldap_secret_backend.config.path
-  username        = "alice"
-  dn              = "cn=alice,ou=users,dc=hashibank,dc=com"
-  role_name       = "alice"
+  username        = "aaron"
+  dn              = "cn=aaron,ou=users,dc=hashibank,dc=com"
+  role_name       = "aaron"
   rotation_period = 60
-}
-
+}*/
+/*
 data "external" "password_hash" {
   program = ["./files/generate_hash.sh", "your-password-here"]
 }
-
 
 resource "vault_ldap_secret_backend_dynamic_role" "this" {
   for_each  = tomap({ for role in var.ldap_roles : role.role_name => role })
@@ -49,3 +109,4 @@ resource "vault_ldap_secret_backend_dynamic_role" "this" {
   max_ttl           = 8 * 3600 # Eight hours
   username_template = "{{printf \"%s%s%s%s\" (.DisplayName | truncate 8) (.RoleName | truncate 8) (random 20)| truncate 20}}"
 }
+*/
