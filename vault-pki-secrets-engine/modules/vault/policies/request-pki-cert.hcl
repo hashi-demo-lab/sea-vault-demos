@@ -1,4 +1,4 @@
-path "demo-pki-intermediate/issue/my_role" {
+/*path "demo-pki-intermediate/issue/my_role" {
   capabilities = [ "create", "update" ]
 
   control_group = {
@@ -9,4 +9,8 @@ path "demo-pki-intermediate/issue/my_role" {
       }
     }
   }
+}*/
+
+path "demo-pki-intermediate/issue/my_role" {
+  capabilities = [ "create", "update" ]
 }
