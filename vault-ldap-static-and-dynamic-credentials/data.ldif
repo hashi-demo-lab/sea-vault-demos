@@ -10,27 +10,33 @@ objectClass: top
 ou: users
 description: users
 
-dn: cn=dev,ou=groups,dc=hashibank,dc=com
+dn: cn=developers,ou=groups,dc=hashibank,dc=com
 objectClass: groupofnames
 objectClass: top
-description: testing group for dev
-cn: dev
-member: cn=alice,ou=users,dc=hashibank,dc=com
+description: group for developers
+cn: developers
+member: cn=aaron,ou=users,dc=hashibank,dc=com
+
+dn: cn=testers,ou=groups,dc=hashibank,dc=com
+objectClass: groupofnames
+objectClass: top
+description: group for testers
+cn: testers
 member: cn=bob,ou=users,dc=hashibank,dc=com
 
-dn: cn=manager,ou=groups,dc=hashibank,dc=com
+dn: cn=administrators,ou=groups,dc=hashibank,dc=com
 objectClass: groupofnames
 objectClass: top
-description: testing group for dev
-cn: manager
-member: cn=raymond,ou=users,dc=hashibank,dc=com
+description: group for administrators
+cn: administrators
+member: cn=simon,ou=users,dc=hashibank,dc=com
 
-dn: cn=alice,ou=users,dc=hashibank,dc=com
+dn: cn=aaron,ou=users,dc=hashibank,dc=com
 objectClass: person
 objectClass: top
-cn: alice
+cn: aaron
 sn: lee
-memberOf: cn=dev,ou=groups,dc=hashibank,dc=com
+memberOf: cn=developers,ou=groups,dc=hashibank,dc=com
 userPassword: password123
 
 dn: cn=bob,ou=users,dc=hashibank,dc=com
@@ -38,13 +44,13 @@ objectClass: person
 objectClass: top
 cn: bob
 sn: villa
-memberOf: cn=dev,ou=groups,dc=hashibank,dc=com
+memberOf: cn=testers,ou=groups,dc=hashibank,dc=com
 userPassword: password123
 
-dn: cn=raymond,ou=users,dc=hashibank,dc=com
+dn: cn=simon,ou=users,dc=hashibank,dc=com
 objectClass: person
 objectClass: top
-cn: raymond
+cn: simon
 sn: goh
-memberOf: cn=manager,ou=groups,dc=hashibank,dc=com
+memberOf: cn=administrators,ou=groups,dc=hashibank,dc=com
 userPassword: password123
