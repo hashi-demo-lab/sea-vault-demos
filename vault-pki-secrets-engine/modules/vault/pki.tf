@@ -88,3 +88,27 @@ resource "vault_pki_secret_backend_role" "this" {
   not_before_duration = "10s"
   allow_ip_sans = false
 }
+
+resource "vault_pki_secret_backend_role" "dev_role" {
+  backend          = vault_mount.intermediate.path
+  name             = "dev-role"
+  allowed_domains  = ["dev.example.com"]
+  allow_subdomains = true
+  max_ttl          = "72h"
+}
+
+resource "vault_pki_secret_backend_role" "test_role" {
+  backend          = vault_mount.intermediate.path
+  name             = "test-role"
+  allowed_domains  = ["test.example.com"]
+  allow_subdomains = true
+  max_ttl          = "72h"
+}
+
+resource "vault_pki_secret_backend_role" "prod_role" {
+  backend          = vault_mount.intermediate.path
+  name             = "prod-role"
+  allowed_domains  = ["prod.example.com"]
+  allow_subdomains = true
+  max_ttl          = "72h"
+}
