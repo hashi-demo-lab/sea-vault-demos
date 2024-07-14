@@ -40,22 +40,27 @@ def download_file_from_s3(S3_BUCKET_NAME, S3_FILE_KEY, LOCAL_FILE_NAME):
     try:
         s3.download_file(S3_BUCKET_NAME, S3_FILE_KEY, LOCAL_FILE_NAME)
         logger.info("File downloaded successfully from S3.")
-    except NoCredentialsError:
-        logger.error("Credentials not available for AWS S3.")
-    except PartialCredentialsError:
-        logger.error("Incomplete credentials for AWS S3.")
     except ClientError as e:
+        logger.error(f"An error occurred: {e}")
         if e.response['Error']['Code'] == '404':
             logger.error("The object does not exist at this location.")
         else:
             raise
-    except Exception as e:
-        logger.error(f"An error occurred: {str(e)}")
 
 def save_encrypted_data(encrypted_data, tag, ciphertext_key, filepath):
     """ Save encrypted data into a JSON file. """
     with open(filepath, 'w') as file:
         json.dump({'encrypted_data': encrypted_data, 'tag': tag, 'ciphertext_key': ciphertext_key}, file, indent=4)
+
+def upload_file_to_s3(S3_BUCKET_NAME, S3_FILE_KEY, LOCAL_FILE_PATH):
+    """ Upload a file to S3. """
+    s3 = boto3.client('s3')
+    try:
+        s3.upload_file(LOCAL_FILE_PATH, S3_BUCKET_NAME, S3_FILE_KEY)
+        logger.info("File uploaded successfully to S3.")
+    except ClientError as e:
+        logger.error(f"An error occurred: {e}")
+        raise
 
 # Configuration from environment variables
 VAULT_ADDR = os.getenv('VAULT_ADDR')
@@ -64,6 +69,7 @@ KEY_NAME = os.getenv('KEY_NAME')
 S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
 S3_FILE_KEY = os.getenv('S3_FILE_KEY')
 LOCAL_FILE_NAME = os.getenv('LOCAL_FILE_NAME')
+ENCRYPTED_FILE_PATH = 'encrypted_data.json'  # Filepath to save the encrypted file
 
 # Generate a new data key
 datakey_response = generate_data_key(VAULT_ADDR, VAULT_TOKEN, KEY_NAME)
@@ -80,7 +86,11 @@ if 'data' in datakey_response:
     encrypted_data, tag = encrypt_data(data_json, plaintext_key)
 
     # Save the encrypted output to a file
-    save_encrypted_data(encrypted_data, tag, ciphertext_key, 'encrypted_data.json')
+    save_encrypted_data(encrypted_data, tag, ciphertext_key, ENCRYPTED_FILE_PATH)
     logger.info("Encrypted data has been saved to 'encrypted_data.json'")
+
+    # Upload encrypted file back to S3
+    upload_file_to_s3(S3_BUCKET_NAME, S3_FILE_KEY.replace('.json', '_encrypted.json'), ENCRYPTED_FILE_PATH)
+
 else:
     logger.error("Error generating data key:", datakey_response.get('errors', 'Unknown error'))
