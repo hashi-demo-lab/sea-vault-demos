@@ -12,6 +12,10 @@ from cryptography.hazmat.backends import default_backend
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+print("Vault Address:", os.getenv("VAULT_ADDR"))
+print("Vault Token:", os.getenv("VAULT_TOKEN"))
+print("Key Name:", os.getenv("KEY_NAME"))
+
 def generate_data_key(VAULT_ADDR, VAULT_TOKEN, KEY_NAME):
     """ Generate a data key using Vault's Transit Secrets Engine. """
     url = f"{VAULT_ADDR}/v1/transit/datakey/plaintext/{KEY_NAME}"
