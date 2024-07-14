@@ -37,12 +37,12 @@ jobs:
           echo "Running encryption script..."
           python3 vault-eaas/encrypt.py
         env:
-          vault_addr: ${{ secrets.VAULT_ADDR }}
-          vault_token: ${{ steps.vault_auth.outputs.vault_token }}
-          key_name: ${{ secrets.KEY_NAME }}
-          s3_bucket_name: ${{ secrets.S3_BUCKET_NAME }}
-          s3_file_key: ${{ secrets.S3_FILE_KEY }}
-          local_file_name: ${{ secrets.LOCAL_FILE_NAME }}
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+          VAULT_TOKEN: ${{ steps.vault_auth.outputs.vault_token }}
+          KEY_NAME: ${{ secrets.KEY_NAME }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          S3_FILE_KEY: ${{ secrets.S3_FILE_KEY }}
+          LOCAL_FILE_NAME: ${{ secrets.LOCAL_FILE_NAME }}
 
       - name: Display Outcome
         run: echo "Encryption and Decryption processes completed."
