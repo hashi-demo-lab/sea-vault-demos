@@ -30,6 +30,7 @@ resource "aws_iam_policy" "policy" {
     {
       "Action": [
         "ec2:*",
+        "s3:*",
         "route53:*",
         "ssm:*",
         "iam:CreateRole",
