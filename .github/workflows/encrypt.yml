@@ -35,7 +35,7 @@ jobs:
       - name: Run Encrypt Script
         run: |
           echo "Running encryption script..."
-          python vault-eaas/encrypt.py
+          python3 vault-eaas/encrypt.py
         env:
           VAULT_URL: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ steps.vault_auth.outputs.vault_token }}
