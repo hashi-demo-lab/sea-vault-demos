@@ -24,6 +24,8 @@ def generate_data_key(VAULT_ADDR, VAULT_TOKEN, KEY_NAME):
         'Content-Type': 'application/json'
     }
     response = requests.post(url, headers=headers, verify=False)  # Insecure, change in production
+    print("Vault response status:", response.status_code)
+    print("Vault response body:", response.text)
     return response.json()
 
 def encrypt_data(plaintext_data, key):
@@ -93,4 +95,4 @@ if 'data' in datakey_response:
     upload_file_to_s3(S3_BUCKET_NAME, S3_FILE_KEY.replace('.json', '_encrypted.json'), ENCRYPTED_FILE_PATH)
 
 else:
-    logger.error("Error generating data key:", datakey_response.get('errors', 'Unknown error'))
+    logger.error("Error generating data key: %s", datakey_response.get('errors', 'Unknown error'))
