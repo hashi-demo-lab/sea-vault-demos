@@ -25,7 +25,6 @@ def generate_data_key(VAULT_ADDR, VAULT_TOKEN, KEY_NAME):
     }
     response = requests.post(url, headers=headers, verify=False)  # Insecure, change in production
     print("Vault response status:", response.status_code)
-    print("Vault response body:", response.text)
     return response.json()
 
 def encrypt_data(plaintext_data, key):
