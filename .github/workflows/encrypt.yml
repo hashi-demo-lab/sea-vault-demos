@@ -15,7 +15,7 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        iteration: [1]
+        iteration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     steps:
       - uses: actions/checkout@v3
@@ -44,8 +44,8 @@ jobs:
 
       - name: Prepare Environment for Encrypt Script
         run: |
-          echo "ORIGINAL_S3_FILE_KEY=large_data_set.json" >> $GITHUB_ENV
-          echo "ENCRYPTED_S3_FILE_KEY=large_data_set_encrypted_${{ github.run_id }}_${{ matrix.iteration }}.json" >> $GITHUB_ENV
+          echo "ORIGINAL_S3_FILE_KEY=small_data_set.json" >> $GITHUB_ENV
+          echo "ENCRYPTED_S3_FILE_KEY=small_data_set_encrypted_${{ matrix.iteration }}.json" >> $GITHUB_ENV
 
       - name: Run Encrypt Script
         run: |
