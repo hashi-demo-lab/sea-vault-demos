@@ -8,7 +8,7 @@ on:
       - '.github/workflows/encrypt.yml'
 
 jobs:
-  process_secrets:
+  encrypt_data:
     runs-on: arc-runner-set
     permissions:
       contents: read
