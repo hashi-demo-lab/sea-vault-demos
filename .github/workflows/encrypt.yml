@@ -27,7 +27,7 @@ jobs:
           outputToken: true
           exportEnv: true
           secrets: |
-            demo-key-value/data/aarons-secrets role | ROLE
+            demo-key-value/data/aarons-secrets role | ROLE ;
             aws-dynamic-credentials/creds/vault-demo-assumed-role access_key | AWS_ACCESS_KEY_ID ;
             aws-dynamic-credentials/creds/vault-demo-assumed-role secret_key | AWS_SECRET_ACCESS_KEY ;
             aws-dynamic-credentials/creds/vault-demo-assumed-role security_token | AWS_SESSION_TOKEN
