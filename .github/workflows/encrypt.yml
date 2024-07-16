@@ -3,6 +3,9 @@ name: Vault Datakey Encryption with GitHub Actions
 on:
   workflow_dispatch:
   push:
+    paths:
+      - 'vault-eaas/encrypt.py'
+      - '.github/workflows/encrypt.yml'
 
 jobs:
   process_secrets:

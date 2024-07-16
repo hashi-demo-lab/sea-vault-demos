@@ -3,6 +3,9 @@ name: Vault Datakey Decryption with GitHub Actions
 on:
   workflow_dispatch:
   push:
+    paths:
+      - 'vault-eaas/decrypt.py'
+      - '.github/workflows/decrypt.yml'
 
 jobs:
   process_secrets:
@@ -36,7 +39,7 @@ jobs:
       - name: Run Encrypt Script
         run: |
           echo "Running encryption script..."
-          python3 vault-eaas/encrypt.py
+          python3 vault-eaas/decrypt.py
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ steps.vault_auth.outputs.vault_token }}
@@ -49,4 +52,4 @@ jobs:
           AWS_SESSION_TOKEN: ${{ env.AWS_SESSION_TOKEN }}
 
       - name: Display Outcome
-        run: echo "Encryption processes completed."
+        run: echo "Decryption processes completed."
