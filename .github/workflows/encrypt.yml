@@ -1,4 +1,4 @@
-name: GitHub Actions with Vault
+name: Vault Datakey Decryption with GitHub Actions
 
 on:
   workflow_dispatch:
@@ -31,12 +31,16 @@ jobs:
             aws-dynamic-credentials/creds/vault-demo-assumed-role secret_key | AWS_SECRET_ACCESS_KEY ;
             aws-dynamic-credentials/creds/vault-demo-assumed-role security_token | AWS_SESSION_TOKEN
 
-      - run: echo "AWS Access Key ID:' ${{ env.AWS_ACCESS_KEY_ID }} "
+      - name: Confirm AWS Credentials Retrieval
+        run: |
+          echo "::debug::AWS Access Key ID retrieved: ${{ env.AWS_ACCESS_KEY_ID }}"
+          echo "AWS credentials retrieved successfully."
 
       - name: Run Encrypt Script
         run: |
-          echo "Running encryption script..."
+          echo "::group::Running Encryption Script"
           python3 vault-eaas/encrypt.py
+          echo "::endgroup::"
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ steps.vault_auth.outputs.vault_token }}
