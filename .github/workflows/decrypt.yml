@@ -1,0 +1,52 @@
+name: Vault Datakey Decryption with GitHub Actions
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  process_secrets:
+    runs-on: arc-runner-set
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v3
+        name: Check out repository code
+      
+      - name: Authenticate to Vault and Import Secrets
+        id: vault_auth
+        uses: hashicorp/vault-action@v3.0.0
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          method: jwt
+          role: 'github-test-role'
+          jwtGithubAudience: 'https://github.com/hashi-demo-lab'
+          tlsSkipVerify: true
+          outputToken: true
+          exportEnv: true
+          secrets: |
+            aws-dynamic-credentials/creds/vault-demo-assumed-role access_key | AWS_ACCESS_KEY_ID ;
+            aws-dynamic-credentials/creds/vault-demo-assumed-role secret_key | AWS_SECRET_ACCESS_KEY ;
+            aws-dynamic-credentials/creds/vault-demo-assumed-role security_token | AWS_SESSION_TOKEN
+
+      - run: echo "AWS Access Key ID:' ${{ env.AWS_ACCESS_KEY_ID }} "
+
+      - name: Run Encrypt Script
+        run: |
+          echo "Running encryption script..."
+          python3 vault-eaas/encrypt.py
+        env:
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+          VAULT_TOKEN: ${{ steps.vault_auth.outputs.vault_token }}
+          KEY_NAME: ${{ secrets.KEY_NAME }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          S3_FILE_KEY: ${{ secrets.S3_FILE_KEY }}
+          LOCAL_FILE_NAME: ${{ secrets.LOCAL_FILE_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ env.AWS_SESSION_TOKEN }}
+
+      - name: Display Outcome
+        run: echo "Encryption processes completed."
