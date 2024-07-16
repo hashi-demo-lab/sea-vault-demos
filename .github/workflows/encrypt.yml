@@ -15,7 +15,7 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        iteration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        iteration: [1]
 
     steps:
       - uses: actions/checkout@v3
@@ -43,7 +43,9 @@ jobs:
           echo "AWS credentials retrieved successfully."
 
       - name: Prepare Environment for Encrypt Script
-        run: echo "S3_FILE_KEY=large_data_set.json" >> $GITHUB_ENV
+        run: |
+          echo "ORIGINAL_S3_FILE_KEY=large_data_set.json" >> $GITHUB_ENV
+          echo "ENCRYPTED_S3_FILE_KEY=large_data_set_encrypted_${{ github.run_id }}_${{ matrix.iteration }}.json" >> $GITHUB_ENV
 
       - name: Run Encrypt Script
         run: |
@@ -55,7 +57,8 @@ jobs:
           VAULT_TOKEN: ${{ steps.vault_auth.outputs.vault_token }}
           KEY_NAME: ${{ secrets.KEY_NAME }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-          S3_FILE_KEY: ${{ env.S3_FILE_KEY }}
+          ORIGINAL_S3_FILE_KEY: ${{ env.ORIGINAL_S3_FILE_KEY }}
+          ENCRYPTED_S3_FILE_KEY: ${{ env.ENCRYPTED_S3_FILE_KEY }}
           LOCAL_FILE_NAME: ${{ secrets.LOCAL_FILE_NAME }}
           AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}

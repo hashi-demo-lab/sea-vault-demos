@@ -68,7 +68,8 @@ VAULT_ADDR = os.getenv('VAULT_ADDR')
 VAULT_TOKEN = os.getenv('VAULT_TOKEN')
 KEY_NAME = os.getenv('KEY_NAME')
 S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
-S3_FILE_KEY = os.getenv('S3_FILE_KEY')
+ORIGINAL_S3_FILE_KEY = os.getenv('ORIGINAL_S3_FILE_KEY')
+ENCRYPTED_S3_FILE_KEY = os.getenv('ENCRYPTED_S3_FILE_KEY')
 LOCAL_FILE_NAME = os.getenv('LOCAL_FILE_NAME')
 ENCRYPTED_FILE_PATH = 'encrypted_data.json'  # Filepath to save the encrypted file
 
@@ -79,7 +80,7 @@ if 'data' in datakey_response:
     ciphertext_key = datakey_response['data']['ciphertext']
 
     # Download and load JSON data
-    download_file_from_s3(S3_BUCKET_NAME, S3_FILE_KEY, LOCAL_FILE_NAME)
+    download_file_from_s3(S3_BUCKET_NAME, ORIGINAL_S3_FILE_KEY, LOCAL_FILE_NAME)
     data = json.load(open(LOCAL_FILE_NAME))
     data_json = json.dumps(data)
 
@@ -90,8 +91,8 @@ if 'data' in datakey_response:
     save_encrypted_data(encrypted_data, tag, ciphertext_key, ENCRYPTED_FILE_PATH)
     logger.info("Encrypted data has been saved to 'encrypted_data.json'")
 
-    # Upload encrypted file back to S3
-    upload_file_to_s3(S3_BUCKET_NAME, S3_FILE_KEY.replace('.json', '_encrypted.json'), ENCRYPTED_FILE_PATH)
+    # Upload encrypted file back to S3 under the new key
+    upload_file_to_s3(S3_BUCKET_NAME, ENCRYPTED_S3_FILE_KEY, ENCRYPTED_FILE_PATH)
 
 else:
     logger.error("Error generating data key: %s", datakey_response.get('errors', 'Unknown error'))
