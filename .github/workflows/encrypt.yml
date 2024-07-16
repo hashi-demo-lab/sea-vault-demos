@@ -40,7 +40,7 @@ jobs:
           echo "AWS credentials retrieved successfully."
 
       - name: Prepare Environment for Encrypt Script
-        run: echo "S3_FILE_KEY=small_data_set.json" >> $GITHUB_ENV
+        run: echo "S3_FILE_KEY=large_data_set.json" >> $GITHUB_ENV
 
       - name: Run Encrypt Script
         run: |
