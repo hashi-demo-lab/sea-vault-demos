@@ -44,8 +44,8 @@ jobs:
 
       - name: Prepare Environment for Encrypt Script
         run: |
-          echo "ORIGINAL_S3_FILE_KEY=large_data_set.json" >> $GITHUB_ENV
-          echo "ENCRYPTED_S3_FILE_KEY=large_data_set_encrypted_${{ matrix.iteration }}.json" >> $GITHUB_ENV
+          echo "ORIGINAL_S3_FILE_KEY=medium_data_set.json" >> $GITHUB_ENV
+          echo "ENCRYPTED_S3_FILE_KEY=medium_data_set_encrypted_${{ matrix.iteration }}.json" >> $GITHUB_ENV
 
       - name: Run Encrypt Script
         run: |
