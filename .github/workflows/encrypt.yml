@@ -39,6 +39,9 @@ jobs:
           echo "::debug::AWS Access Key ID retrieved: ${{ env.AWS_ACCESS_KEY_ID }}"
           echo "AWS credentials retrieved successfully."
 
+      - name: Prepare Environment for Encrypt Script
+        run: echo "S3_FILE_KEY=small_data_set.json" >> $GITHUB_ENV
+
       - name: Run Encrypt Script
         run: |
           echo "::group::Running Encryption Script"
@@ -49,7 +52,7 @@ jobs:
           VAULT_TOKEN: ${{ steps.vault_auth.outputs.vault_token }}
           KEY_NAME: ${{ secrets.KEY_NAME }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-          S3_FILE_KEY: ${{ secrets.S3_FILE_KEY }}
+          S3_FILE_KEY: ${{ env.S3_FILE_KEY }}
           LOCAL_FILE_NAME: ${{ secrets.LOCAL_FILE_NAME }}
           AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
