@@ -15,6 +15,22 @@ jobs:
       - uses: actions/checkout@v3
         name: Check out repository code
       
+      - name: Authenticate to Vault and Import Secrets
+        id: vault_auth
+        uses: hashicorp/vault-action@v3.0.0
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          method: jwt
+          role: 'github-test-role'
+          jwtGithubAudience: 'https://github.com/hashi-demo-lab'
+          tlsSkipVerify: true
+          outputToken: true
+          exportEnv: true
+          secrets: 'demo-key-value/data/aarons-secrets role | ROLE'
+
+      - run: echo "my secret role hash is':' $(echo -n "${{ steps.vault_auth.outputs.ROLE }}" | sha256sum)"
+      - run: echo "my secret role is':' ${{ steps.vault_auth.outputs.ROLE }} " | sed 's/ //g'
+
       - name: Fetch AWS Credentials from Vault
         id: fetch_aws_creds
         uses: hashicorp/vault-action@v3.0.0
