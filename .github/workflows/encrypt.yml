@@ -1,4 +1,4 @@
-name: Vault Datakey Decryption with GitHub Actions
+name: Vault Datakey Encryption with GitHub Actions
 
 on:
   workflow_dispatch:
