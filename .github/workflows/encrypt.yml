@@ -27,13 +27,10 @@ jobs:
           outputToken: true
           exportEnv: true
           secrets: |
-            demo-key-value/data/aarons-secrets role | ROLE ;
             aws-dynamic-credentials/creds/vault-demo-assumed-role access_key | AWS_ACCESS_KEY_ID ;
             aws-dynamic-credentials/creds/vault-demo-assumed-role secret_key | AWS_SECRET_ACCESS_KEY ;
             aws-dynamic-credentials/creds/vault-demo-assumed-role security_token | AWS_SESSION_TOKEN
 
-      - run: echo "my secret role hash is':' $(echo -n "${{ steps.vault_auth.outputs.ROLE }}" | sha256sum)"
-      - run: echo "my secret role is':' ${{ steps.vault_auth.outputs.ROLE }} " | sed 's/ //g'
       - run: echo "AWS Access Key ID:' ${{ env.AWS_ACCESS_KEY_ID }} "
 
       - name: Run Encrypt Script
