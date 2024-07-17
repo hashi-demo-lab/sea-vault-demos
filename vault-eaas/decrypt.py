@@ -9,92 +9,86 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def decrypt_data_key(vault_url, vault_token, key_name, ciphertext):
+def decrypt_data_key(VAULT_ADDR, VAULT_TOKEN, KEY_NAME, ciphertext):
     """ Call Vault to decrypt the data key. """
-    url = f"{vault_url}/v1/transit/decrypt/{key_name}"
-    headers = {'X-Vault-Token': vault_token, 'Content-Type': 'application/json'}
+    url = f"{VAULT_ADDR}/v1/transit/decrypt/{KEY_NAME}"
+    headers = {'X-Vault-Token': VAULT_TOKEN, 'Content-Type': 'application/json'}
     payload = {'ciphertext': ciphertext}
     response = requests.post(url, headers=headers, json=payload, verify=False)  # Change for production
+    if response.status_code == 200:
+        logger.info("Vault data key decrypted successfully.")
+    else:
+        logger.error(f"Failed to decrypt data key: {response.text}")
     return response.json()
 
-def download_file_from_s3(s3_bucket_name, s3_file_key, local_file_name):
+def download_file_from_s3(S3_BUCKET_NAME, S3_FILE_KEY, local_file_name):
     """ Download a file from S3 to a local file. """
     s3 = boto3.client('s3')
     try:
-        s3.download_file(s3_bucket_name, s3_file_key, local_file_name)
+        s3.download_file(S3_BUCKET_NAME, S3_FILE_KEY, local_file_name)
         logger.info("File downloaded successfully from S3.")
     except ClientError as e:
-        logger.error(f"An error occurred: {e}")
+        logger.error(f"Failed to download file from S3: {e}")
         raise
-
-def load_encrypted_data(filepath):
-    """ Load encrypted data from a JSON file. """
-    with open(filepath, 'r') as file:
-        data = json.load(file)
-    return data['encrypted_data'], data['tag'], data['ciphertext_key']
 
 def decrypt_data(encrypted_data, key, iv, tag):
     """ Decrypt data using AES GCM. """
-    decryptor = Cipher(
-        algorithms.AES(key),
-        modes.GCM(iv, tag),
-        backend=default_backend()
-    ).decryptor()
-    return decryptor.update(encrypted_data) + decryptor.finalize()
+    try:
+        decryptor = Cipher(algorithms.AES(key), modes.GCM(iv, tag), backend=default_backend()).decryptor()
+        decrypted_data = decryptor.update(encrypted_data) + decryptor.finalize()
+        logger.info("Data decrypted successfully.")
+        return decrypted_data
+    except Exception as e:
+        logger.error(f"Decryption failed: {str(e)}")
+        raise
 
 def save_decrypted_data(data, filepath):
     """ Save decrypted data to a JSON file. """
-    with open(filepath, 'w') as file:
-        json.dump(data, file, indent=4)
+    try:
+        with open(filepath, 'w') as file:
+            file.write(data)
+        logger.info("Decrypted data saved to file successfully.")
+    except Exception as e:
+        logger.error(f"Failed to save decrypted data to file: {str(e)}")
+        raise
 
-def upload_file_to_s3(s3_bucket_name, s3_file_key, local_file_path):
+def upload_file_to_s3(S3_BUCKET_NAME, S3_FILE_KEY, local_file_path):
     """ Upload a file to S3. """
     s3 = boto3.client('s3')
     try:
-        s3.upload_file(local_file_path, s3_bucket_name, s3_file_key)
+        s3.upload_file(local_file_path, S3_BUCKET_NAME, S3_FILE_KEY)
         logger.info("File uploaded successfully to S3.")
     except ClientError as e:
-        logger.error(f"An error occurred: {e}")
+        logger.error(f"Failed to upload file to S3: {e}")
         raise
 
 # Configuration from environment variables
-vault_url = os.getenv('VAULT_ADDR')
-vault_token = os.getenv('VAULT_TOKEN')
-key_name = os.getenv('KEY_NAME')
-s3_bucket_name = os.getenv('S3_BUCKET_NAME')
-s3_file_key = os.getenv('S3_FILE_KEY')
-local_encrypted_file_name = 'encrypted_data.json'
-local_decrypted_file_name = 'decrypted_data.json'
+VAULT_ADDR = os.getenv('VAULT_ADDR')
+VAULT_TOKEN = os.getenv('VAULT_TOKEN')
+KEY_NAME = os.getenv('KEY_NAME')
+S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
+ENCRYPTED_S3_FILE_KEY = os.getenv('ENCRYPTED_S3_FILE_KEY')
+DECRYPTED_S3_FILE_KEY = os.getenv('DECRYPTED_S3_FILE_KEY')
+LOCAL_FILE_NAME = 'downloaded_encrypted_data.json'
+DECRYPTED_FILE_PATH = 'decrypted_data.json'
 
-# Download the encrypted file from S3
-download_file_from_s3(s3_bucket_name, s3_file_key, local_encrypted_file_name)
+# Main logic
+try:
+    download_file_from_s3(S3_BUCKET_NAME, ENCRYPTED_S3_FILE_KEY, LOCAL_FILE_NAME)
+    data = json.load(open(LOCAL_FILE_NAME))
+    encrypted_data = base64.b64decode(data['encrypted_data'])
+    tag = base64.b64decode(data['tag'])
 
-# Load encrypted data
-encrypted_data_base64, tag_base64, ciphertext_key = load_encrypted_data(local_encrypted_file_name)
-logger.info("Ciphertext Key being used for decryption: " + ciphertext_key)
-
-# Decrypt the data key using Vault
-decrypted_key_response = decrypt_data_key(vault_url, vault_token, key_name, ciphertext_key)
-if 'data' in decrypted_key_response and 'plaintext' in decrypted_key_response['data']:
-    decrypted_data_key = base64.b64decode(decrypted_key_response['data']['plaintext'])
-    encrypted_data = base64.b64decode(encrypted_data_base64)
-    tag = base64.b64decode(tag_base64)
-    iv = b'\x00' * 12  # This should match the IV used during encryption
-
-    # Decrypt the data
-    decrypted_data_bytes = decrypt_data(encrypted_data, decrypted_data_key, iv, tag)
-    decrypted_data = json.loads(decrypted_data_bytes.decode('utf-8'))
-
-    # Save the decrypted data to a new JSON file
-    save_decrypted_data(decrypted_data, local_decrypted_file_name)
-
-    # Upload decrypted file back to S3 under a new key
-    decrypted_s3_file_key = s3_file_key.replace('encrypted', 'decrypted')
-    upload_file_to_s3(s3_bucket_name, decrypted_s3_file_key, local_decrypted_file_name)
-
-    logger.info("Decryption completed. Data is saved to '" + local_decrypted_file_name + "' and uploaded back to S3.")
-else:
-    logger.error("Failed to decrypt the data key: " + str(decrypted_key_response.get('errors', 'Unknown error')))
+    decrypted_key_response = decrypt_data_key(VAULT_ADDR, VAULT_TOKEN, KEY_NAME, data['ciphertext_key'])
+    if 'data' in decrypted_key_response and 'plaintext' in decrypted_key_response['data']:
+        decrypted_key = base64.b64decode(decrypted_key_response['data']['plaintext'])
+        decrypted_data = decrypt_data(encrypted_data, decrypted_key, b'\x00' * 12, tag)  # IV should be the same as in encryption
+        save_decrypted_data(decrypted_data.decode('utf-8'), DECRYPTED_FILE_PATH)
+        upload_file_to_s3(S3_BUCKET_NAME, DECRYPTED_S3_FILE_KEY, DECRYPTED_FILE_PATH)
+    else:
+        logger.error("Failed to decrypt data key.")
+except Exception as e:
+    logger.error(f"An error occurred: {str(e)}")
