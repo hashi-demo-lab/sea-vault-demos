@@ -26,6 +26,11 @@ path "sys/policies/*" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
 
+# deny modifying my own admin policy
+path "sys/policies/namespace-admin" {
+  capabilities = ["read", "list"]
+}
+
 path "sys/auth/*" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
