@@ -5,8 +5,6 @@ The objective of this repository is to to create an easy deployable environment
 that allows for members of the SEA team to demonstrate the capabilities of using 
 HashiCorp Vault
 
-![Alt text](image.png)
-
 The repo was created with the following principles in mind
 
 - Require no credentials to be stored in Terraform Cloud
