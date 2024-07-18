@@ -83,13 +83,31 @@ resource "vault_ldap_secret_backend" "config" {
   userdn       = "ou=users,dc=hashibank,dc=com"
 }
 
-/*resource "vault_ldap_secret_backend_static_role" "role" {
+resource "vault_ldap_secret_backend_static_role" "dev_service" {
   mount           = vault_ldap_secret_backend.config.path
-  username        = "aaron"
-  dn              = "cn=aaron,ou=users,dc=hashibank,dc=com"
-  role_name       = "aaron"
-  rotation_period = 60
-}*/
+  username        = "dev-service"
+  dn              = "cn=dev-service,ou=users,dc=hashibank,dc=com"
+  role_name       = "dev-service"
+  rotation_period = 86400 # 24 hours
+}
+
+resource "vault_ldap_secret_backend_static_role" "test_service" {
+  mount           = vault_ldap_secret_backend.config.path
+  username        = "test-service"
+  dn              = "cn=test-service,ou=users,dc=hashibank,dc=com"
+  role_name       = "test-service"
+  rotation_period = 86400 # 24 hours
+}
+
+resource "vault_ldap_secret_backend_static_role" "prod_service" {
+  mount           = vault_ldap_secret_backend.config.path
+  username        = "prod-service"
+  dn              = "cn=prod-service,ou=users,dc=hashibank,dc=com"
+  role_name       = "prod-service"
+  rotation_period = 86400 # 24 hours
+}
+
+/**/
 /*
 data "external" "password_hash" {
   program = ["./files/generate_hash.sh", "your-password-here"]
