@@ -54,3 +54,24 @@ cn: simon
 sn: goh
 memberOf: cn=administrators,ou=groups,dc=hashibank,dc=com
 userPassword: password123
+
+dn: cn=dev-service,ou=users,dc=hashibank,dc=com
+objectClass: person
+objectClass: top
+cn: dev-service
+sn: dev-service
+userPassword: dev-password123
+
+dn: cn=test-service,ou=users,dc=hashibank,dc=com
+objectClass: person
+objectClass: top
+cn: test-service
+sn: test-service
+userPassword: test-password123
+
+dn: cn=prod-service,ou=users,dc=hashibank,dc=com
+objectClass: person
+objectClass: top
+cn: prod-service
+sn: prod-service
+userPassword: prod-password123
