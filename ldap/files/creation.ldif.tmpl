@@ -1,8 +1,11 @@
-dn: CN={{.Username }},ou=users,dc=hashibank,dc=com
+dn: CN={{.Username}},ou=users,dc=hashibank,dc=com
 objectClass: top
 objectClass: person
-cn: {{.Username }}
+objectClass: inetOrgPerson
+cn: {{.Username}}
 sn: vault-demo
+description: Temporary service account for {{.DisplayName}}
+mail: {{.Username}}@hashibank.com
 
 dn: CN={{.Username}},ou=users,dc=hashibank,dc=com
 changetype: modify
@@ -14,7 +17,6 @@ userPassword: ${password_hash}
 dn: CN=${group_name},ou=groups,dc=hashibank,dc=com
 changetype: modify
 add: member
-member: CN={{.Username }},ou=users,dc=hashibank,dc=com 
+member: CN={{.Username}},ou=users,dc=hashibank,dc=com
 -
-
 %{ endfor }
