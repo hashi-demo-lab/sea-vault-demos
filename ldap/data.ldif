@@ -31,6 +31,13 @@ description: group for administrators
 cn: administrators
 member: cn=simon,ou=users,dc=hashibank,dc=com
 
+dn: cn=service-accounts,ou=groups,dc=hashibank,dc=com
+objectClass: groupofnames
+objectClass: top
+description: group for dynamic service accounts
+cn: service-accounts
+member: cn=aaron,ou=users,dc=hashibank,dc=com  # Placeholder member
+
 dn: cn=aaron,ou=users,dc=hashibank,dc=com
 objectClass: person
 objectClass: top
@@ -75,3 +82,24 @@ objectClass: top
 cn: prod-service
 sn: prod-service
 userPassword: prod-password123
+
+dn: cn=svc-account1,ou=service-accounts,dc=hashibank,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+cn: svc-account1
+sn: Service Account 1
+userPassword: password123
+
+dn: cn=svc-account2,ou=service-accounts,dc=hashibank,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+cn: svc-account2
+sn: Service Account 2
+userPassword: password123
+
+dn: cn=svc-account3,ou=service-accounts,dc=hashibank,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+cn: svc-account3
+sn: Service Account 3
+userPassword: password123
