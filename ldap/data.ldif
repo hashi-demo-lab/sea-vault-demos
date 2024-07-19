@@ -1,3 +1,9 @@
+dn: ou=service-accounts,dc=hashibank,dc=com
+objectClass: organizationalunit
+objectClass: top
+ou: service-accounts
+description: Service accounts
+
 dn: ou=groups,dc=hashibank,dc=com
 objectClass: organizationalunit
 objectClass: top

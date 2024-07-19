@@ -128,3 +128,12 @@ resource "vault_ldap_secret_backend_dynamic_role" "this" {
   default_ttl       = 86400     # 24 hours
   max_ttl           = 8 * 3600  # Eight hours
 }
+
+/*resource "vault_ldap_secret_backend_library_set" "service_account_library" {
+  mount                        = vault_ldap_secret_backend.config.path
+  name                         = "service-accounts"
+  service_account_names        = ["svc-account1", "svc-account2", "svc-account3"]
+  ttl                          = 3600     # 1 hour
+  max_ttl                      = 86400    # 24 hours
+  disable_check_in_enforcement = false
+}*/
