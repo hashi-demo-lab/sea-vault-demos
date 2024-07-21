@@ -13,9 +13,13 @@ resource "vault_policy" "approve-pki-cert" {
   policy = file("${path.module}/policies/approve-pki-cert.hcl")
 }
 
+data "vault_auth_backend" "this" {
+  path = "kv-userpass"
+}
+
 data "vault_identity_entity" "simon" {
   alias_name           = "simon"
-  alias_mount_accessor = "auth_userpass_a5d744cf"
+  alias_mount_accessor = data.vault_auth_backend.this.accessor
 }
 
 resource "vault_identity_group" "acct_manager" {
