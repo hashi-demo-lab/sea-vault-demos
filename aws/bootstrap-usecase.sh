@@ -38,7 +38,7 @@ done
 
 # Unseal Vault pods using the unseal key from the JSON file
 sleep 5
-output_file="../vault-in-kubernetes/vault_keys.json"
+output_file="../_setup/vault_keys.json"
 UNSEAL_KEY_DC1=$(jq -r '.dc1.unseal_key' "$output_file")
 VAULT_TOKEN=$(jq -r '.dc1.root_token' "$output_file")
 
