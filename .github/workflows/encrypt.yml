@@ -52,7 +52,7 @@ jobs:
       - name: Run Encrypt Script
         run: |
           echo "::group::Running Encryption Script"
-          python3 vault-eaas/encrypt.py
+          python3 transit/encrypt.py
           echo "::endgroup::"
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
