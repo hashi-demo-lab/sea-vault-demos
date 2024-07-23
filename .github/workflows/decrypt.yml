@@ -50,7 +50,7 @@ jobs:
       - name: Run Decrypt Script
         run: |
           echo "::group::Running Decryption Script"
-          python3 vault-eaas/decrypt.py
+          python3 transit/decrypt.py
           echo "::endgroup::"
         env:
           VAULT_ADDR: https://vault-dc2-active:8200
