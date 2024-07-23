@@ -26,7 +26,7 @@ jobs:
         id: vault_auth
         uses: hashicorp/vault-action@v3.0.0
         with:
-          url: ${{ env.VAULT_ADDR }}
+          url: https://vault-dc1-active:8200
           method: jwt
           role: 'github-test-role'
           jwtGithubAudience: 'https://github.com/hashi-demo-lab'
