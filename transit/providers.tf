@@ -33,9 +33,35 @@ resource "vault_mount" "transit" {
   max_lease_ttl_seconds     = 86400
 }
 
-resource "vault_transit_secret_backend_key" "key" {
+resource "vault_transit_secret_backend_key" "aes256-gcm96" {
   backend = vault_mount.transit.path
-  name    = "my_key"
+  name    = "aes256-gcm96"
+  type = "aes256-gcm96"
+  deletion_allowed = true
+}
+
+resource "vault_transit_secret_backend_key" "aes256-gcm96-convergent_encryption" {
+  backend = vault_mount.transit.path
+  name    = "aes256-gcm96-convergent_encryption"
+  type = "aes256-gcm96"
+  deletion_allowed = true
+  convergent_encryption = true
+  derived = true
+}
+
+
+resource "vault_transit_secret_backend_key" "chacha20-poly1305" {
+  backend = vault_mount.transit.path
+  name    = "chacha20-poly1305"
+  type = "chacha20-poly1305"
+  deletion_allowed = true
+}
+
+resource "vault_transit_secret_backend_key" "rsa-4096" {
+  backend = vault_mount.transit.path
+  name    = "rsa-4096"
+  type = "rsa-4096"
+  deletion_allowed = true
 }
 
 module "s3_bucket" {
@@ -46,7 +72,7 @@ module "s3_bucket" {
 
   control_object_ownership = true
   object_ownership         = "ObjectWriter"
-
+  force_destroy = true
   versioning = {
     enabled = true
   }
