@@ -26,7 +26,7 @@ jobs:
         id: vault_auth
         uses: hashicorp/vault-action@v3.0.0
         with:
-          url: https://vault-dc1-active:8200
+          url: https://vault-dc2-active:8200
           method: jwt
           role: 'github-test-role'
           jwtGithubAudience: 'https://github.com/hashi-demo-lab'
@@ -54,7 +54,7 @@ jobs:
           python3 transit/decrypt.py
           echo "::endgroup::"
         env:
-          VAULT_ADDR: https://vault-dc1-active:8200
+          VAULT_ADDR: https://vault-dc2-active:8200
           VAULT_TOKEN: ${{ steps.vault_auth.outputs.vault_token }}
           KEY_NAME: ${{ secrets.KEY_NAME }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
