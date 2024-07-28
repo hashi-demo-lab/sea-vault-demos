@@ -6,7 +6,7 @@ namespace="my-vault-demo"
 for dc in dc1 dc2; do
     helm uninstall vault-${dc} -n "$namespace"
     echo "sleeping..."
-    sleep 5
+    sleep 3
   done
 
 for i in {0..2}; do
