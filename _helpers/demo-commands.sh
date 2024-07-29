@@ -124,3 +124,31 @@ dynamicCreds -e "select birth_date from my_app.customers;"
 vault write demo-transit/decrypt/customer-key ciphertext="vault:example"
 
 echo "" | base64 -D; echo
+
+# Commands to show
+vault list transit/keys
+vault read transit/keys/aes256-gcm96
+
+# Encrypt a plaintext value
+vault write transit/encrypt/aes256-gcm96 plaintext=$(base64 <<< "my secret data")
+
+# Decrypt a ciphertext value
+vault write transit/decrypt/aes256-gcm96 ciphertext=
+
+# Decode base64 encoded string
+echo "bXkgc2VjcmV0IGRhdGEK" | base64 --decode
+
+# Rotate the encryption key
+vault write -f transit/keys/aes256-gcm96/rotate
+vault read transit/keys/aes256-gcm96
+# Update ciphertext with new versioned key
+vault write transit/rewrap/aes256-gcm96 ciphertext=
+# Update the min_decryption_version
+vault write transit/keys/aes256-gcm96/config min_decryption_version=2
+# Verify the key version
+vault write transit/decrypt/aes256-gcm96 ciphertext=
+
+# Generate Datakey 
+vault write -f transit/datakey/plaintext/aes256-gcm96
+# Retrieve Datakey plaintext key
+vault write transit/decrypt/aes256-gcm96 ciphertext=
