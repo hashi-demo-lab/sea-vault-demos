@@ -96,12 +96,12 @@ for dc in "${datacentres[@]}"; do
 
   # Enable audit logging
   echo "\n\033[32m---Enabling audit logging for ${dc}---\033[0m"
-  kubectl --namespace="$namespace" exec "${vault_operator_pod}" -- vault audit enable file file_path=/vault/audit/vault_audit.log
+  kubectl --namespace="$namespace" exec -it "${vault_operator_pod}" -- sh -c vault login $(eval echo "\${${dc}_root_token}") && vault audit enable file file_path=/vault/audit/vault_audit.log
 done
 
 # Setup base details for access
 export VAULT_TOKEN=$dc1_root_token
-export VAULT_ADDR=https://vault-dc1.hashibank.com:8200
+export VAULT_ADDR=https://vault-dc1.hashibank.com:443
 
 # Initialize an empty JSON object
 output_file="vault_keys.json"
